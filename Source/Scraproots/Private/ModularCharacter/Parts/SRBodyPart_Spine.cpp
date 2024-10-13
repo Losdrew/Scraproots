@@ -2,6 +2,8 @@
 
 #include "ModularCharacter/Parts/SRBodyPart_Spine.h"
 
+#include "Core/SRAssetManager.h"
+
 void ASRBodyPart_Spine::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 {
 	// Cast the base preset to the spine-specific preset
@@ -16,6 +18,10 @@ void ASRBodyPart_Spine::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 	const FSRBodyPartSchema_Spine& SpineSchema = SpinePreset.SpineSchemaDataAsset->SpineSchema;
 	BaseMesh = SpineSchema.Mesh;
 	AttachmentSocket = SpineSchema.AttachmentSocket;
+
+	USRAssetManager& AssetManager = USRAssetManager::Get();
+	AssetManager.SetSkeletalMeshAsync(BaseMesh, MeshComponent);
+	MeshComponent->SetAnimInstanceClass(AnimInstanceClass);
 
 	Super::InitializeFromPreset(Preset);
 }

@@ -2,6 +2,8 @@
 
 #include "ModularCharacter/Parts/SRBodyPart_Head.h"
 
+#include "Core/SRAssetManager.h"
+
 void ASRBodyPart_Head::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 {
 	// Cast the base preset to the head-specific preset
@@ -16,6 +18,10 @@ void ASRBodyPart_Head::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 	const FSRBodyPartSchema_Head& HeadSchema = HeadPreset.HeadSchemaDataAsset->HeadSchema;
 	BaseMesh = HeadSchema.Mesh;
 	AttachmentSocket = HeadSchema.AttachmentSocket;
+
+	USRAssetManager& AssetManager = USRAssetManager::Get();
+	AssetManager.SetSkeletalMeshAsync(BaseMesh, MeshComponent);
+	MeshComponent->SetAnimInstanceClass(AnimInstanceClass);
 
 	Super::InitializeFromPreset(Preset);
 }

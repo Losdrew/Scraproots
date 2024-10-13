@@ -2,7 +2,6 @@
 
 #include "ModularCharacter/Parts/SRBodyPart.h"
 
-#include "Core/SRAssetManager.h"
 #include "ModularCharacter/SRModularCharacterTypes.h"
 
 TSubclassOf<ASRBodyPart> FSRBodyPartSchema::GetBodyPartClass() const
@@ -38,18 +37,6 @@ void ASRBodyPart::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 	Stats = BodyPartSchema.Stats;
 
 	bInitialized = true;
-}
-
-void ASRBodyPart::BeginPlay()
-{
-	if (MeshComponent)
-	{
-		USRAssetManager& AssetManager = USRAssetManager::Get();
-		AssetManager.SetSkeletalMeshAsync(BaseMesh, MeshComponent);
-		MeshComponent->SetAnimInstanceClass(AnimInstanceClass);
-	}
-
-	Super::BeginPlay();
 }
 
 void ASRBodyPart::SetBodyPartMeshParameters(USkeletalMeshComponent* SkeletalMeshComponent)

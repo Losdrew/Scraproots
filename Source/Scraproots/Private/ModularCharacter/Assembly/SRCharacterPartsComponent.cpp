@@ -2,6 +2,7 @@
 
 #include "ModularCharacter/Assembly/SRCharacterPartsComponent.h"
 
+#include "Core/SRAssetManager.h"
 #include "GameFramework/Character.h"
 #include "ModularCharacter/Parts/SRBodyPart.h"
 #include "ModularCharacter/SRModularCharacterTypes.h"
@@ -156,6 +157,15 @@ void USRCharacterPartsComponent::AttachBodyPart(ASRBodyPart* BodyPart)
 
 	if (USkeletalMeshComponent* ParentMeshComponent = GetParentMeshComponent())
 	{
+		// If the body part is a torso, replace the character's mesh with the torso mesh
+		if (BodyPart->BodyPartType == ESRBodyPartType::Torso)
+		{
+			USRAssetManager& AssetManager = USRAssetManager::Get();
+			AssetManager.SetSkeletalMeshAsync(BodyPart->BaseMesh, ParentMeshComponent);
+			ParentMeshComponent->SetAnimInstanceClass(BodyPart->AnimInstanceClass);
+			BodyPart->MeshComponent->SetSkeletalMesh(nullptr, true);
+		}
+
 		BodyPart->AttachToComponent(ParentMeshComponent, FAttachmentTransformRules::SnapToTargetIncludingScale, BodyPart->AttachmentSocket);
 		BodyPart->SetOwner(Owner);
 	}

@@ -2,6 +2,8 @@
 
 #include "ModularCharacter/Parts/SRBodyPart_Arm.h"
 
+#include "Core/SRAssetManager.h"
+
 void ASRBodyPart_Arm::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 {
 	// Cast the base preset to the arm-specific preset
@@ -25,6 +27,10 @@ void ASRBodyPart_Arm::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 		BaseMesh = ArmSchema.MeshRight;
 		AttachmentSocket = ArmSchema.AttachmentSocketRight;
 	}
+
+	USRAssetManager& AssetManager = USRAssetManager::Get();
+	AssetManager.SetSkeletalMeshAsync(BaseMesh, MeshComponent);
+	MeshComponent->SetAnimInstanceClass(AnimInstanceClass);
 
 	Super::InitializeFromPreset(Preset);
 }

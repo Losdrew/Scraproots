@@ -73,7 +73,6 @@ public:
 	ASRBodyPart();
 
 	virtual void InitializeFromPreset(const FSRBodyPartPreset& Preset);
-	virtual void BeginPlay() override;
 
 public:
 	UPROPERTY(BlueprintReadOnly, Category = "BodyPart")
@@ -99,14 +98,14 @@ public:
 
 	bool bInitialized = false;
 
-protected:
-	// Sets default parameters for a body part mesh
-	virtual void SetBodyPartMeshParameters(USkeletalMeshComponent* MeshComponent);
-
-protected:
+public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	TObjectPtr<USceneComponent> Root;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	TObjectPtr<USkeletalMeshComponent> MeshComponent;
+
+protected:
+	// Sets default parameters for a body part mesh
+	virtual void SetBodyPartMeshParameters(USkeletalMeshComponent* MeshComponent);
 };

@@ -2,6 +2,8 @@
 
 #include "ModularCharacter/Parts/SRBodyPart_Leg.h"
 
+#include "Core/SRAssetManager.h"
+
 void ASRBodyPart_Leg::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 {
 	// Cast the base preset to the leg-specific preset
@@ -16,6 +18,10 @@ void ASRBodyPart_Leg::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 	const FSRBodyPartSchema_Leg& LegSchema = LegPreset.LegSchemaDataAsset->LegSchema;
 	BaseMesh = LegSchema.Mesh;
 	AttachmentSocket = LegSchema.AttachmentSocket;
+
+	USRAssetManager& AssetManager = USRAssetManager::Get();
+	AssetManager.SetSkeletalMeshAsync(BaseMesh, MeshComponent);
+	MeshComponent->SetAnimInstanceClass(AnimInstanceClass);
 
 	Super::InitializeFromPreset(Preset);
 }
