@@ -14,8 +14,6 @@ void ASRBodyPart_Torso::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 	}
 
 	const FSRBodyPartSchema_Torso& TorsoSchema = TorsoPreset.TorsoSchemaDataAsset->TorsoSchema;
-
-	// Set base mesh to first cosmetic mesh by default
 	BaseMesh = TorsoSchema.Mesh;
 
 	Super::InitializeFromPreset(Preset);

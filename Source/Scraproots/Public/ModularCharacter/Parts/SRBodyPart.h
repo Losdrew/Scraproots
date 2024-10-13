@@ -26,9 +26,6 @@ public:
 	ESRRarity Rarity = ESRRarity::Common;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BodyPart", meta = (DisplayPriority = 1))
-	FName AttachmentSocket;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BodyPart", meta = (DisplayPriority = 1))
 	TSubclassOf<UAnimInstance> AnimInstanceClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BodyPart", meta = (ForceInlineRow))

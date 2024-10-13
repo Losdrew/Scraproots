@@ -21,7 +21,13 @@ public:
 	TSoftObjectPtr<USkeletalMesh> MeshLeft;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BodyPart")
+	FName AttachmentSocketLeft;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BodyPart")
 	TSoftObjectPtr<USkeletalMesh> MeshRight;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BodyPart")
+	FName AttachmentSocketRight;
 };
 
 UCLASS(Blueprintable, BlueprintType)

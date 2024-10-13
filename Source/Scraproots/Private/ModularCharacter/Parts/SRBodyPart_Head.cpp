@@ -14,8 +14,8 @@ void ASRBodyPart_Head::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 	}
 
 	const FSRBodyPartSchema_Head& HeadSchema = HeadPreset.HeadSchemaDataAsset->HeadSchema;
-
 	BaseMesh = HeadSchema.Mesh;
+	AttachmentSocket = HeadSchema.AttachmentSocket;
 
 	Super::InitializeFromPreset(Preset);
 }

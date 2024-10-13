@@ -15,6 +15,7 @@ void ASRBodyPart_Spine::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 
 	const FSRBodyPartSchema_Spine& SpineSchema = SpinePreset.SpineSchemaDataAsset->SpineSchema;
 	BaseMesh = SpineSchema.Mesh;
+	AttachmentSocket = SpineSchema.AttachmentSocket;
 
 	Super::InitializeFromPreset(Preset);
 }

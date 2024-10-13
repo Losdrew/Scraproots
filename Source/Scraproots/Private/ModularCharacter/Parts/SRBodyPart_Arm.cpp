@@ -18,10 +18,12 @@ void ASRBodyPart_Arm::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 	if (Preset.BodyPartType == ESRBodyPartType::LeftArm)
 	{
 		BaseMesh = ArmSchema.MeshLeft;
+		AttachmentSocket = ArmSchema.AttachmentSocketLeft;
 	}
 	else if (Preset.BodyPartType == ESRBodyPartType::RightArm)
 	{
 		BaseMesh = ArmSchema.MeshRight;
+		AttachmentSocket = ArmSchema.AttachmentSocketRight;
 	}
 
 	Super::InitializeFromPreset(Preset);

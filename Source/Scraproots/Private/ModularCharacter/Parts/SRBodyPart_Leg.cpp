@@ -15,6 +15,7 @@ void ASRBodyPart_Leg::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 
 	const FSRBodyPartSchema_Leg& LegSchema = LegPreset.LegSchemaDataAsset->LegSchema;
 	BaseMesh = LegSchema.Mesh;
+	AttachmentSocket = LegSchema.AttachmentSocket;
 
 	Super::InitializeFromPreset(Preset);
 }

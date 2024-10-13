@@ -19,6 +19,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BodyPart")
 	TSoftObjectPtr<USkeletalMesh> Mesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BodyPart")
+	FName AttachmentSocket;
 };
 
 UCLASS(Blueprintable, BlueprintType)
