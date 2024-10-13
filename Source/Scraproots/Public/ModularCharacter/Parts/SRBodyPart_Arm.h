@@ -1,0 +1,62 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "ModularCharacter/Parts/SRBodyPart.h"
+#include "SRBodyPart_Arm.generated.h"
+
+USTRUCT(BlueprintType)
+struct SCRAPROOTS_API FSRBodyPartSchema_Arm : public FSRBodyPartSchema
+{
+	GENERATED_BODY()
+
+public:
+	virtual TSubclassOf<ASRBodyPart> GetBodyPartClass() const override { return ArmClass; };
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BodyPart", meta = (AllowedClasses = "/Script/Scraproots.SRBodyPart_Arm"))
+	TSubclassOf<ASRBodyPart> ArmClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BodyPart")
+	TSoftObjectPtr<USkeletalMesh> MeshLeft;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BodyPart")
+	TSoftObjectPtr<USkeletalMesh> MeshRight;
+};
+
+UCLASS(Blueprintable, BlueprintType)
+class SCRAPROOTS_API USRArmSchemaData : public USRBodyPartSchemaData
+{
+	GENERATED_BODY()
+
+	virtual const FSRBodyPartSchema& GetBodyPartSchema() const override { return ArmSchema; };
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ShowOnlyInnerProperties))
+	FSRBodyPartSchema_Arm ArmSchema;
+};
+
+USTRUCT(BlueprintType)
+struct SCRAPROOTS_API FSRBodyPartPreset_Arm : public FSRBodyPartPreset
+{
+	GENERATED_BODY()
+
+public:
+	// Inherit constructors
+	using FSRBodyPartPreset::FSRBodyPartPreset;
+
+	virtual USRBodyPartSchemaData* GetBodyPartSchemaData() const override { return ArmSchemaDataAsset; };
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BodyPart")
+	TObjectPtr<USRArmSchemaData> ArmSchemaDataAsset;
+};
+
+UCLASS()
+class SCRAPROOTS_API ASRBodyPart_Arm : public ASRBodyPart
+{
+	GENERATED_BODY()
+
+public:
+	virtual void InitializeFromPreset(const FSRBodyPartPreset& Preset) override;
+};
