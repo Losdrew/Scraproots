@@ -18,13 +18,13 @@ void ASRBodyPart_Spine::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 	const FSRBodyPartSchema_Spine& SpineSchema = SpinePreset.SpineSchemaDataAsset->SpineSchema;
 	BaseMesh = SpineSchema.Mesh;
 	AttachmentSocket = SpineSchema.AttachmentSocket;
+	AnimInstanceClass = SpineSchema.AnimInstanceClass;
 
 	USRAssetManager& AssetManager = USRAssetManager::Get();
 	AssetManager.SetSkeletalMeshAsync(BaseMesh, MeshComponent, [this]() 
 	{
 		OnMeshLoaded();
 	});
-	MeshComponent->SetAnimInstanceClass(AnimInstanceClass);
 
 	Super::InitializeFromPreset(Preset);
 }

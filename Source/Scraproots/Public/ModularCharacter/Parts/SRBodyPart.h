@@ -4,6 +4,7 @@
 
 #include "GameplayTags.h"
 #include "ModularCharacter/SRModularCharacterTypes.h"
+#include "Animation/SRAnimInstance.h"
 #include "SRBodyPart.generated.h"
 
 class ASRBodyPart;
@@ -24,9 +25,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BodyPart", meta = (DisplayPriority = 1))
 	ESRRarity Rarity = ESRRarity::Common;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BodyPart", meta = (DisplayPriority = 1))
-	TSubclassOf<UAnimInstance> AnimInstanceClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BodyPart", meta = (ForceInlineRow))
 	TMap<FGameplayTag, float> Stats;
@@ -89,7 +87,7 @@ public:
 	FName AttachmentSocket;
 
 	UPROPERTY(BlueprintReadOnly, Category = "BodyPart")
-	TSubclassOf<UAnimInstance> AnimInstanceClass;
+	TSubclassOf<USRAnimInstance> AnimInstanceClass;
 
 	UPROPERTY(BlueprintReadOnly, Category = "BodyPart")
 	TMap<FGameplayTag, float> Stats;

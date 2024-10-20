@@ -36,6 +36,8 @@ void ASRBodyPart::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 	Rarity = BodyPartSchema.Rarity;
 	Stats = BodyPartSchema.Stats;
 
+	MeshComponent->SetAnimInstanceClass(AnimInstanceClass);
+
 	bInitialized = true;
 }
 

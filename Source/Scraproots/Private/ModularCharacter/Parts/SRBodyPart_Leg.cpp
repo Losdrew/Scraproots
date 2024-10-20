@@ -18,6 +18,7 @@ void ASRBodyPart_Leg::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 	const FSRBodyPartSchema_Leg& LegSchema = LegPreset.LegSchemaDataAsset->LegSchema;
 	BaseMesh = LegSchema.Mesh;
 	AttachmentSocket = LegSchema.AttachmentSocket;
+	AnimInstanceClass = LegSchema.AnimInstanceClass;
 	MeshComponent->SetRelativeLocation(LegSchema.Offset);
 
 	USRAssetManager& AssetManager = USRAssetManager::Get();
@@ -25,7 +26,6 @@ void ASRBodyPart_Leg::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 	{
 		OnMeshLoaded();
 	});
-	MeshComponent->SetAnimInstanceClass(AnimInstanceClass);
 
 	Super::InitializeFromPreset(Preset);
 }

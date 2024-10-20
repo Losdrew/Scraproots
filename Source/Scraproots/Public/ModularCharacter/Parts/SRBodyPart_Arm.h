@@ -18,6 +18,12 @@ public:
 	TSubclassOf<ASRBodyPart> ArmClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BodyPart")
+	TSubclassOf<USRAnimInstance> AnimInstanceClassLeft;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BodyPart")
+	TSubclassOf<USRAnimInstance> AnimInstanceClassRight;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BodyPart")
 	TSoftObjectPtr<USkeletalMesh> MeshLeft;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BodyPart")

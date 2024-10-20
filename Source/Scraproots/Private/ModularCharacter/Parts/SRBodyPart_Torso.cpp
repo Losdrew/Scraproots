@@ -18,13 +18,13 @@ void ASRBodyPart_Torso::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 	const FSRBodyPartSchema_Torso& TorsoSchema = TorsoPreset.TorsoSchemaDataAsset->TorsoSchema;
 	BaseMesh = TorsoSchema.Mesh;
 	AttachmentSocket = TorsoSchema.AttachmentSocket;
+	AnimInstanceClass = TorsoSchema.AnimInstanceClass;
 
 	USRAssetManager& AssetManager = USRAssetManager::Get();
 	AssetManager.SetSkeletalMeshAsync(BaseMesh, MeshComponent, [this]() 
 	{
 		OnMeshLoaded();
 	});
-	MeshComponent->SetAnimInstanceClass(AnimInstanceClass);
 
 	Super::InitializeFromPreset(Preset);
 }

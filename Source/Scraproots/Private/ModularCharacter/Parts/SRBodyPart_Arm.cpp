@@ -21,11 +21,13 @@ void ASRBodyPart_Arm::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 	{
 		BaseMesh = ArmSchema.MeshLeft;
 		AttachmentSocket = ArmSchema.AttachmentSocketLeft;
+		AnimInstanceClass = ArmSchema.AnimInstanceClassLeft;
 	}
 	else if (Preset.BodyPartType == ESRBodyPartType::RightArm)
 	{
 		BaseMesh = ArmSchema.MeshRight;
 		AttachmentSocket = ArmSchema.AttachmentSocketRight;
+		AnimInstanceClass = ArmSchema.AnimInstanceClassRight;
 	}
 
 	USRAssetManager& AssetManager = USRAssetManager::Get();
@@ -33,7 +35,6 @@ void ASRBodyPart_Arm::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 	{
 		OnMeshLoaded();
 	});
-	MeshComponent->SetAnimInstanceClass(AnimInstanceClass);
 
 	Super::InitializeFromPreset(Preset);
 }

@@ -18,13 +18,13 @@ void ASRBodyPart_Head::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 	const FSRBodyPartSchema_Head& HeadSchema = HeadPreset.HeadSchemaDataAsset->HeadSchema;
 	BaseMesh = HeadSchema.Mesh;
 	AttachmentSocket = HeadSchema.AttachmentSocket;
+	AnimInstanceClass = HeadSchema.AnimInstanceClass;
 
 	USRAssetManager& AssetManager = USRAssetManager::Get();
 	AssetManager.SetSkeletalMeshAsync(BaseMesh, MeshComponent, [this]() 
 	{
 		OnMeshLoaded();
 	});
-	MeshComponent->SetAnimInstanceClass(AnimInstanceClass);
 
 	Super::InitializeFromPreset(Preset);
 }
