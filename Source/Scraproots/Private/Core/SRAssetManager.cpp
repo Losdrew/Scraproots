@@ -19,7 +19,7 @@ USRAssetManager& USRAssetManager::Get()
 	return *NewObject<USRAssetManager>();
 }
 
-void USRAssetManager::SetSkeletalMeshAsync(TSoftObjectPtr<USkeletalMesh> MeshToLoad, USkeletalMeshComponent* MeshComponentToSet)
+void USRAssetManager::SetSkeletalMeshAsync(TSoftObjectPtr<USkeletalMesh> MeshToLoad, USkeletalMeshComponent* MeshComponentToSet, TFunction<void()> OnMeshLoadedCallback)
 {
 	if (MeshComponentToSet != nullptr)
 	{
@@ -28,11 +28,17 @@ void USRAssetManager::SetSkeletalMeshAsync(TSoftObjectPtr<USkeletalMesh> MeshToL
 			FStreamableManager& Streamable = GetStreamableManager();
 
 			Streamable.RequestAsyncLoad(MeshToLoad.ToSoftObjectPath(),
-				[this, MeshToLoad, MeshComponentToSet]()
+				[this, MeshToLoad, MeshComponentToSet, OnMeshLoadedCallback]()
 				{
 					if (USkeletalMesh* LoadedMesh = MeshToLoad.Get())
 					{
 						MeshComponentToSet->SetSkeletalMesh(LoadedMesh, true);
+
+						// Call the callback to notify that the mesh has been set
+						if (OnMeshLoadedCallback)
+						{
+							OnMeshLoadedCallback();
+						}
 					}
 					else
 					{
@@ -55,7 +61,7 @@ void USRAssetManager::SetSkeletalMeshAsync(TSoftObjectPtr<USkeletalMesh> MeshToL
 	}
 }
 
-void USRAssetManager::SetStaticMeshAsync(TSoftObjectPtr<UStaticMesh> MeshToLoad, UStaticMeshComponent* MeshComponentToSet)
+void USRAssetManager::SetStaticMeshAsync(TSoftObjectPtr<UStaticMesh> MeshToLoad, UStaticMeshComponent* MeshComponentToSet, TFunction<void()> OnMeshLoadedCallback)
 {
 	if (MeshComponentToSet != nullptr)
 	{
@@ -64,11 +70,17 @@ void USRAssetManager::SetStaticMeshAsync(TSoftObjectPtr<UStaticMesh> MeshToLoad,
 			FStreamableManager& Streamable = GetStreamableManager();
 
 			Streamable.RequestAsyncLoad(MeshToLoad.ToSoftObjectPath(),
-				[this, MeshToLoad, MeshComponentToSet]()
+				[this, MeshToLoad, MeshComponentToSet, OnMeshLoadedCallback]()
 				{
 					if (UStaticMesh* LoadedMesh = MeshToLoad.Get())
 					{
 						MeshComponentToSet->SetStaticMesh(LoadedMesh);
+
+						// Call the callback to notify that the mesh has been set
+						if (OnMeshLoadedCallback)
+						{
+							OnMeshLoadedCallback();
+						}
 					}
 					else
 					{
