@@ -18,6 +18,7 @@ void ASRBodyPart_Leg::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 	const FSRBodyPartSchema_Leg& LegSchema = LegPreset.LegSchemaDataAsset->LegSchema;
 	BaseMesh = LegSchema.Mesh;
 	AttachmentSocket = LegSchema.AttachmentSocket;
+	MeshComponent->SetRelativeLocation(LegSchema.Offset);
 
 	USRAssetManager& AssetManager = USRAssetManager::Get();
 	AssetManager.SetSkeletalMeshAsync(BaseMesh, MeshComponent, [this]() 
