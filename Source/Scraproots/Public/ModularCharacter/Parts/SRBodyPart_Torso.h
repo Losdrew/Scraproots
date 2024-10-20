@@ -19,6 +19,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BodyPart")
 	TSoftObjectPtr<USkeletalMesh> Mesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BodyPart")
+	FName AttachmentSocket;
 };
 
 UCLASS(Blueprintable, BlueprintType)
@@ -56,4 +59,10 @@ class SCRAPROOTS_API ASRBodyPart_Torso : public ASRBodyPart
 
 public:
 	virtual void InitializeFromPreset(const FSRBodyPartPreset& Preset) override;
+
+protected:
+	virtual void AttachToBodyPart(ASRBodyPart* BodyPart) override;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void AttachToLegs(ASRBodyPart* BodyPart);
 };

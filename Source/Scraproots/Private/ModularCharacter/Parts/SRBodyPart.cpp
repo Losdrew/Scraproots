@@ -48,3 +48,39 @@ void ASRBodyPart::SetBodyPartMeshParameters(USkeletalMeshComponent* SkeletalMesh
 		SkeletalMeshComponent->SetCollisionEnabled(ECollisionEnabled::Type::QueryOnly);
 	}
 }
+
+void ASRBodyPart::OnMeshLoaded()
+{
+	AttachBodyParts();
+}
+
+void ASRBodyPart::AddAttachmentBodyPart(ASRBodyPart* BodyPart)
+{
+	if (BodyPart)
+	{
+		AttachmentBodyParts.Add(BodyPart);
+	}
+}
+
+void ASRBodyPart::AttachBodyParts()
+{
+	// Attach all attachment body parts to this body part
+	for (TWeakObjectPtr<ASRBodyPart> BodyPart : AttachmentBodyParts)
+	{
+		if (BodyPart.IsValid())
+		{
+			BodyPart->AttachToBodyPart(this);
+		}
+	}
+}
+
+void ASRBodyPart::AttachToBodyPart(ASRBodyPart* BodyPart)
+{
+	if (BodyPart)
+	{
+		if (BodyPart->MeshComponent)
+		{
+			AttachToComponent(BodyPart->MeshComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
+		}
+	}
+}

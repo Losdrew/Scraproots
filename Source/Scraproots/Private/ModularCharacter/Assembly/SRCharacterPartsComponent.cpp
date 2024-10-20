@@ -17,62 +17,61 @@ void USRCharacterPartsComponent::Initialize(TArray<TObjectPtr<ASRBodyPart>>* Bod
 
 void USRCharacterPartsComponent::AddBodyPart(const FSRBodyPartPreset& PartPreset)
 {
-    if (BodyPartsPtr == nullptr)
-    {
-        UE_LOG(LogSRModularCharacter, Error, TEXT("USRCharacterPartsComponent::AddBodyPart: Body parts array is null"));
-        return;
-    }
+	if (BodyPartsPtr == nullptr)
+	{
+		UE_LOG(LogSRModularCharacter, Error, TEXT("USRCharacterPartsComponent::AddBodyPart: Body parts array is null"));
+		return;
+	}
 
-    // Not adding body part of this type if it already exists in the character
-    if (GetBodyPartByPartType(PartPreset.BodyPartType))
-    {
-        UE_LOG(LogSRModularCharacter, Error, TEXT("USRCharacterPartsComponent::AddBodyPart: Body part already exists in the character"));
-        return;
-    }
+	// Not adding body part of this type if it already exists in the character
+	if (GetBodyPartByPartType(PartPreset.BodyPartType))
+	{
+		UE_LOG(LogSRModularCharacter, Error, TEXT("USRCharacterPartsComponent::AddBodyPart: Body part already exists in the character"));
+		return;
+	}
 
-    USRBodyPartSchemaData* BodyPartSchemaData = PartPreset.GetBodyPartSchemaData();
-    if (BodyPartSchemaData == nullptr)
-    {
-        UE_LOG(LogSRModularCharacter, Error, TEXT("USRCharacterPartsComponent::AddBodyPart: Body part schema data is null"));
-        return;
-    }
+	USRBodyPartSchemaData* BodyPartSchemaData = PartPreset.GetBodyPartSchemaData();
+	if (BodyPartSchemaData == nullptr)
+	{
+		UE_LOG(LogSRModularCharacter, Error, TEXT("USRCharacterPartsComponent::AddBodyPart: Body part schema data is null"));
+		return;
+	}
 
-    const FSRBodyPartSchema& BodyPartSchema = BodyPartSchemaData->GetBodyPartSchema();
-    TSubclassOf<ASRBodyPart> BodyPartClass = BodyPartSchema.GetBodyPartClass();
-    if (BodyPartClass == nullptr)
-    {
-        UE_LOG(LogSRModularCharacter, Error, TEXT("USRCharacterPartsComponent::AddBodyPart: Body part class is null"));
-        return;
-    }
+	const FSRBodyPartSchema& BodyPartSchema = BodyPartSchemaData->GetBodyPartSchema();
+	TSubclassOf<ASRBodyPart> BodyPartClass = BodyPartSchema.GetBodyPartClass();
+	if (BodyPartClass == nullptr)
+	{
+		UE_LOG(LogSRModularCharacter, Error, TEXT("USRCharacterPartsComponent::AddBodyPart: Body part class is null"));
+		return;
+	}
 
-    AActor* Owner = GetOwner();
-    if (Owner == nullptr)
-    {
-        UE_LOG(LogSRModularCharacter, Warning, TEXT("USRCharacterPartsComponent::AddBodyPart: Owner is null"));
-        return;
-    }
+	AActor* Owner = GetOwner();
+	if (Owner == nullptr)
+	{
+		UE_LOG(LogSRModularCharacter, Warning, TEXT("USRCharacterPartsComponent::AddBodyPart: Owner is null"));
+		return;
+	}
 
-    ASRBodyPart* NewBodyPart = GetWorld()->SpawnActorDeferred<ASRBodyPart>(BodyPartClass, FTransform::Identity, Owner);
-    if (NewBodyPart)
-    {
-        NewBodyPart->InitializeFromPreset(PartPreset);
-        if (NewBodyPart->bInitialized)
-        {
-            AttachBodyPart(NewBodyPart);
+	ASRBodyPart* NewBodyPart = GetWorld()->SpawnActorDeferred<ASRBodyPart>(BodyPartClass, FTransform::Identity, Owner);
+	if (NewBodyPart)
+	{
+		NewBodyPart->InitializeFromPreset(PartPreset);
+		if (NewBodyPart->bInitialized)
+		{
 			NewBodyPart->FinishSpawning(FTransform::Identity);
 			BodyPartsPtr->Add(NewBodyPart);
-        }
-        else
-        {
-            UE_LOG(LogSRModularCharacter, Error, TEXT("USRCharacterPartsComponent::AddBodyPart: Failed to initialize body part"));
-            NewBodyPart->Destroy();
-        }
-    }
-    else
-    {
-        UE_LOG(LogSRModularCharacter, Error, TEXT("USRCharacterPartsComponent::AddBodyPart: Failed to spawn body part actor"));
+		}
+		else
+		{
+			UE_LOG(LogSRModularCharacter, Error, TEXT("USRCharacterPartsComponent::AddBodyPart: Failed to initialize body part"));
+			NewBodyPart->Destroy();
+		}
+	}
+	else
+	{
+		UE_LOG(LogSRModularCharacter, Error, TEXT("USRCharacterPartsComponent::AddBodyPart: Failed to spawn body part actor"));
 		return;
-    }
+	}
 }
 
 void USRCharacterPartsComponent::RemoveBodyPart(ESRBodyPartType BodyPartType)
@@ -130,6 +129,50 @@ TArray<ASRBodyPart*> USRCharacterPartsComponent::GetAllBodyParts() const
 	return TArray<ASRBodyPart*>();
 }
 
+void USRCharacterPartsComponent::AttachBodyParts()
+{
+	if (BodyPartsPtr == nullptr)
+	{
+		UE_LOG(LogSRModularCharacter, Error, TEXT("USRCharacterPartsComponent::AttachBodyParts: Body part array is null"));
+		return;
+	}
+
+	ASRBodyPart* Torso = GetBodyPartByPartType(ESRBodyPartType::Torso);
+	if (Torso == nullptr)
+	{
+		UE_LOG(LogSRModularCharacter, Error, TEXT("USRCharacterPartsComponent::AttachBodyParts: Torso not found"));
+		return;
+	}
+
+	USkeletalMeshComponent* ParentMeshComponent = GetParentMeshComponent();
+	if (ParentMeshComponent == nullptr)
+	{
+		UE_LOG(LogSRModularCharacter, Error, TEXT("USRCharacterPartsComponent::AttachBodyParts: Parent mesh component is null"));
+		return;
+	}
+
+	Torso->AttachToComponent(ParentMeshComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
+
+	for (ASRBodyPart* BodyPart : *BodyPartsPtr)
+	{
+		if (BodyPart == Torso)
+		{
+			continue;
+		}
+
+		// The torso should attach to the legs if there are any
+		if (BodyPart->BodyPartType == ESRBodyPartType::Legs)
+		{
+			BodyPart->AttachToComponent(ParentMeshComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
+			BodyPart->AddAttachmentBodyPart(Torso);
+		}
+		else
+		{
+			Torso->AddAttachmentBodyPart(BodyPart);
+		}
+	}
+}
+
 USkeletalMeshComponent* USRCharacterPartsComponent::GetParentMeshComponent() const
 {
 	if (AActor* OwnerActor = GetOwner())
@@ -144,31 +187,6 @@ USkeletalMeshComponent* USRCharacterPartsComponent::GetParentMeshComponent() con
 	}
 
 	return nullptr;
-}
-
-void USRCharacterPartsComponent::AttachBodyPart(ASRBodyPart* BodyPart)
-{
-	AActor* Owner = GetOwner();
-	if (!BodyPart || !Owner)
-	{
-		UE_LOG(LogSRModularCharacter, Error, TEXT("USRCharacterPartsComponent::AttachBodyPart: Invalid body part instance or owner"));
-		return;
-	}
-
-	if (USkeletalMeshComponent* ParentMeshComponent = GetParentMeshComponent())
-	{
-		// If the body part is a torso, replace the character's mesh with the torso mesh
-		if (BodyPart->BodyPartType == ESRBodyPartType::Torso)
-		{
-			USRAssetManager& AssetManager = USRAssetManager::Get();
-			AssetManager.SetSkeletalMeshAsync(BodyPart->BaseMesh, ParentMeshComponent);
-			ParentMeshComponent->SetAnimInstanceClass(BodyPart->AnimInstanceClass);
-			BodyPart->MeshComponent->SetSkeletalMesh(nullptr, true);
-		}
-
-		BodyPart->AttachToComponent(ParentMeshComponent, FAttachmentTransformRules::SnapToTargetIncludingScale, BodyPart->AttachmentSocket);
-		BodyPart->SetOwner(Owner);
-	}
 }
 
 void USRCharacterPartsComponent::DetachBodyPart(ASRBodyPart* BodyPart)

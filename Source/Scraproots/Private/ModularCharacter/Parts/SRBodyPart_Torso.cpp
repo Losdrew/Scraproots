@@ -2,6 +2,8 @@
 
 #include "ModularCharacter/Parts/SRBodyPart_Torso.h"
 
+#include "Core/SRAssetManager.h"
+
 void ASRBodyPart_Torso::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 {
 	// Cast the base preset to the torso-specific preset
@@ -15,6 +17,25 @@ void ASRBodyPart_Torso::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 
 	const FSRBodyPartSchema_Torso& TorsoSchema = TorsoPreset.TorsoSchemaDataAsset->TorsoSchema;
 	BaseMesh = TorsoSchema.Mesh;
+	AttachmentSocket = TorsoSchema.AttachmentSocket;
+
+	USRAssetManager& AssetManager = USRAssetManager::Get();
+	AssetManager.SetSkeletalMeshAsync(BaseMesh, MeshComponent, [this]() 
+	{
+		OnMeshLoaded();
+	});
+	MeshComponent->SetAnimInstanceClass(AnimInstanceClass);
 
 	Super::InitializeFromPreset(Preset);
+}
+
+void ASRBodyPart_Torso::AttachToBodyPart(ASRBodyPart* BodyPart)
+{
+	if (BodyPart)
+	{
+		if (BodyPart->BodyPartType == ESRBodyPartType::Legs && BodyPart->MeshComponent)
+		{
+			AttachToLegs(BodyPart);
+		}
+	}
 }

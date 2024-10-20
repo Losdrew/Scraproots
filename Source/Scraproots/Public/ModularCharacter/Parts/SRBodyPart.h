@@ -73,6 +73,7 @@ public:
 	ASRBodyPart();
 
 	virtual void InitializeFromPreset(const FSRBodyPartPreset& Preset);
+	virtual void AddAttachmentBodyPart(ASRBodyPart* BodyPart);
 
 public:
 	UPROPERTY(BlueprintReadOnly, Category = "BodyPart")
@@ -108,4 +109,12 @@ public:
 protected:
 	// Sets default parameters for a body part mesh
 	virtual void SetBodyPartMeshParameters(USkeletalMeshComponent* MeshComponent);
+
+	virtual void OnMeshLoaded();
+	virtual void AttachBodyParts();
+	virtual void AttachToBodyPart(ASRBodyPart* BodyPart);
+
+protected:
+	// Body parts that should be attached to this body part
+	TArray<TWeakObjectPtr<ASRBodyPart>> AttachmentBodyParts;
 };

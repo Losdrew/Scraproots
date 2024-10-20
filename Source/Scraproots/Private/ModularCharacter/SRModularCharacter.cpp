@@ -20,10 +20,13 @@ void ASRModularCharacter::InitializeFromPreset(const FSRModularCharacterPreset& 
 	}
 
 	CharacterPartsComponent->Initialize(&BodyParts);
+
 	CharacterPartsComponent->AddBodyPart(Preset.LeftArmPreset);
 	CharacterPartsComponent->AddBodyPart(Preset.RightArmPreset);
 	CharacterPartsComponent->AddBodyPart(Preset.LegsPreset);
 	CharacterPartsComponent->AddBodyPart(Preset.HeadPreset);
 	CharacterPartsComponent->AddBodyPart(Preset.TorsoPreset);
 	CharacterPartsComponent->AddBodyPart(Preset.SpinePreset);
+
+	CharacterPartsComponent->AttachBodyParts();
 }

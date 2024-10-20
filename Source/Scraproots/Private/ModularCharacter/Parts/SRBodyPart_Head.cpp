@@ -20,8 +20,23 @@ void ASRBodyPart_Head::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 	AttachmentSocket = HeadSchema.AttachmentSocket;
 
 	USRAssetManager& AssetManager = USRAssetManager::Get();
-	AssetManager.SetSkeletalMeshAsync(BaseMesh, MeshComponent);
+	AssetManager.SetSkeletalMeshAsync(BaseMesh, MeshComponent, [this]() 
+	{
+		OnMeshLoaded();
+	});
 	MeshComponent->SetAnimInstanceClass(AnimInstanceClass);
 
 	Super::InitializeFromPreset(Preset);
+}
+
+void ASRBodyPart_Head::AttachToBodyPart(ASRBodyPart* BodyPart)
+{
+	if (BodyPart)
+	{
+		if (BodyPart->MeshComponent)
+		{
+			FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, EAttachmentRule::SnapToTarget, true);
+			AttachToComponent(BodyPart->MeshComponent, AttachmentRules, AttachmentSocket);
+		}
+	}
 }

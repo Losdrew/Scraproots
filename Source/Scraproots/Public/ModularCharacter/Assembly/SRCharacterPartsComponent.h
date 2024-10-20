@@ -33,12 +33,15 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ModularCharacter|Parts")
 	TArray<ASRBodyPart*> GetAllBodyParts() const;
 
+	// Attaches all body parts to the character
+	UFUNCTION(BlueprintCallable, Category = "ModularCharacter|Parts")
+	void AttachBodyParts();
+
 protected:
 	// If the parent actor is derived from ACharacter, returns the Mesh component, otherwise nullptr
 	USkeletalMeshComponent* GetParentMeshComponent() const;
 
 private:
-	void AttachBodyPart(ASRBodyPart* BodyPart);
 	void DetachBodyPart(ASRBodyPart* BodyPart);
 
 private:

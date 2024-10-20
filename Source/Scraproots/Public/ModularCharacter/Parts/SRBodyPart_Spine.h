@@ -59,4 +59,7 @@ class SCRAPROOTS_API ASRBodyPart_Spine : public ASRBodyPart
 
 public:
 	virtual void InitializeFromPreset(const FSRBodyPartPreset& Preset) override;
+
+protected:
+	virtual void AttachToBodyPart(ASRBodyPart* BodyPart) override;
 };
