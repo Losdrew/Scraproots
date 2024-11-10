@@ -177,9 +177,18 @@ USkeletalMeshComponent* USRCharacterPartsComponent::GetParentMeshComponent() con
 {
 	if (AActor* OwnerActor = GetOwner())
 	{
+		// If the parent actor is derived from ACharacter, returns the character mesh
 		if (ACharacter* OwningCharacter = Cast<ACharacter>(OwnerActor))
 		{
 			if (USkeletalMeshComponent* MeshComponent = OwningCharacter->GetMesh())
+			{
+				return MeshComponent;
+			}
+		}
+		// If the parent actor is derived from AActor, search for a skeletal mesh component
+		else if (AActor* OwningActor = Cast<AActor>(OwnerActor))
+		{
+			if (USkeletalMeshComponent* MeshComponent = OwningActor->FindComponentByClass<USkeletalMeshComponent>())
 			{
 				return MeshComponent;
 			}
