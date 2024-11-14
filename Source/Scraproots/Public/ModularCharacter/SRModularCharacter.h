@@ -12,6 +12,7 @@
 #include "SRModularCharacter.generated.h"
 
 class USRCharacterPartsComponent;
+class ARipBodyPart;
 
 USTRUCT(BlueprintType)
 struct SCRAPROOTS_API FSRModularCharacterPreset
@@ -40,7 +41,7 @@ struct SCRAPROOTS_API FSRModularCharacterPreset
 };
 
 UCLASS(Abstract)
-class SCRAPROOTS_API ASRModularCharacter : public ACharacter
+class SCRAPROOTS_API ASRModularCharacter : public AActor
 {
 	GENERATED_BODY()
 
@@ -50,11 +51,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Character")
 	virtual void InitializeFromPreset(const FSRModularCharacterPreset& Preset);
 
-protected:
+	UFUNCTION(BlueprintCallable, Category = "Character")
+	TArray<ASRBodyPart*> GetAllBodyParts() const;
+
+public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	TObjectPtr<USRCharacterPartsComponent> CharacterPartsComponent;
-
-protected:
-	UPROPERTY()
-	TArray<TObjectPtr<ASRBodyPart>> BodyParts;
 };

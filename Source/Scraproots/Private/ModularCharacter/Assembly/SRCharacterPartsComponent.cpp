@@ -5,24 +5,26 @@
 #include "Core/SRAssetManager.h"
 #include "GameFramework/Character.h"
 #include "ModularCharacter/Parts/SRBodyPart.h"
+#include "ModularCharacter/SRModularCharacter.h"
 #include "ModularCharacter/SRModularCharacterTypes.h"
 
 USRCharacterPartsComponent::USRCharacterPartsComponent(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer) {}
 
-void USRCharacterPartsComponent::Initialize(TArray<TObjectPtr<ASRBodyPart>>* BodyParts)
+void USRCharacterPartsComponent::AddBodyPartsFromPreset(const FSRModularCharacterPreset& Preset)
 {
-	BodyPartsPtr = BodyParts;
+	AddBodyPart(Preset.LeftArmPreset);
+	AddBodyPart(Preset.RightArmPreset);
+	AddBodyPart(Preset.LegsPreset);
+	AddBodyPart(Preset.HeadPreset);
+	AddBodyPart(Preset.TorsoPreset);
+	AddBodyPart(Preset.SpinePreset);
+
+	AttachBodyParts();
 }
 
 void USRCharacterPartsComponent::AddBodyPart(const FSRBodyPartPreset& PartPreset)
 {
-	if (BodyPartsPtr == nullptr)
-	{
-		UE_LOG(LogSRModularCharacter, Error, TEXT("USRCharacterPartsComponent::AddBodyPart: Body parts array is null"));
-		return;
-	}
-
 	// Not adding body part of this type if it already exists in the character
 	if (GetBodyPartByPartType(PartPreset.BodyPartType))
 	{
@@ -59,7 +61,7 @@ void USRCharacterPartsComponent::AddBodyPart(const FSRBodyPartPreset& PartPreset
 		if (NewBodyPart->bInitialized)
 		{
 			NewBodyPart->FinishSpawning(FTransform::Identity);
-			BodyPartsPtr->Add(NewBodyPart);
+			BodyParts.Add(NewBodyPart);
 		}
 		else
 		{
@@ -76,18 +78,12 @@ void USRCharacterPartsComponent::AddBodyPart(const FSRBodyPartPreset& PartPreset
 
 void USRCharacterPartsComponent::RemoveBodyPart(ESRBodyPartType BodyPartType)
 {
-	if (BodyPartsPtr == nullptr)
-	{
-		UE_LOG(LogSRModularCharacter, Error, TEXT("USRCharacterPartsComponent::RemoveBodyPart: Body part array is null"));
-		return;
-	}
-
 	if (ASRBodyPart* BodyPart = GetBodyPartByPartType(BodyPartType))
 	{
 		if (BodyPart)
 		{
 			DetachBodyPart(BodyPart);
-			BodyPartsPtr->Remove(BodyPart);
+			BodyParts.Remove(BodyPart);
 		}
 	}
 	else
@@ -98,20 +94,11 @@ void USRCharacterPartsComponent::RemoveBodyPart(ESRBodyPartType BodyPartType)
 
 ASRBodyPart* USRCharacterPartsComponent::GetBodyPartByPartType(ESRBodyPartType PartType) const
 {
-	if (BodyPartsPtr == nullptr)
+	for (ASRBodyPart* BodyPart : BodyParts)
 	{
-		UE_LOG(LogSRModularCharacter, Error, TEXT("USRCharacterPartsComponent::GetBodyPartByPartType: Body part array is null"));
-		return nullptr;
-	}
-
-	if (!BodyPartsPtr->IsEmpty())
-	{
-		for (ASRBodyPart* BodyPart : *BodyPartsPtr)
+		if (BodyPart->BodyPartType == PartType)
 		{
-			if (BodyPart->BodyPartType == PartType)
-			{
-				return BodyPart;
-			}
+			return BodyPart;
 		}
 	}
 
@@ -120,23 +107,11 @@ ASRBodyPart* USRCharacterPartsComponent::GetBodyPartByPartType(ESRBodyPartType P
 
 TArray<ASRBodyPart*> USRCharacterPartsComponent::GetAllBodyParts() const
 {
-	if (BodyPartsPtr != nullptr)
-	{
-		return *BodyPartsPtr;
-	}
-
-	UE_LOG(LogSRModularCharacter, Error, TEXT("USRCharacterPartsComponent::GetAllBodyParts: Body part array is null"));
-	return TArray<ASRBodyPart*>();
+	return BodyParts;
 }
 
 void USRCharacterPartsComponent::AttachBodyParts()
 {
-	if (BodyPartsPtr == nullptr)
-	{
-		UE_LOG(LogSRModularCharacter, Error, TEXT("USRCharacterPartsComponent::AttachBodyParts: Body part array is null"));
-		return;
-	}
-
 	ASRBodyPart* Torso = GetBodyPartByPartType(ESRBodyPartType::Torso);
 	if (Torso == nullptr)
 	{
@@ -153,7 +128,7 @@ void USRCharacterPartsComponent::AttachBodyParts()
 
 	Torso->AttachToComponent(ParentMeshComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
 
-	for (ASRBodyPart* BodyPart : *BodyPartsPtr)
+	for (ASRBodyPart* BodyPart : BodyParts)
 	{
 		if (BodyPart == Torso)
 		{
