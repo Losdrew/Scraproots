@@ -6,7 +6,6 @@
 #include "ModularCharacter/Parts/SRBodyPart_Arm.h"
 #include "ModularCharacter/Parts/SRBodyPart_Head.h"
 #include "ModularCharacter/Parts/SRBodyPart_Leg.h"
-#include "ModularCharacter/Parts/SRBodyPart_Spine.h"
 #include "ModularCharacter/Parts/SRBodyPart_Torso.h"
 #include "ModularCharacter/SRModularCharacterTypes.h"
 #include "SRModularCharacter.generated.h"
@@ -35,13 +34,10 @@ struct SCRAPROOTS_API FSRModularCharacterPreset
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Body Parts")
 	FSRBodyPartPreset_Torso TorsoPreset{ESRBodyPartType::Torso};
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Body Parts")
-	FSRBodyPartPreset_Spine SpinePreset{ESRBodyPartType::Spine};
 };
 
 UCLASS(Abstract)
-class SCRAPROOTS_API ASRModularCharacter : public AActor
+class SCRAPROOTS_API ASRModularCharacter : public ACharacter
 {
 	GENERATED_BODY()
 

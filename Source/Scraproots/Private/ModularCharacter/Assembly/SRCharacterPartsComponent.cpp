@@ -18,7 +18,6 @@ void USRCharacterPartsComponent::AddBodyPartsFromPreset(const FSRModularCharacte
 	AddBodyPart(Preset.LegsPreset);
 	AddBodyPart(Preset.HeadPreset);
 	AddBodyPart(Preset.TorsoPreset);
-	AddBodyPart(Preset.SpinePreset);
 
 	AttachBodyParts();
 }
