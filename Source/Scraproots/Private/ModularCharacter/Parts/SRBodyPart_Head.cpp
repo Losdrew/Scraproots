@@ -37,6 +37,8 @@ void ASRBodyPart_Head::AttachToBodyPart(ASRBodyPart* BodyPart)
 		{
 			FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, EAttachmentRule::SnapToTarget, true);
 			AttachToComponent(BodyPart->MeshComponent, AttachmentRules, AttachmentSocket);
+			FRotator Rotation = BodyPart->GetActorRotation();
+			AddActorWorldRotation(FRotator(Rotation));
 		}
 	}
 }
