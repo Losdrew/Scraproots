@@ -32,8 +32,11 @@ void USRAssetManager::SetSkeletalMeshAsync(TSoftObjectPtr<USkeletalMesh> MeshToL
 				{
 					if (USkeletalMesh* LoadedMesh = MeshToLoad.Get())
 					{
-						MeshComponentToSet->SetSkeletalMesh(LoadedMesh, true);
-
+						if (MeshComponentToSet)
+						{
+							MeshComponentToSet->SetSkeletalMesh(LoadedMesh, true);
+						}
+						
 						// Call the callback to notify that the mesh has been set
 						if (OnMeshLoadedCallback)
 						{
@@ -74,7 +77,10 @@ void USRAssetManager::SetStaticMeshAsync(TSoftObjectPtr<UStaticMesh> MeshToLoad,
 				{
 					if (UStaticMesh* LoadedMesh = MeshToLoad.Get())
 					{
-						MeshComponentToSet->SetStaticMesh(LoadedMesh);
+						if (MeshComponentToSet)
+						{
+							MeshComponentToSet->SetStaticMesh(LoadedMesh);
+						}
 
 						// Call the callback to notify that the mesh has been set
 						if (OnMeshLoadedCallback)
