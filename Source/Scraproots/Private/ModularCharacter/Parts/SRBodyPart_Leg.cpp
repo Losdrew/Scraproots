@@ -19,7 +19,6 @@ void ASRBodyPart_Leg::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 	BaseMesh = LegSchema.Mesh;
 	AttachmentSocket = LegSchema.AttachmentSocket;
 	AnimInstanceClass = LegSchema.AnimInstanceClass;
-	MeshComponent->SetRelativeLocation(LegSchema.Offset);
 
 	USRAssetManager& AssetManager = USRAssetManager::Get();
 	AssetManager.SetSkeletalMeshAsync(BaseMesh, MeshComponent, [this]() 
@@ -36,8 +35,7 @@ void ASRBodyPart_Leg::AttachToBodyPart(ASRBodyPart* BodyPart)
 	{
 		if (BodyPart->MeshComponent)
 		{
-			FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, EAttachmentRule::SnapToTarget, true);
-			AttachToComponent(BodyPart->MeshComponent, AttachmentRules, AttachmentSocket);
+			AttachToComponent(BodyPart->MeshComponent, FAttachmentTransformRules::SnapToTargetIncludingScale, AttachmentSocket);
 		}
 	}
 }

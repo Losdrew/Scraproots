@@ -19,14 +19,14 @@ void ASRModularCharacter::InitializeFromPreset(const FSRModularCharacterPreset& 
 		return;
 	}
 
-	CharacterPartsComponent->Initialize(&BodyParts);
+	CharacterPartsComponent->AddBodyPartsFromPreset(Preset);
+}
 
-	CharacterPartsComponent->AddBodyPart(Preset.LeftArmPreset);
-	CharacterPartsComponent->AddBodyPart(Preset.RightArmPreset);
-	CharacterPartsComponent->AddBodyPart(Preset.LegsPreset);
-	CharacterPartsComponent->AddBodyPart(Preset.HeadPreset);
-	CharacterPartsComponent->AddBodyPart(Preset.TorsoPreset);
-	CharacterPartsComponent->AddBodyPart(Preset.SpinePreset);
-
-	CharacterPartsComponent->AttachBodyParts();
+TArray<ASRBodyPart*> ASRModularCharacter::GetAllBodyParts() const
+{
+	if (CharacterPartsComponent)
+	{
+		return CharacterPartsComponent->GetAllBodyParts();
+	}
+	return TArray<ASRBodyPart*>();
 }

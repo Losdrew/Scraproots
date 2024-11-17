@@ -6,6 +6,7 @@
 #include "SRCharacterPartsComponent.generated.h"
 
 enum class ESRBodyPartType : uint8;
+struct FSRModularCharacterPreset;
 struct FSRBodyPartPreset;
 class ASRBodyPart;
 
@@ -18,7 +19,8 @@ class USRCharacterPartsComponent : public UActorComponent
 public:
 	USRCharacterPartsComponent(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
-	void Initialize(TArray<TObjectPtr<ASRBodyPart>>* BodyParts);
+	UFUNCTION(BlueprintCallable, Category = "ModularCharacter")
+	void AddBodyPartsFromPreset(const FSRModularCharacterPreset& Preset);
 
 	UFUNCTION(BlueprintCallable, Category = "ModularCharacter|Parts")
 	void AddBodyPart(const FSRBodyPartPreset& PartPreset);
@@ -41,9 +43,10 @@ protected:
 	// If the parent actor is derived from ACharacter, returns the Mesh component, otherwise nullptr
 	USkeletalMeshComponent* GetParentMeshComponent() const;
 
-private:
-	void DetachBodyPart(ASRBodyPart* BodyPart);
+protected:
+	UPROPERTY()
+	TArray<TObjectPtr<ASRBodyPart>> BodyParts;
 
 private:
-	TArray<TObjectPtr<ASRBodyPart>>* BodyPartsPtr = nullptr;
+	void DetachBodyPart(ASRBodyPart* BodyPart);
 };

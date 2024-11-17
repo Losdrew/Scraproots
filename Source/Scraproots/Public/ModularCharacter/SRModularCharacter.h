@@ -6,12 +6,12 @@
 #include "ModularCharacter/Parts/SRBodyPart_Arm.h"
 #include "ModularCharacter/Parts/SRBodyPart_Head.h"
 #include "ModularCharacter/Parts/SRBodyPart_Leg.h"
-#include "ModularCharacter/Parts/SRBodyPart_Spine.h"
 #include "ModularCharacter/Parts/SRBodyPart_Torso.h"
 #include "ModularCharacter/SRModularCharacterTypes.h"
 #include "SRModularCharacter.generated.h"
 
 class USRCharacterPartsComponent;
+class ARipBodyPart;
 
 USTRUCT(BlueprintType)
 struct SCRAPROOTS_API FSRModularCharacterPreset
@@ -34,9 +34,6 @@ struct SCRAPROOTS_API FSRModularCharacterPreset
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Body Parts")
 	FSRBodyPartPreset_Torso TorsoPreset{ESRBodyPartType::Torso};
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Body Parts")
-	FSRBodyPartPreset_Spine SpinePreset{ESRBodyPartType::Spine};
 };
 
 UCLASS(Abstract)
@@ -50,11 +47,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Character")
 	virtual void InitializeFromPreset(const FSRModularCharacterPreset& Preset);
 
-protected:
+	UFUNCTION(BlueprintCallable, Category = "Character")
+	TArray<ASRBodyPart*> GetAllBodyParts() const;
+
+public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	TObjectPtr<USRCharacterPartsComponent> CharacterPartsComponent;
-
-protected:
-	UPROPERTY()
-	TArray<TObjectPtr<ASRBodyPart>> BodyParts;
 };

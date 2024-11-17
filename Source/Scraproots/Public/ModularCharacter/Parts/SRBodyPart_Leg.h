@@ -25,9 +25,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BodyPart")
 	FName AttachmentSocket;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BodyPart")
-	FVector Offset; 
 };
 
 UCLASS(Blueprintable, BlueprintType)
