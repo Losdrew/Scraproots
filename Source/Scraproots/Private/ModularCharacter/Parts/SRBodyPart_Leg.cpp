@@ -35,8 +35,7 @@ void ASRBodyPart_Leg::AttachToBodyPart(ASRBodyPart* BodyPart)
 	{
 		if (BodyPart->MeshComponent)
 		{
-			FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, EAttachmentRule::SnapToTarget, true);
-			AttachToComponent(BodyPart->MeshComponent, AttachmentRules, AttachmentSocket);
+			AttachToComponent(BodyPart->MeshComponent, FAttachmentTransformRules::SnapToTargetIncludingScale, AttachmentSocket);
 		}
 	}
 }
