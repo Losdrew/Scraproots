@@ -5,6 +5,7 @@
 #include "GameplayTags.h"
 #include "ModularCharacter/SRModularCharacterTypes.h"
 #include "Animation/SRAnimInstance.h"
+#include "Product/SRProductTypes.h"
 #include "SRBodyPart.generated.h"
 
 class ASRBodyPart;
@@ -31,7 +32,7 @@ public:
 };
 
 UCLASS(Abstract)
-class SCRAPROOTS_API USRBodyPartSchemaData : public UDataAsset
+class SCRAPROOTS_API USRBodyPartSchemaData : public USRProductSchemaData
 {
 	GENERATED_BODY()
 
