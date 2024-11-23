@@ -6,6 +6,7 @@
 #include "ModularCharacter/SRModularCharacterTypes.h"
 #include "Animation/SRAnimInstance.h"
 #include "Product/SRProductTypes.h"
+#include "Abilities/SRAbility.h"
 #include "SRBodyPart.generated.h"
 
 class ASRBodyPart;
@@ -19,16 +20,6 @@ struct SCRAPROOTS_API FSRBodyPartSchema
 public:
 	virtual ~FSRBodyPartSchema() = default;
 	virtual TSubclassOf<ASRBodyPart> GetBodyPartClass() const;
-
-public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BodyPart", meta = (DisplayPriority = 1))
-	FText Name;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BodyPart", meta = (DisplayPriority = 1))
-	ESRRarity Rarity = ESRRarity::Common;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BodyPart", meta = (ForceInlineRow))
-	TMap<FGameplayTag, float> Stats;
 };
 
 UCLASS(Abstract)
@@ -55,10 +46,10 @@ public:
 	FSRBodyPartPreset(ESRBodyPartType PartType) : BodyPartType(PartType){};
 	virtual ~FSRBodyPartPreset() = default;
 
-	virtual USRBodyPartSchemaData* GetBodyPartSchemaData() const { return nullptr; };
-
 public:
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FGameplayTag ProductTag = FGameplayTag::EmptyTag;
+
 	ESRBodyPartType BodyPartType = ESRBodyPartType::None;
 };
 
@@ -75,25 +66,29 @@ public:
 	virtual void AddAttachmentBodyPart(ASRBodyPart* BodyPart);
 
 public:
-	UPROPERTY(BlueprintReadOnly, Category = "BodyPart")
-	FText BodyPartName;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BodyPart")
+	FGameplayTag ProductTag;
 
-	UPROPERTY(BlueprintReadOnly, Category = "BodyPart")
-	ESRRarity Rarity;
-
-	UPROPERTY(BlueprintReadOnly, Category = "BodyPart")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BodyPart")
 	ESRBodyPartType BodyPartType;
 
-	UPROPERTY(BlueprintReadOnly, Category = "BodyPart")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BodyPart")
 	FName AttachmentSocket;
 
-	UPROPERTY(BlueprintReadOnly, Category = "BodyPart")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BodyPart")
 	TSubclassOf<USRAnimInstance> AnimInstanceClass;
 
-	UPROPERTY(BlueprintReadOnly, Category = "BodyPart")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BodyPart")
 	TMap<FGameplayTag, float> Stats;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Cosmetics")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BodyPart")
+	TArray<TSubclassOf<ASRAbility>> Abilities;
+
+	// Weight used for random generation
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BodyPart")
+	int32 Weight;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Cosmetics")
 	TSoftObjectPtr<USkeletalMesh> BaseMesh;
 
 	bool bInitialized = false;

@@ -2,19 +2,21 @@
 
 #include "ModularCharacter/Parts/SRBodyPart_Torso.h"
 
+#include "ModularCharacter/SRModularCharacterUtils.h"
 
 void ASRBodyPart_Torso::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 {
 	// Cast the base preset to the torso-specific preset
 	const FSRBodyPartPreset_Torso& TorsoPreset = static_cast<const FSRBodyPartPreset_Torso&>(Preset);
 
-	if (TorsoPreset.TorsoSchemaDataAsset == nullptr)
+	USRBodyPartSchemaData* BodyPartSchemaData = USRModularCharacterUtils::GetBodyPartSchemaDataByProductTag(this, Preset.ProductTag);
+	USRTorsoSchemaData* TorsoSchemaData = Cast<USRTorsoSchemaData>(BodyPartSchemaData);
+	if (TorsoSchemaData == nullptr)
 	{
-		UE_LOG(LogSRModularCharacter, Warning, TEXT("ASRBodyPart_Torso::InitializeFromPreset: TorsoSchemaDataAsset is null"));
 		return;
 	}
 
-	const FSRBodyPartSchema_Torso& TorsoSchema = TorsoPreset.TorsoSchemaDataAsset->TorsoSchema;
+	const FSRBodyPartSchema_Torso& TorsoSchema = TorsoSchemaData->TorsoSchema;
 	BaseMesh = TorsoSchema.Mesh;
 	AttachmentSocket = TorsoSchema.AttachmentSocket;
 

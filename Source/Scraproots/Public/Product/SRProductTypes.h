@@ -5,7 +5,10 @@
 #include "Engine/DataTable.h"
 #include "GameplayTagContainer.h"
 #include "Core/SRGameplayEventRouter.h"
+#include "Abilities/SRAbility.h"
 #include "SRProductTypes.generated.h"
+
+class ASRAbility;
 
 UENUM(BlueprintType)
 enum class ESRProductCategory : uint8
@@ -21,9 +24,19 @@ class SCRAPROOTS_API USRProductSchemaData : public UDataAsset
 };
 
 USTRUCT(BlueprintType)
-struct SCRAPROOTS_API FSRInventoryItemDetails
+struct SCRAPROOTS_API FSRItemDetails
 {
 	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (ForceInlineRow))
+	TMap<FGameplayTag, float> Stats;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TArray<TSubclassOf<ASRAbility>> Abilities;
+
+	// Weight used for random generation
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	int32 Weight;
 };
 
 USTRUCT(BlueprintType)
@@ -52,17 +65,14 @@ struct SCRAPROOTS_API FSRProductDefinition : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TObjectPtr<USRProductSchemaData> Schema;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	FGameplayTagContainer Attributes;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (FullyExpand = "true"))
+	FSRItemDetails ItemDetails;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	bool bShopItem = true;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	bool bInventoryItem = true;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (EditCondition = "bInventoryItem", EditConditionHides))
-	FSRInventoryItemDetails InventoryItemDetails;
 
 	bool IsValid() const
 	{

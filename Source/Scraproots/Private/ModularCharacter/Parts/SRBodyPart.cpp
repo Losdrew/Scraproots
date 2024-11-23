@@ -3,6 +3,8 @@
 #include "ModularCharacter/Parts/SRBodyPart.h"
 
 #include "ModularCharacter/SRModularCharacterTypes.h"
+#include "ModularCharacter/SRModularCharacterUtils.h"
+#include "Product/SRProductTypes.h"
 #include "Core/SRAssetManager.h"
 
 TSubclassOf<ASRBodyPart> FSRBodyPartSchema::GetBodyPartClass() const
@@ -23,19 +25,27 @@ ASRBodyPart::ASRBodyPart()
 
 void ASRBodyPart::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 {
-	USRBodyPartSchemaData* SchemaData = Preset.GetBodyPartSchemaData();
-	if (SchemaData == nullptr)
+	FSRProductDefinition* ProductDef = USRModularCharacterUtils::GetProductDefinitionByProductTag(this, Preset.ProductTag);
+	if (!ProductDef)
 	{
-		UE_LOG(LogSRModularCharacter, Warning, TEXT("ASRBodyPart::InitializeFromPreset: SchemaData is null"));
 		return;
 	}
 
-	const FSRBodyPartSchema& BodyPartSchema = SchemaData->GetBodyPartSchema();
+	USRBodyPartSchemaData* SchemaData = Cast<USRBodyPartSchemaData>(ProductDef->Schema);
+	if (!SchemaData)
+	{
+		UE_LOG(LogSRModularCharacter, Warning, TEXT("ASRBodyPart::InitializeFromPreset: Body Part Schema Data not found for %s"), *Preset.ProductTag.ToString());
+		return;	
+	}
 
+	const FSRBodyPartSchema& BodyPartSchema = SchemaData->GetBodyPartSchema();
 	BodyPartType = Preset.BodyPartType;
-	BodyPartName = BodyPartSchema.Name;
-	Rarity = BodyPartSchema.Rarity;
-	Stats = BodyPartSchema.Stats;
+	ProductTag = Preset.ProductTag;
+
+	const FSRItemDetails& ItemDetails = ProductDef->ItemDetails;
+	Stats = ItemDetails.Stats;
+	Abilities = ItemDetails.Abilities;
+	Weight = ItemDetails.Weight;
 
 	LoadMesh();
 	MeshComponent->SetAnimInstanceClass(AnimInstanceClass);

@@ -7,6 +7,7 @@
 #include "ModularCharacter/Parts/SRBodyPart.h"
 #include "ModularCharacter/SRModularCharacter.h"
 #include "ModularCharacter/SRModularCharacterTypes.h"
+#include "ModularCharacter/SRModularCharacterUtils.h"
 
 USRCharacterPartsComponent::USRCharacterPartsComponent(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer) {}
@@ -31,7 +32,7 @@ void USRCharacterPartsComponent::AddBodyPart(const FSRBodyPartPreset& PartPreset
 		return;
 	}
 
-	USRBodyPartSchemaData* BodyPartSchemaData = PartPreset.GetBodyPartSchemaData();
+	USRBodyPartSchemaData* BodyPartSchemaData = USRModularCharacterUtils::GetBodyPartSchemaDataByProductTag(this, PartPreset.ProductTag);
 	if (BodyPartSchemaData == nullptr)
 	{
 		UE_LOG(LogSRModularCharacter, Error, TEXT("USRCharacterPartsComponent::AddBodyPart: Body part schema data is null"));
@@ -61,6 +62,7 @@ void USRCharacterPartsComponent::AddBodyPart(const FSRBodyPartPreset& PartPreset
 		{
 			NewBodyPart->FinishSpawning(FTransform::Identity);
 			BodyParts.Add(NewBodyPart);
+			OnBodyPartAdded(NewBodyPart);
 		}
 		else
 		{
@@ -73,6 +75,11 @@ void USRCharacterPartsComponent::AddBodyPart(const FSRBodyPartPreset& PartPreset
 		UE_LOG(LogSRModularCharacter, Error, TEXT("USRCharacterPartsComponent::AddBodyPart: Failed to spawn body part actor"));
 		return;
 	}
+}
+
+void USRCharacterPartsComponent::OnBodyPartAdded(ASRBodyPart* BodyPart)
+{
+	OnBodyPartAddedDelegate.Broadcast(BodyPart);
 }
 
 void USRCharacterPartsComponent::RemoveBodyPart(ESRBodyPartType BodyPartType)

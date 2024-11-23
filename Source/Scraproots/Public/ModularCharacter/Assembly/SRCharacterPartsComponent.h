@@ -10,6 +10,8 @@ struct FSRModularCharacterPreset;
 struct FSRBodyPartPreset;
 class ASRBodyPart;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnBodyPartAddedSignature, ASRBodyPart*, BodyPart);
+
 // Handles spawning and managing body parts for a modular character
 UCLASS(Blueprintable, BlueprintType, meta = (BlueprintSpawnableComponent))
 class USRCharacterPartsComponent : public UActorComponent
@@ -39,7 +41,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ModularCharacter|Parts")
 	void AttachBodyParts();
 
+public:
+	UPROPERTY(BlueprintAssignable, Category = "ModularCharacter|Parts")
+	FOnBodyPartAddedSignature OnBodyPartAddedDelegate;
+
 protected:
+	UFUNCTION()
+	void OnBodyPartAdded(ASRBodyPart* BodyPart);
+
 	// If the parent actor is derived from ACharacter, returns the Mesh component, otherwise nullptr
 	USkeletalMeshComponent* GetParentMeshComponent() const;
 

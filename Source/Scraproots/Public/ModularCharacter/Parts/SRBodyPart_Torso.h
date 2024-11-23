@@ -44,12 +44,6 @@ struct SCRAPROOTS_API FSRBodyPartPreset_Torso : public FSRBodyPartPreset
 public:
 	// Inherit constructors
 	using FSRBodyPartPreset::FSRBodyPartPreset;
-
-	virtual USRBodyPartSchemaData* GetBodyPartSchemaData() const override { return TorsoSchemaDataAsset; };
-
-public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BodyPart")
-	TObjectPtr<USRTorsoSchemaData> TorsoSchemaDataAsset;
 };
 
 UCLASS()

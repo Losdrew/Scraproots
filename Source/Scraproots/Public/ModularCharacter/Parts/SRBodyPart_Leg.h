@@ -47,12 +47,6 @@ struct SCRAPROOTS_API FSRBodyPartPreset_Leg : public FSRBodyPartPreset
 public:
 	// Inherit constructors
 	using FSRBodyPartPreset::FSRBodyPartPreset;
-
-	virtual USRBodyPartSchemaData* GetBodyPartSchemaData() const override { return LegSchemaDataAsset; };
-
-public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BodyPart")
-	TObjectPtr<USRLegSchemaData> LegSchemaDataAsset;
 };
 
 UCLASS()
