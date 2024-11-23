@@ -11,14 +11,12 @@
 #include "SRModularCharacter.generated.h"
 
 class USRCharacterPartsComponent;
-class ARipBodyPart;
+class ASRBodyPart;
 
 USTRUCT(BlueprintType)
 struct SCRAPROOTS_API FSRModularCharacterPreset
 {
 	GENERATED_BODY()
-
-	virtual ~FSRModularCharacterPreset() = default;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Body Parts")
 	FSRBodyPartPreset_Arm LeftArmPreset{ESRBodyPartType::LeftArm};

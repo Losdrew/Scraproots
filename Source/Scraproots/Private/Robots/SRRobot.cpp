@@ -9,7 +9,6 @@ ASRRobot::ASRRobot(const FObjectInitializer& ObjectInitializer)
 
 void ASRRobot::InitializeFromPreset(const FSRModularCharacterPreset& Preset)
 {
-	const FSRRobotPreset& RobotPreset = static_cast<const FSRRobotPreset&>(Preset);
 	Super::InitializeFromPreset(Preset);
 }
 
@@ -17,7 +16,7 @@ void ASRRobot::BeginPlay()
 {
 	if (RobotDataAsset)
 	{
-		InitializeFromPreset(RobotDataAsset->CharacterPreset);
+		InitializeFromPreset(RobotDataAsset->RobotPreset);
 	}
 
 	Super::BeginPlay();

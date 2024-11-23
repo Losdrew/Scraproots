@@ -5,12 +5,6 @@
 #include "ModularCharacter/SRModularCharacter.h"
 #include "SRRobot.generated.h"
 
-USTRUCT(BlueprintType)
-struct SCRAPROOTS_API FSRRobotPreset : public FSRModularCharacterPreset
-{
-	GENERATED_BODY()
-};
-
 UCLASS(Blueprintable, BlueprintType)
 class SCRAPROOTS_API USRRobotData : public UDataAsset
 {
@@ -18,7 +12,7 @@ class SCRAPROOTS_API USRRobotData : public UDataAsset
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ShowOnlyInnerProperties))
-	FSRRobotPreset CharacterPreset;
+	FSRModularCharacterPreset RobotPreset;
 };
 
 UCLASS()
