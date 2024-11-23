@@ -11,14 +11,12 @@
 #include "SRModularCharacter.generated.h"
 
 class USRCharacterPartsComponent;
-class ARipBodyPart;
+class ASRBodyPart;
 
 USTRUCT(BlueprintType)
 struct SCRAPROOTS_API FSRModularCharacterPreset
 {
 	GENERATED_BODY()
-
-	virtual ~FSRModularCharacterPreset() = default;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Body Parts")
 	FSRBodyPartPreset_Arm LeftArmPreset{ESRBodyPartType::LeftArm};
@@ -46,9 +44,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Character")
 	virtual void InitializeFromPreset(const FSRModularCharacterPreset& Preset);
-
-	UFUNCTION(BlueprintCallable, Category = "Character")
-	TArray<ASRBodyPart*> GetAllBodyParts() const;
 
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")

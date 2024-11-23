@@ -10,6 +10,8 @@ struct FSRModularCharacterPreset;
 struct FSRBodyPartPreset;
 class ASRBodyPart;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnBodyPartAddedSignature, ASRBodyPart*, BodyPart);
+
 // Handles spawning and managing body parts for a modular character
 UCLASS(Blueprintable, BlueprintType, meta = (BlueprintSpawnableComponent))
 class USRCharacterPartsComponent : public UActorComponent
@@ -20,10 +22,11 @@ public:
 	USRCharacterPartsComponent(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 	UFUNCTION(BlueprintCallable, Category = "ModularCharacter")
-	void AddBodyPartsFromPreset(const FSRModularCharacterPreset& Preset);
+	void SetBodyPartsFromPreset(const FSRModularCharacterPreset& Preset);
 
+	// Sets a body part on the character, replaces if it already exists
 	UFUNCTION(BlueprintCallable, Category = "ModularCharacter|Parts")
-	void AddBodyPart(const FSRBodyPartPreset& PartPreset);
+	void SetBodyPart(const FSRBodyPartPreset& PartPreset);
 
 	UFUNCTION(BlueprintCallable, Category = "ModularCharacter|Parts")
 	void RemoveBodyPart(ESRBodyPartType BodyPartType);
@@ -33,19 +36,26 @@ public:
 
 	// Gets all body part instances currently attached to the character
 	UFUNCTION(BlueprintCallable, Category = "ModularCharacter|Parts")
-	TArray<ASRBodyPart*> GetAllBodyParts() const;
+	const TMap<ESRBodyPartType, ASRBodyPart*> GetAllBodyParts() const;
 
 	// Attaches all body parts to the character
 	UFUNCTION(BlueprintCallable, Category = "ModularCharacter|Parts")
 	void AttachBodyParts();
 
+public:
+	UPROPERTY(BlueprintAssignable, Category = "ModularCharacter|Parts")
+	FOnBodyPartAddedSignature OnBodyPartAddedDelegate;
+
 protected:
+	UFUNCTION()
+	void OnBodyPartAdded(ASRBodyPart* BodyPart);
+
 	// If the parent actor is derived from ACharacter, returns the Mesh component, otherwise nullptr
 	USkeletalMeshComponent* GetParentMeshComponent() const;
 
 protected:
 	UPROPERTY()
-	TArray<TObjectPtr<ASRBodyPart>> BodyParts;
+	TMap<ESRBodyPartType, TObjectPtr<ASRBodyPart>> BodyParts;
 
 private:
 	void DetachBodyPart(ASRBodyPart* BodyPart);

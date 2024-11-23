@@ -2,8 +2,6 @@
 
 #include "Core/SRAssetManager.h"
 
-DEFINE_LOG_CATEGORY_STATIC(LogSRAssetManager, Log, All);
-
 USRAssetManager& USRAssetManager::Get()
 {
 	check(GEngine);
@@ -19,92 +17,52 @@ USRAssetManager& USRAssetManager::Get()
 	return *NewObject<USRAssetManager>();
 }
 
-void USRAssetManager::SetSkeletalMeshAsync(TSoftObjectPtr<USkeletalMesh> MeshToLoad, USkeletalMeshComponent* MeshComponentToSet, TFunction<void()> OnMeshLoadedCallback)
+void USRAssetManager::SetSkeletalMeshAsync(TSoftObjectPtr<USkeletalMesh> MeshToLoad, TWeakObjectPtr<USkeletalMeshComponent> MeshComponentToSet, TDelegate<void()> OnMeshLoadedCallback)
 {
-	if (MeshComponentToSet != nullptr)
+	if (!MeshComponentToSet.IsValid())
 	{
-		if (!MeshToLoad.IsNull())
-		{
-			FStreamableManager& Streamable = GetStreamableManager();
+		UE_LOG(LogSRAssetManager, Warning, TEXT("MeshComponentToSet is null"));
+		return;
+	}
 
-			Streamable.RequestAsyncLoad(MeshToLoad.ToSoftObjectPath(),
-				[this, MeshToLoad, MeshComponentToSet, OnMeshLoadedCallback]()
-				{
-					if (USkeletalMesh* LoadedMesh = MeshToLoad.Get())
-					{
-						if (MeshComponentToSet)
-						{
-							MeshComponentToSet->SetSkeletalMesh(LoadedMesh, true);
-						}
-						
-						// Call the callback to notify that the mesh has been set
-						if (OnMeshLoadedCallback)
-						{
-							OnMeshLoadedCallback();
-						}
-					}
-					else
-					{
-						FString MeshName = MeshToLoad.ToSoftObjectPath().ToString();
-						UE_LOG(LogSRAssetManager, Warning, TEXT("Failed to load skeletal mesh {0}."), *MeshName);
-					}
-				});
-		}
-		else
+	if (MeshToLoad.IsNull())
+	{
+		// Assuming that null mesh is a valid state and we should clear the mesh on the component
+		if (MeshComponentToSet.IsValid())
 		{
-			// Assuming null mesh is a valid state and we should clear the mesh
 			MeshComponentToSet->SetSkeletalMesh(nullptr);
+		}
+		return;
+	}
+
+	if (MeshToLoad.IsValid())
+	{
+		if (USkeletalMesh* LoadedMesh = MeshToLoad.Get())
+		{
+			if (MeshComponentToSet.IsValid())
+			{
+				MeshComponentToSet->SetSkeletalMesh(LoadedMesh, true);
+			}
+			OnMeshLoadedCallback.ExecuteIfBound();
 			return;
 		}
 	}
-	else
-	{
-		UE_LOG(LogSRAssetManager, Warning, TEXT("MeshComponentToSet is null"));
-		return;
-	}
-}
 
-void USRAssetManager::SetStaticMeshAsync(TSoftObjectPtr<UStaticMesh> MeshToLoad, UStaticMeshComponent* MeshComponentToSet, TFunction<void()> OnMeshLoadedCallback)
-{
-	if (MeshComponentToSet != nullptr)
+	FStreamableManager& Streamable = GetStreamableManager();
+	Streamable.RequestAsyncLoad(MeshToLoad.ToSoftObjectPath(), [MeshToLoad, MeshComponentToSet, OnMeshLoadedCallback]()
 	{
-		if (!MeshToLoad.IsNull())
+		if (USkeletalMesh* LoadedMesh = MeshToLoad.Get())
 		{
-			FStreamableManager& Streamable = GetStreamableManager();
-
-			Streamable.RequestAsyncLoad(MeshToLoad.ToSoftObjectPath(),
-				[this, MeshToLoad, MeshComponentToSet, OnMeshLoadedCallback]()
-				{
-					if (UStaticMesh* LoadedMesh = MeshToLoad.Get())
-					{
-						if (MeshComponentToSet)
-						{
-							MeshComponentToSet->SetStaticMesh(LoadedMesh);
-						}
-
-						// Call the callback to notify that the mesh has been set
-						if (OnMeshLoadedCallback)
-						{
-							OnMeshLoadedCallback();
-						}
-					}
-					else
-					{
-						FString MeshName = MeshToLoad.ToSoftObjectPath().ToString();
-						UE_LOG(LogSRAssetManager, Warning, TEXT("Failed to load static mesh {0}."), *MeshName);
-					}
-				});
+			if (MeshComponentToSet.IsValid())
+			{
+				MeshComponentToSet->SetSkeletalMesh(LoadedMesh, true);
+			}
+			OnMeshLoadedCallback.ExecuteIfBound();
 		}
 		else
 		{
-			// Assuming null mesh is a valid state and we should clear the mesh
-			MeshComponentToSet->SetStaticMesh(nullptr);
-			return;
+			FString MeshName = MeshToLoad.ToSoftObjectPath().ToString();
+			UE_LOG(LogSRAssetManager, Warning, TEXT("Failed to load skeletal mesh {0}."), *MeshName);
 		}
-	}
-	else
-	{
-		UE_LOG(LogSRAssetManager, Warning, TEXT("MeshComponentToSet is null"));
-		return;
-	}
+	});
 }

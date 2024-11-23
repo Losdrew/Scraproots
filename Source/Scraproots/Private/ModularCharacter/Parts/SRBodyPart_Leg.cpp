@@ -2,29 +2,24 @@
 
 #include "ModularCharacter/Parts/SRBodyPart_Leg.h"
 
-#include "Core/SRAssetManager.h"
+#include "ModularCharacter/SRModularCharacterUtils.h"
 
 void ASRBodyPart_Leg::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 {
 	// Cast the base preset to the leg-specific preset
 	const FSRBodyPartPreset_Leg& LegPreset = static_cast<const FSRBodyPartPreset_Leg&>(Preset);
 
-	if (LegPreset.LegSchemaDataAsset == nullptr)
+	USRBodyPartSchemaData* BodyPartSchemaData = USRModularCharacterUtils::GetBodyPartSchemaDataByProductTag(this, Preset.ProductTag);
+	USRLegSchemaData* LegSchemaData = Cast<USRLegSchemaData>(BodyPartSchemaData);
+	if (LegSchemaData == nullptr)
 	{
-		UE_LOG(LogSRModularCharacter, Warning, TEXT("ASRBodyPart_Leg::InitializeFromPreset: LegSchemaDataAsset is null"));
 		return;
 	}
 
-	const FSRBodyPartSchema_Leg& LegSchema = LegPreset.LegSchemaDataAsset->LegSchema;
+	const FSRBodyPartSchema_Leg& LegSchema = LegSchemaData->LegSchema;
 	BaseMesh = LegSchema.Mesh;
 	AttachmentSocket = LegSchema.AttachmentSocket;
 	AnimInstanceClass = LegSchema.AnimInstanceClass;
-
-	USRAssetManager& AssetManager = USRAssetManager::Get();
-	AssetManager.SetSkeletalMeshAsync(BaseMesh, MeshComponent, [this]() 
-	{
-		OnMeshLoaded();
-	});
 
 	Super::InitializeFromPreset(Preset);
 }

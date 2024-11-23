@@ -18,10 +18,10 @@ public:
 	TSubclassOf<ASRBodyPart> ArmClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BodyPart")
-	TSubclassOf<USRAnimInstance> AnimInstanceClassLeft;
+	TSoftClassPtr<USRAnimInstance> AnimInstanceClassLeft;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BodyPart")
-	TSubclassOf<USRAnimInstance> AnimInstanceClassRight;
+	TSoftClassPtr<USRAnimInstance> AnimInstanceClassRight;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BodyPart")
 	TSoftObjectPtr<USkeletalMesh> MeshLeft;
@@ -56,12 +56,6 @@ struct SCRAPROOTS_API FSRBodyPartPreset_Arm : public FSRBodyPartPreset
 public:
 	// Inherit constructors
 	using FSRBodyPartPreset::FSRBodyPartPreset;
-
-	virtual USRBodyPartSchemaData* GetBodyPartSchemaData() const override { return ArmSchemaDataAsset; };
-
-public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BodyPart")
-	TObjectPtr<USRArmSchemaData> ArmSchemaDataAsset;
 };
 
 UCLASS()

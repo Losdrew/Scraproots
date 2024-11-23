@@ -3,6 +3,9 @@
 #include "ModularCharacter/Parts/SRBodyPart.h"
 
 #include "ModularCharacter/SRModularCharacterTypes.h"
+#include "ModularCharacter/SRModularCharacterUtils.h"
+#include "Product/SRProductTypes.h"
+#include "Core/SRAssetManager.h"
 
 TSubclassOf<ASRBodyPart> FSRBodyPartSchema::GetBodyPartClass() const
 {
@@ -22,21 +25,29 @@ ASRBodyPart::ASRBodyPart()
 
 void ASRBodyPart::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 {
-	USRBodyPartSchemaData* SchemaData = Preset.GetBodyPartSchemaData();
-	if (SchemaData == nullptr)
+	FSRProductDefinition* ProductDef = USRModularCharacterUtils::GetProductDefinitionByProductTag(this, Preset.ProductTag);
+	if (!ProductDef)
 	{
-		UE_LOG(LogSRModularCharacter, Warning, TEXT("ASRBodyPart::InitializeFromPreset: SchemaData is null"));
 		return;
 	}
 
+	USRBodyPartSchemaData* SchemaData = Cast<USRBodyPartSchemaData>(ProductDef->Schema);
+	if (!SchemaData)
+	{
+		UE_LOG(LogSRModularCharacter, Warning, TEXT("ASRBodyPart::InitializeFromPreset: Body Part Schema Data not found for %s"), *Preset.ProductTag.ToString());
+		return;	
+	}
+
 	const FSRBodyPartSchema& BodyPartSchema = SchemaData->GetBodyPartSchema();
-
 	BodyPartType = Preset.BodyPartType;
-	BodyPartName = BodyPartSchema.Name;
-	Rarity = BodyPartSchema.Rarity;
-	Stats = BodyPartSchema.Stats;
+	ProductTag = Preset.ProductTag;
 
-	MeshComponent->SetAnimInstanceClass(AnimInstanceClass);
+	const FSRItemDetails& ItemDetails = ProductDef->ItemDetails;
+	Stats = ItemDetails.Stats;
+	Abilities = ItemDetails.Abilities;
+	Weight = ItemDetails.Weight;
+
+	LoadMesh();
 
 	bInitialized = true;
 }
@@ -51,28 +62,46 @@ void ASRBodyPart::SetBodyPartMeshParameters(USkeletalMeshComponent* SkeletalMesh
 	}
 }
 
+void ASRBodyPart::LoadMesh()
+{
+	USRAssetManager& AssetManager = USRAssetManager::Get();
+	TWeakObjectPtr<USkeletalMeshComponent> WeakMeshComponent = MeshComponent;
+	bMeshLoaded = false;
+	AssetManager.SetSkeletalMeshAsync(BaseMesh, WeakMeshComponent, FSimpleDelegate::CreateWeakLambda(this, [this]() 
+	{
+		OnMeshLoaded();
+	}));
+}
+
 void ASRBodyPart::OnMeshLoaded()
 {
-	AttachBodyParts();
+	bMeshLoaded = true;
+	OnMeshLoadedDelegate.Broadcast();
+
+	USRAssetManager& AssetManager = USRAssetManager::Get();
+	AssetManager.LoadClassAsync<UAnimInstance>(AnimInstanceClass, TDelegate<void(TSubclassOf<UAnimInstance>)>::CreateWeakLambda(this, [this](TSubclassOf<UAnimInstance> LoadedAnimInstanceClass)
+	{
+		MeshComponent->SetAnimInstanceClass(LoadedAnimInstanceClass);
+	}));
 }
 
 void ASRBodyPart::AddAttachmentBodyPart(ASRBodyPart* BodyPart)
 {
-	if (BodyPart)
-	{
-		AttachmentBodyParts.Add(BodyPart);
+	if (!BodyPart)
+	{	
+		return;
 	}
-}
 
-void ASRBodyPart::AttachBodyParts()
-{
-	// Attach all attachment body parts to this body part
-	for (TWeakObjectPtr<ASRBodyPart> BodyPart : AttachmentBodyParts)
+	if (bMeshLoaded)
 	{
-		if (BodyPart.IsValid())
+		BodyPart->AttachToBodyPart(this);	
+	}
+	else
+	{
+		OnMeshLoadedDelegate.AddWeakLambda(this, [this, BodyPart]()
 		{
 			BodyPart->AttachToBodyPart(this);
-		}
+		});
 	}
 }
 
