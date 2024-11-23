@@ -16,9 +16,5 @@ public:
 
 	// Asynchronously sets skeletal mesh on the passed in SkeletalMeshComponent.
 	// Also provides a callback to be called when the mesh is loaded.
-	void SetSkeletalMeshAsync(TSoftObjectPtr<USkeletalMesh> MeshToLoad, USkeletalMeshComponent* MeshComponentToSet, TFunction<void()> OnMeshLoadedCallback = nullptr);
-
-	// Asynchronously sets skeletal mesh on the passed in SkeletalMeshComponent.
-	// Also provides a callback to be called when the mesh is loaded.
-	void SetStaticMeshAsync(TSoftObjectPtr<UStaticMesh> MeshToLoad, UStaticMeshComponent* MeshComponentToSet, TFunction<void()> OnMeshLoadedCallback = nullptr);
+	void SetSkeletalMeshAsync(TSoftObjectPtr<USkeletalMesh> MeshToLoad, TWeakObjectPtr<USkeletalMeshComponent> MeshComponentToSet, TDelegate<void()> OnMeshLoadedCallback = nullptr);
 };

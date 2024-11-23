@@ -2,7 +2,6 @@
 
 #include "ModularCharacter/Parts/SRBodyPart_Arm.h"
 
-#include "Core/SRAssetManager.h"
 
 void ASRBodyPart_Arm::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 {
@@ -29,12 +28,6 @@ void ASRBodyPart_Arm::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 		AttachmentSocket = ArmSchema.AttachmentSocketRight;
 		AnimInstanceClass = ArmSchema.AnimInstanceClassRight;
 	}
-
-	USRAssetManager& AssetManager = USRAssetManager::Get();
-	AssetManager.SetSkeletalMeshAsync(BaseMesh, MeshComponent, [this]() 
-	{
-		OnMeshLoaded();
-	});
 
 	Super::InitializeFromPreset(Preset);
 }

@@ -2,7 +2,6 @@
 
 #include "ModularCharacter/Parts/SRBodyPart_Torso.h"
 
-#include "Core/SRAssetManager.h"
 
 void ASRBodyPart_Torso::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 {
@@ -18,12 +17,6 @@ void ASRBodyPart_Torso::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 	const FSRBodyPartSchema_Torso& TorsoSchema = TorsoPreset.TorsoSchemaDataAsset->TorsoSchema;
 	BaseMesh = TorsoSchema.Mesh;
 	AttachmentSocket = TorsoSchema.AttachmentSocket;
-
-	USRAssetManager& AssetManager = USRAssetManager::Get();
-	AssetManager.SetSkeletalMeshAsync(BaseMesh, MeshComponent, [this]() 
-	{
-		OnMeshLoaded();
-	});
 
 	Super::InitializeFromPreset(Preset);
 }

@@ -3,6 +3,7 @@
 #include "ModularCharacter/Parts/SRBodyPart.h"
 
 #include "ModularCharacter/SRModularCharacterTypes.h"
+#include "Core/SRAssetManager.h"
 
 TSubclassOf<ASRBodyPart> FSRBodyPartSchema::GetBodyPartClass() const
 {
@@ -36,6 +37,7 @@ void ASRBodyPart::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 	Rarity = BodyPartSchema.Rarity;
 	Stats = BodyPartSchema.Stats;
 
+	LoadMesh();
 	MeshComponent->SetAnimInstanceClass(AnimInstanceClass);
 
 	bInitialized = true;
@@ -49,6 +51,16 @@ void ASRBodyPart::SetBodyPartMeshParameters(USkeletalMeshComponent* SkeletalMesh
 		SkeletalMeshComponent->SetCollisionResponseToChannel(ECC_Pawn, ECR_Ignore);
 		SkeletalMeshComponent->SetCollisionEnabled(ECollisionEnabled::Type::QueryOnly);
 	}
+}
+
+void ASRBodyPart::LoadMesh()
+{
+	USRAssetManager& AssetManager = USRAssetManager::Get();
+	TWeakObjectPtr<USkeletalMeshComponent> WeakMeshComponent = MeshComponent;
+	AssetManager.SetSkeletalMeshAsync(BaseMesh, WeakMeshComponent, FSimpleDelegate::CreateWeakLambda(this, [this]() 
+	{
+		OnMeshLoaded();
+	}));
 }
 
 void ASRBodyPart::OnMeshLoaded()
