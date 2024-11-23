@@ -19,14 +19,5 @@ void ASRModularCharacter::InitializeFromPreset(const FSRModularCharacterPreset& 
 		return;
 	}
 
-	CharacterPartsComponent->AddBodyPartsFromPreset(Preset);
-}
-
-TArray<ASRBodyPart*> ASRModularCharacter::GetAllBodyParts() const
-{
-	if (CharacterPartsComponent)
-	{
-		return CharacterPartsComponent->GetAllBodyParts();
-	}
-	return TArray<ASRBodyPart*>();
+	CharacterPartsComponent->SetBodyPartsFromPreset(Preset);
 }

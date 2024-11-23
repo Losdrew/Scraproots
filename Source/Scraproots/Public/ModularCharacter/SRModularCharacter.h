@@ -45,9 +45,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Character")
 	virtual void InitializeFromPreset(const FSRModularCharacterPreset& Preset);
 
-	UFUNCTION(BlueprintCallable, Category = "Character")
-	TArray<ASRBodyPart*> GetAllBodyParts() const;
-
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	TObjectPtr<USRCharacterPartsComponent> CharacterPartsComponent;

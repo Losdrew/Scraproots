@@ -50,6 +50,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FGameplayTag ProductTag = FGameplayTag::EmptyTag;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	ESRBodyPartType BodyPartType = ESRBodyPartType::None;
 };
 
@@ -108,6 +109,8 @@ protected:
 	virtual void OnMeshLoaded();
 	virtual void AttachBodyParts();
 	virtual void AttachToBodyPart(ASRBodyPart* BodyPart);
+
+	bool bMeshLoaded = false;
 
 protected:
 	// Body parts that should be attached to this body part

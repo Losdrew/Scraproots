@@ -21,40 +21,50 @@ USRAssetManager& USRAssetManager::Get()
 
 void USRAssetManager::SetSkeletalMeshAsync(TSoftObjectPtr<USkeletalMesh> MeshToLoad, TWeakObjectPtr<USkeletalMeshComponent> MeshComponentToSet, TDelegate<void()> OnMeshLoadedCallback)
 {
-	if (MeshComponentToSet != nullptr)
-	{
-		if (!MeshToLoad.IsNull())
-		{
-			FStreamableManager& Streamable = GetStreamableManager();
-
-			Streamable.RequestAsyncLoad(MeshToLoad.ToSoftObjectPath(),
-				[this, MeshToLoad, MeshComponentToSet, OnMeshLoadedCallback]()
-				{
-					if (USkeletalMesh* LoadedMesh = MeshToLoad.Get())
-					{
-						if (MeshComponentToSet.IsValid())
-						{
-							MeshComponentToSet->SetSkeletalMesh(LoadedMesh, true);
-						}
-						OnMeshLoadedCallback.ExecuteIfBound();
-					}
-					else
-					{
-						FString MeshName = MeshToLoad.ToSoftObjectPath().ToString();
-						UE_LOG(LogSRAssetManager, Warning, TEXT("Failed to load skeletal mesh {0}."), *MeshName);
-					}
-				});
-		}
-		else
-		{
-			// Assuming null mesh is a valid state and we should clear the mesh
-			MeshComponentToSet->SetSkeletalMesh(nullptr);
-			return;
-		}
-	}
-	else
+	if (!MeshComponentToSet.IsValid())
 	{
 		UE_LOG(LogSRAssetManager, Warning, TEXT("MeshComponentToSet is null"));
 		return;
 	}
+
+	if (MeshToLoad.IsNull())
+	{
+		// Assuming that null mesh is a valid state and we should clear the mesh on the component
+		if (MeshComponentToSet.IsValid())
+		{
+			MeshComponentToSet->SetSkeletalMesh(nullptr);
+		}
+		return;
+	}
+
+	if (MeshToLoad.IsValid())
+	{
+		if (USkeletalMesh* LoadedMesh = MeshToLoad.Get())
+		{
+			if (MeshComponentToSet.IsValid())
+			{
+				MeshComponentToSet->SetSkeletalMesh(LoadedMesh, true);
+			}
+			OnMeshLoadedCallback.ExecuteIfBound();
+			return;
+		}
+	}
+
+	FStreamableManager& Streamable = GetStreamableManager();
+	Streamable.RequestAsyncLoad(MeshToLoad.ToSoftObjectPath(), [MeshToLoad, MeshComponentToSet, OnMeshLoadedCallback]()
+	{
+		if (USkeletalMesh* LoadedMesh = MeshToLoad.Get())
+		{
+			if (MeshComponentToSet.IsValid())
+			{
+				MeshComponentToSet->SetSkeletalMesh(LoadedMesh, true);
+			}
+			OnMeshLoadedCallback.ExecuteIfBound();
+		}
+		else
+		{
+			FString MeshName = MeshToLoad.ToSoftObjectPath().ToString();
+			UE_LOG(LogSRAssetManager, Warning, TEXT("Failed to load skeletal mesh {0}."), *MeshName);
+		}
+	});
 }

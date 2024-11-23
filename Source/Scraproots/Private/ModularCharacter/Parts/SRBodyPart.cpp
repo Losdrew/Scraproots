@@ -67,6 +67,7 @@ void ASRBodyPart::LoadMesh()
 {
 	USRAssetManager& AssetManager = USRAssetManager::Get();
 	TWeakObjectPtr<USkeletalMeshComponent> WeakMeshComponent = MeshComponent;
+	bMeshLoaded = false;
 	AssetManager.SetSkeletalMeshAsync(BaseMesh, WeakMeshComponent, FSimpleDelegate::CreateWeakLambda(this, [this]() 
 	{
 		OnMeshLoaded();
@@ -75,14 +76,22 @@ void ASRBodyPart::LoadMesh()
 
 void ASRBodyPart::OnMeshLoaded()
 {
+	bMeshLoaded = true;
 	AttachBodyParts();
 }
 
 void ASRBodyPart::AddAttachmentBodyPart(ASRBodyPart* BodyPart)
 {
 	if (BodyPart)
-	{
-		AttachmentBodyParts.Add(BodyPart);
+	{	
+		if (bMeshLoaded)
+		{
+			BodyPart->AttachToBodyPart(this);	
+		}
+		else
+		{
+			AttachmentBodyParts.Add(BodyPart);
+		}
 	}
 }
 
@@ -94,6 +103,7 @@ void ASRBodyPart::AttachBodyParts()
 		if (BodyPart.IsValid())
 		{
 			BodyPart->AttachToBodyPart(this);
+			AttachmentBodyParts.Remove(BodyPart);
 		}
 	}
 }

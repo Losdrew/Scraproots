@@ -22,10 +22,11 @@ public:
 	USRCharacterPartsComponent(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 	UFUNCTION(BlueprintCallable, Category = "ModularCharacter")
-	void AddBodyPartsFromPreset(const FSRModularCharacterPreset& Preset);
+	void SetBodyPartsFromPreset(const FSRModularCharacterPreset& Preset);
 
+	// Sets a body part on the character, replaces if it already exists
 	UFUNCTION(BlueprintCallable, Category = "ModularCharacter|Parts")
-	void AddBodyPart(const FSRBodyPartPreset& PartPreset);
+	void SetBodyPart(const FSRBodyPartPreset& PartPreset);
 
 	UFUNCTION(BlueprintCallable, Category = "ModularCharacter|Parts")
 	void RemoveBodyPart(ESRBodyPartType BodyPartType);
@@ -35,7 +36,7 @@ public:
 
 	// Gets all body part instances currently attached to the character
 	UFUNCTION(BlueprintCallable, Category = "ModularCharacter|Parts")
-	TArray<ASRBodyPart*> GetAllBodyParts() const;
+	const TMap<ESRBodyPartType, ASRBodyPart*> GetAllBodyParts() const;
 
 	// Attaches all body parts to the character
 	UFUNCTION(BlueprintCallable, Category = "ModularCharacter|Parts")
@@ -54,7 +55,7 @@ protected:
 
 protected:
 	UPROPERTY()
-	TArray<TObjectPtr<ASRBodyPart>> BodyParts;
+	TMap<ESRBodyPartType, TObjectPtr<ASRBodyPart>> BodyParts;
 
 private:
 	void DetachBodyPart(ASRBodyPart* BodyPart);
