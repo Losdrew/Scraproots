@@ -48,7 +48,6 @@ void ASRBodyPart::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 	Weight = ItemDetails.Weight;
 
 	LoadMesh();
-	MeshComponent->SetAnimInstanceClass(AnimInstanceClass);
 
 	bInitialized = true;
 }
@@ -77,34 +76,32 @@ void ASRBodyPart::LoadMesh()
 void ASRBodyPart::OnMeshLoaded()
 {
 	bMeshLoaded = true;
-	AttachBodyParts();
+	OnMeshLoadedDelegate.Broadcast();
+
+	USRAssetManager& AssetManager = USRAssetManager::Get();
+	AssetManager.LoadClassAsync<UAnimInstance>(AnimInstanceClass, TDelegate<void(TSubclassOf<UAnimInstance>)>::CreateWeakLambda(this, [this](TSubclassOf<UAnimInstance> LoadedAnimInstanceClass)
+	{
+		MeshComponent->SetAnimInstanceClass(LoadedAnimInstanceClass);
+	}));
 }
 
 void ASRBodyPart::AddAttachmentBodyPart(ASRBodyPart* BodyPart)
 {
-	if (BodyPart)
+	if (!BodyPart)
 	{	
-		if (bMeshLoaded)
-		{
-			BodyPart->AttachToBodyPart(this);	
-		}
-		else
-		{
-			AttachmentBodyParts.Add(BodyPart);
-		}
+		return;
 	}
-}
 
-void ASRBodyPart::AttachBodyParts()
-{
-	// Attach all attachment body parts to this body part
-	for (TWeakObjectPtr<ASRBodyPart> BodyPart : AttachmentBodyParts)
+	if (bMeshLoaded)
 	{
-		if (BodyPart.IsValid())
+		BodyPart->AttachToBodyPart(this);	
+	}
+	else
+	{
+		OnMeshLoadedDelegate.AddWeakLambda(this, [this, BodyPart]()
 		{
 			BodyPart->AttachToBodyPart(this);
-			AttachmentBodyParts.Remove(BodyPart);
-		}
+		});
 	}
 }
 

@@ -2,8 +2,6 @@
 
 #include "Core/SRAssetManager.h"
 
-DEFINE_LOG_CATEGORY_STATIC(LogSRAssetManager, Log, All);
-
 USRAssetManager& USRAssetManager::Get()
 {
 	check(GEngine);

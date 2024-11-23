@@ -54,6 +54,8 @@ public:
 	ESRBodyPartType BodyPartType = ESRBodyPartType::None;
 };
 
+DECLARE_MULTICAST_DELEGATE(FOnMeshLoadedSignature);
+
 // Instance of a body part
 UCLASS(Abstract)
 class SCRAPROOTS_API ASRBodyPart : public AActor
@@ -77,7 +79,7 @@ public:
 	FName AttachmentSocket;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BodyPart")
-	TSubclassOf<USRAnimInstance> AnimInstanceClass;
+	TSoftClassPtr<USRAnimInstance> AnimInstanceClass;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BodyPart")
 	TMap<FGameplayTag, float> Stats;
@@ -107,12 +109,11 @@ protected:
 
 	virtual void LoadMesh();
 	virtual void OnMeshLoaded();
-	virtual void AttachBodyParts();
 	virtual void AttachToBodyPart(ASRBodyPart* BodyPart);
+
+protected:
 
 	bool bMeshLoaded = false;
 
-protected:
-	// Body parts that should be attached to this body part
-	TArray<TWeakObjectPtr<ASRBodyPart>> AttachmentBodyParts;
+	FOnMeshLoadedSignature OnMeshLoadedDelegate;
 };
