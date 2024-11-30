@@ -39,16 +39,6 @@ public:
 	FSRBodyPartSchema_Leg LegSchema;
 };
 
-USTRUCT(BlueprintType)
-struct SCRAPROOTS_API FSRBodyPartPreset_Leg : public FSRBodyPartPreset
-{
-	GENERATED_BODY()
-
-public:
-	// Inherit constructors
-	using FSRBodyPartPreset::FSRBodyPartPreset;
-};
-
 UCLASS()
 class SCRAPROOTS_API ASRBodyPart_Leg : public ASRBodyPart
 {

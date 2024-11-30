@@ -48,16 +48,6 @@ public:
 	FSRBodyPartSchema_Arm ArmSchema;
 };
 
-USTRUCT(BlueprintType)
-struct SCRAPROOTS_API FSRBodyPartPreset_Arm : public FSRBodyPartPreset
-{
-	GENERATED_BODY()
-
-public:
-	// Inherit constructors
-	using FSRBodyPartPreset::FSRBodyPartPreset;
-};
-
 UCLASS()
 class SCRAPROOTS_API ASRBodyPart_Arm : public ASRBodyPart
 {

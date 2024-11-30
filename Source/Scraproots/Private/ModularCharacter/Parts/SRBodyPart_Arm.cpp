@@ -6,9 +6,6 @@
 
 void ASRBodyPart_Arm::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 {
-	// Cast the base preset to the arm-specific preset
-	const FSRBodyPartPreset_Arm& ArmPreset = static_cast<const FSRBodyPartPreset_Arm&>(Preset);
-
 	USRBodyPartSchemaData* BodyPartSchemaData = USRModularCharacterUtils::GetBodyPartSchemaDataByProductTag(this, Preset.ProductTag);
 	USRArmSchemaData* ArmSchemaData = Cast<USRArmSchemaData>(BodyPartSchemaData);
 	if (ArmSchemaData == nullptr)

@@ -6,9 +6,6 @@
 
 void ASRBodyPart_Torso::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 {
-	// Cast the base preset to the torso-specific preset
-	const FSRBodyPartPreset_Torso& TorsoPreset = static_cast<const FSRBodyPartPreset_Torso&>(Preset);
-
 	USRBodyPartSchemaData* BodyPartSchemaData = USRModularCharacterUtils::GetBodyPartSchemaDataByProductTag(this, Preset.ProductTag);
 	USRTorsoSchemaData* TorsoSchemaData = Cast<USRTorsoSchemaData>(BodyPartSchemaData);
 	if (TorsoSchemaData == nullptr)

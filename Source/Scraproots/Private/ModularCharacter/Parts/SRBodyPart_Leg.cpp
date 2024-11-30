@@ -6,9 +6,6 @@
 
 void ASRBodyPart_Leg::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 {
-	// Cast the base preset to the leg-specific preset
-	const FSRBodyPartPreset_Leg& LegPreset = static_cast<const FSRBodyPartPreset_Leg&>(Preset);
-
 	USRBodyPartSchemaData* BodyPartSchemaData = USRModularCharacterUtils::GetBodyPartSchemaDataByProductTag(this, Preset.ProductTag);
 	USRLegSchemaData* LegSchemaData = Cast<USRLegSchemaData>(BodyPartSchemaData);
 	if (LegSchemaData == nullptr)

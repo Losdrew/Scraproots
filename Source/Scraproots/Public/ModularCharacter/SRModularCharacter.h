@@ -3,10 +3,7 @@
 #pragma once
 
 #include "GameFramework/Character.h"
-#include "ModularCharacter/Parts/SRBodyPart_Arm.h"
-#include "ModularCharacter/Parts/SRBodyPart_Head.h"
-#include "ModularCharacter/Parts/SRBodyPart_Leg.h"
-#include "ModularCharacter/Parts/SRBodyPart_Torso.h"
+#include "ModularCharacter/Parts/SRBodyPart.h"
 #include "ModularCharacter/SRModularCharacterTypes.h"
 #include "SRModularCharacter.generated.h"
 
@@ -19,19 +16,19 @@ struct SCRAPROOTS_API FSRModularCharacterPreset
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Body Parts")
-	FSRBodyPartPreset_Arm LeftArmPreset{ESRBodyPartType::LeftArm};
+	FSRBodyPartPreset LeftArmPreset{ESRBodyPartType::LeftArm};
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Body Parts")
-	FSRBodyPartPreset_Arm RightArmPreset{ESRBodyPartType::RightArm};
+	FSRBodyPartPreset RightArmPreset{ESRBodyPartType::RightArm};
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Body Parts")
-	FSRBodyPartPreset_Leg LegsPreset{ESRBodyPartType::Legs};
+	FSRBodyPartPreset LegsPreset{ESRBodyPartType::Legs};
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Body Parts")
-	FSRBodyPartPreset_Head HeadPreset{ESRBodyPartType::Head};
+	FSRBodyPartPreset HeadPreset{ESRBodyPartType::Head};
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Body Parts")
-	FSRBodyPartPreset_Torso TorsoPreset{ESRBodyPartType::Torso};
+	FSRBodyPartPreset TorsoPreset{ESRBodyPartType::Torso};
 };
 
 UCLASS(Abstract)

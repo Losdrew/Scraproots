@@ -15,14 +15,4 @@ enum class ESRBodyPartType : uint8
 	LeftArm,
 	RightArm,
 	Legs,
-	Spine
-};
-
-UENUM(BlueprintType)
-enum class ESRRarity : uint8
-{
-	Common,
-	Rare,
-	Epic,
-	Legendary
 };
