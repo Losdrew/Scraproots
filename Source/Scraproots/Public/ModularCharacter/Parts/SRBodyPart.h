@@ -18,6 +18,7 @@ struct SCRAPROOTS_API FSRBodyPartSchema
 	GENERATED_BODY()
 
 public:
+	FSRBodyPartSchema();
 	virtual ~FSRBodyPartSchema() = default;
 	virtual TSubclassOf<ASRBodyPart> GetBodyPartClass() const;
 };
@@ -47,10 +48,10 @@ public:
 	virtual ~FSRBodyPartPreset() = default;
 
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Categories = "BodyPart"))
 	FGameplayTag ProductTag = FGameplayTag::EmptyTag;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	ESRBodyPartType BodyPartType = ESRBodyPartType::None;
 };
 

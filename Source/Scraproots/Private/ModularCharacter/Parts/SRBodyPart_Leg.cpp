@@ -2,13 +2,20 @@
 
 #include "ModularCharacter/Parts/SRBodyPart_Leg.h"
 
+#include "Core/SRDeveloperSettings.h"
 #include "ModularCharacter/SRModularCharacterUtils.h"
+
+FSRBodyPartSchema_Leg::FSRBodyPartSchema_Leg()
+	: Super()
+{
+	const USRDeveloperSettings* DeveloperSettings = GetDefault<USRDeveloperSettings>();
+	LegClass = DeveloperSettings->ModularCharacterConfig.DefaultLegClass;
+}
+
+//////////////////////////////////////////////////
 
 void ASRBodyPart_Leg::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 {
-	// Cast the base preset to the leg-specific preset
-	const FSRBodyPartPreset_Leg& LegPreset = static_cast<const FSRBodyPartPreset_Leg&>(Preset);
-
 	USRBodyPartSchemaData* BodyPartSchemaData = USRModularCharacterUtils::GetBodyPartSchemaDataByProductTag(this, Preset.ProductTag);
 	USRLegSchemaData* LegSchemaData = Cast<USRLegSchemaData>(BodyPartSchemaData);
 	if (LegSchemaData == nullptr)

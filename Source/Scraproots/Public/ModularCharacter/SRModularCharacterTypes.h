@@ -15,14 +15,22 @@ enum class ESRBodyPartType : uint8
 	LeftArm,
 	RightArm,
 	Legs,
-	Spine
 };
 
-UENUM(BlueprintType)
-enum class ESRRarity : uint8
+USTRUCT(BlueprintType)
+struct FSRModularCharacterConfig
 {
-	Common,
-	Rare,
-	Epic,
-	Legendary
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Modular Character")
+	TSubclassOf<class ASRBodyPart_Head> DefaultHeadClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Modular Character")
+	TSubclassOf<class ASRBodyPart_Arm> DefaultArmClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Modular Character")
+	TSubclassOf<class ASRBodyPart_Leg> DefaultLegClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Modular Character")
+	TSubclassOf<class ASRBodyPart_Torso> DefaultTorsoClass;
 };

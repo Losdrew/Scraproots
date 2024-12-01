@@ -11,6 +11,7 @@ struct SCRAPROOTS_API FSRBodyPartSchema_Leg : public FSRBodyPartSchema
 	GENERATED_BODY()
 
 public:
+	FSRBodyPartSchema_Leg();
 	virtual TSubclassOf<ASRBodyPart> GetBodyPartClass() const override { return LegClass; };
 
 public:
@@ -37,16 +38,6 @@ class SCRAPROOTS_API USRLegSchemaData : public USRBodyPartSchemaData
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ShowOnlyInnerProperties))
 	FSRBodyPartSchema_Leg LegSchema;
-};
-
-USTRUCT(BlueprintType)
-struct SCRAPROOTS_API FSRBodyPartPreset_Leg : public FSRBodyPartPreset
-{
-	GENERATED_BODY()
-
-public:
-	// Inherit constructors
-	using FSRBodyPartPreset::FSRBodyPartPreset;
 };
 
 UCLASS()

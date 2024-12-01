@@ -2,13 +2,20 @@
 
 #include "ModularCharacter/Parts/SRBodyPart_Head.h"
 
+#include "Core/SRDeveloperSettings.h"
 #include "ModularCharacter/SRModularCharacterUtils.h"
+
+FSRBodyPartSchema_Head::FSRBodyPartSchema_Head()
+	: Super()
+{
+	const USRDeveloperSettings* DeveloperSettings = GetDefault<USRDeveloperSettings>();
+	HeadClass = DeveloperSettings->ModularCharacterConfig.DefaultHeadClass;
+}
+
+//////////////////////////////////////////////////
 
 void ASRBodyPart_Head::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 {
-	// Cast the base preset to the head-specific preset
-	const FSRBodyPartPreset_Head& HeadPreset = static_cast<const FSRBodyPartPreset_Head&>(Preset);
-
 	USRBodyPartSchemaData* BodyPartSchemaData = USRModularCharacterUtils::GetBodyPartSchemaDataByProductTag(this, Preset.ProductTag);
 	USRHeadSchemaData* HeadSchemaData = Cast<USRHeadSchemaData>(BodyPartSchemaData);
 	if (HeadSchemaData == nullptr)

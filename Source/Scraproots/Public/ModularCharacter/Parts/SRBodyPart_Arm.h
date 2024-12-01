@@ -11,6 +11,7 @@ struct SCRAPROOTS_API FSRBodyPartSchema_Arm : public FSRBodyPartSchema
 	GENERATED_BODY()
 
 public:
+	FSRBodyPartSchema_Arm();
 	virtual TSubclassOf<ASRBodyPart> GetBodyPartClass() const override { return ArmClass; };
 
 public:
@@ -46,16 +47,6 @@ class SCRAPROOTS_API USRArmSchemaData : public USRBodyPartSchemaData
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ShowOnlyInnerProperties))
 	FSRBodyPartSchema_Arm ArmSchema;
-};
-
-USTRUCT(BlueprintType)
-struct SCRAPROOTS_API FSRBodyPartPreset_Arm : public FSRBodyPartPreset
-{
-	GENERATED_BODY()
-
-public:
-	// Inherit constructors
-	using FSRBodyPartPreset::FSRBodyPartPreset;
 };
 
 UCLASS()

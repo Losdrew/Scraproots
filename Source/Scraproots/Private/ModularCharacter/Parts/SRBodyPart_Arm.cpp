@@ -2,13 +2,20 @@
 
 #include "ModularCharacter/Parts/SRBodyPart_Arm.h"
 
+#include "Core/SRDeveloperSettings.h"
 #include "ModularCharacter/SRModularCharacterUtils.h"
+
+FSRBodyPartSchema_Arm::FSRBodyPartSchema_Arm()
+	: Super()
+{
+	const USRDeveloperSettings* DeveloperSettings = GetDefault<USRDeveloperSettings>();
+	ArmClass = DeveloperSettings->ModularCharacterConfig.DefaultArmClass;
+}
+
+//////////////////////////////////////////////////
 
 void ASRBodyPart_Arm::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 {
-	// Cast the base preset to the arm-specific preset
-	const FSRBodyPartPreset_Arm& ArmPreset = static_cast<const FSRBodyPartPreset_Arm&>(Preset);
-
 	USRBodyPartSchemaData* BodyPartSchemaData = USRModularCharacterUtils::GetBodyPartSchemaDataByProductTag(this, Preset.ProductTag);
 	USRArmSchemaData* ArmSchemaData = Cast<USRArmSchemaData>(BodyPartSchemaData);
 	if (ArmSchemaData == nullptr)

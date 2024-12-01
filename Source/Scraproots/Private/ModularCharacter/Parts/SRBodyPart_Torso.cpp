@@ -2,13 +2,20 @@
 
 #include "ModularCharacter/Parts/SRBodyPart_Torso.h"
 
+#include "Core/SRDeveloperSettings.h"
 #include "ModularCharacter/SRModularCharacterUtils.h"
+
+FSRBodyPartSchema_Torso::FSRBodyPartSchema_Torso()
+	: Super()
+{
+	const USRDeveloperSettings* DeveloperSettings = GetDefault<USRDeveloperSettings>();
+	TorsoClass = DeveloperSettings->ModularCharacterConfig.DefaultTorsoClass;
+}
+
+//////////////////////////////////////////////////
 
 void ASRBodyPart_Torso::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 {
-	// Cast the base preset to the torso-specific preset
-	const FSRBodyPartPreset_Torso& TorsoPreset = static_cast<const FSRBodyPartPreset_Torso&>(Preset);
-
 	USRBodyPartSchemaData* BodyPartSchemaData = USRModularCharacterUtils::GetBodyPartSchemaDataByProductTag(this, Preset.ProductTag);
 	USRTorsoSchemaData* TorsoSchemaData = Cast<USRTorsoSchemaData>(BodyPartSchemaData);
 	if (TorsoSchemaData == nullptr)

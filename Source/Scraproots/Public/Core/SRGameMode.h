@@ -32,10 +32,6 @@ public:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Inventory Manager")
 	TObjectPtr<USRInventoryManager> InventoryManager;
 
-protected:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Game Configuration")
-	FSRProductsConfig ProductsConfig;
-
 private:
 	void InitializeGameSystems();
 };

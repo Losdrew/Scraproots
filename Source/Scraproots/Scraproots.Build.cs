@@ -18,7 +18,8 @@ public class Scraproots : ModuleRules
                 "EnhancedInput",
                 "GameplayTags",
                 "CommonUI",
-                "UMG"
+                "UMG",
+                "DeveloperSettings"
             }
         );
     }

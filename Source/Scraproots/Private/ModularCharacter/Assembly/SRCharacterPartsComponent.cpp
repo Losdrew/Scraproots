@@ -75,17 +75,19 @@ void USRCharacterPartsComponent::OnBodyPartAdded(ASRBodyPart* BodyPart)
 	OnBodyPartAddedDelegate.Broadcast(BodyPart);
 }
 
+void USRCharacterPartsComponent::OnBodyPartRemoved(ASRBodyPart* BodyPart)
+{
+	OnBodyPartRemovedDelegate.Broadcast(BodyPart);
+}
+
 void USRCharacterPartsComponent::RemoveBodyPart(ESRBodyPartType BodyPartType)
 {
 	if (ASRBodyPart* BodyPart = GetBodyPartByPartType(BodyPartType))
 	{
 		DetachBodyPart(BodyPart);
 		BodyParts.Remove(BodyPartType);
+		OnBodyPartRemoved(BodyPart);
 		BodyPart->Destroy();
-	}
-	else
-	{
-		UE_LOG(LogSRModularCharacter, Error, TEXT("USRCharacterPartsComponent::RemoveBodyPart: Body part not found"));
 	}
 }
 

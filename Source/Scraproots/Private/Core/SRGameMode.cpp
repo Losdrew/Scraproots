@@ -2,6 +2,7 @@
 
 #include "Core/SRGameMode.h"
 
+#include "Core/SRDeveloperSettings.h"
 #include "Core/SRGameplayEventRouter.h"
 #include "Inventory/SRInventoryManager.h"
 #include "Product/SRProductManager.h"
@@ -22,7 +23,8 @@ void ASRGameMode::InitializeGameSystems()
 	checkf(ProductManager, TEXT("ProductManager is not set in the SRGameMode!"));
 	if (ProductManager)
 	{
-		ProductManager->Initialize(ProductsConfig);
+		const USRDeveloperSettings* DeveloperSettings = GetDefault<USRDeveloperSettings>();
+		ProductManager->Initialize(DeveloperSettings->ProductsConfig);
 	}
 
 	InventoryManager = NewObject<USRInventoryManager>(this);
