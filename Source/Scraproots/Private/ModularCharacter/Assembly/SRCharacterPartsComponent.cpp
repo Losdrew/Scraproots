@@ -89,10 +89,6 @@ void USRCharacterPartsComponent::RemoveBodyPart(ESRBodyPartType BodyPartType)
 		OnBodyPartRemoved(BodyPart);
 		BodyPart->Destroy();
 	}
-	else
-	{
-		UE_LOG(LogSRModularCharacter, Error, TEXT("USRCharacterPartsComponent::RemoveBodyPart: Body part not found"));
-	}
 }
 
 ASRBodyPart* USRCharacterPartsComponent::GetBodyPartByPartType(ESRBodyPartType PartType) const

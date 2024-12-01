@@ -33,7 +33,10 @@ void USRAssetManager::LoadClassAsync(const TSoftClassPtr<ClassType>& ClassPointe
 	if (!ClassPath.IsValid())
 	{
 		FString ClassName = ClassPath.ToString();
-		UE_LOG(LogSRAssetManager, Warning, TEXT("Invalid asset path for class %s."), *ClassName);
+		if (!ClassName.IsEmpty())
+		{
+			UE_LOG(LogSRAssetManager, Warning, TEXT("Invalid asset path for class %s."), *ClassName);
+		}
 		return;
 	}
 
