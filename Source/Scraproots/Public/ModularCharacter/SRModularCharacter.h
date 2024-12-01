@@ -16,6 +16,12 @@ struct SCRAPROOTS_API FSRModularCharacterPreset
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Body Parts")
+	FSRBodyPartPreset HeadPreset{ESRBodyPartType::Head};
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Body Parts")
+	FSRBodyPartPreset TorsoPreset{ESRBodyPartType::Torso};
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Body Parts")
 	FSRBodyPartPreset LeftArmPreset{ESRBodyPartType::LeftArm};
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Body Parts")
@@ -23,12 +29,6 @@ struct SCRAPROOTS_API FSRModularCharacterPreset
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Body Parts")
 	FSRBodyPartPreset LegsPreset{ESRBodyPartType::Legs};
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Body Parts")
-	FSRBodyPartPreset HeadPreset{ESRBodyPartType::Head};
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Body Parts")
-	FSRBodyPartPreset TorsoPreset{ESRBodyPartType::Torso};
 };
 
 UCLASS(Abstract)
