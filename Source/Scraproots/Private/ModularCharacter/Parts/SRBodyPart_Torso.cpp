@@ -2,7 +2,17 @@
 
 #include "ModularCharacter/Parts/SRBodyPart_Torso.h"
 
+#include "Core/SRDeveloperSettings.h"
 #include "ModularCharacter/SRModularCharacterUtils.h"
+
+FSRBodyPartSchema_Torso::FSRBodyPartSchema_Torso()
+	: Super()
+{
+	const USRDeveloperSettings* DeveloperSettings = GetDefault<USRDeveloperSettings>();
+	TorsoClass = DeveloperSettings->ModularCharacterConfig.DefaultTorsoClass;
+}
+
+//////////////////////////////////////////////////
 
 void ASRBodyPart_Torso::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 {

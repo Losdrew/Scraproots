@@ -16,3 +16,21 @@ enum class ESRBodyPartType : uint8
 	RightArm,
 	Legs,
 };
+
+USTRUCT(BlueprintType)
+struct FSRModularCharacterConfig
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Modular Character")
+	TSubclassOf<class ASRBodyPart_Head> DefaultHeadClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Modular Character")
+	TSubclassOf<class ASRBodyPart_Arm> DefaultArmClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Modular Character")
+	TSubclassOf<class ASRBodyPart_Leg> DefaultLegClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Modular Character")
+	TSubclassOf<class ASRBodyPart_Torso> DefaultTorsoClass;
+};

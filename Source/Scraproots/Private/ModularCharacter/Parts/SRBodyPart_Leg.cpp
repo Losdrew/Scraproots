@@ -2,7 +2,17 @@
 
 #include "ModularCharacter/Parts/SRBodyPart_Leg.h"
 
+#include "Core/SRDeveloperSettings.h"
 #include "ModularCharacter/SRModularCharacterUtils.h"
+
+FSRBodyPartSchema_Leg::FSRBodyPartSchema_Leg()
+	: Super()
+{
+	const USRDeveloperSettings* DeveloperSettings = GetDefault<USRDeveloperSettings>();
+	LegClass = DeveloperSettings->ModularCharacterConfig.DefaultLegClass;
+}
+
+//////////////////////////////////////////////////
 
 void ASRBodyPart_Leg::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 {

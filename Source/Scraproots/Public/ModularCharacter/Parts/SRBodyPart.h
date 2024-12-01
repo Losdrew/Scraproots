@@ -18,6 +18,7 @@ struct SCRAPROOTS_API FSRBodyPartSchema
 	GENERATED_BODY()
 
 public:
+	FSRBodyPartSchema();
 	virtual ~FSRBodyPartSchema() = default;
 	virtual TSubclassOf<ASRBodyPart> GetBodyPartClass() const;
 };

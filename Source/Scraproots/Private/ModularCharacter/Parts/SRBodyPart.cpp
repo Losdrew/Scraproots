@@ -7,6 +7,10 @@
 #include "Product/SRProductTypes.h"
 #include "Core/SRAssetManager.h"
 
+FSRBodyPartSchema::FSRBodyPartSchema()
+{
+}
+
 TSubclassOf<ASRBodyPart> FSRBodyPartSchema::GetBodyPartClass() const
 {
 	return ASRBodyPart::StaticClass();

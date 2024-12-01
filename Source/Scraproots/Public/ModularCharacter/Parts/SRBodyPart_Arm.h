@@ -11,6 +11,7 @@ struct SCRAPROOTS_API FSRBodyPartSchema_Arm : public FSRBodyPartSchema
 	GENERATED_BODY()
 
 public:
+	FSRBodyPartSchema_Arm();
 	virtual TSubclassOf<ASRBodyPart> GetBodyPartClass() const override { return ArmClass; };
 
 public:
