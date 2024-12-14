@@ -136,14 +136,14 @@ void USRCharacterPartsComponent::AttachBodyParts()
 		{
 			if (Child)
 			{
-				Child->AttachToComponent(ParentMeshComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
+				Child->AttachToMeshComponent(ParentMeshComponent);
 			}
 		}
 	};
 
 	if (Legs)
 	{
-		Legs->AttachToComponent(ParentMeshComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
+		Legs->AttachToMeshComponent(ParentMeshComponent);;
 	}
 
 	AttachOrAdd(Legs, Torso);

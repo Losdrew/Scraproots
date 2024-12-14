@@ -27,8 +27,18 @@ void ASRBodyPart_Torso::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 	BaseMesh = TorsoSchema.Mesh;
 	AttachmentSocket = TorsoSchema.AttachmentSocket;
 	AnimInstanceClass = TorsoSchema.AnimInstanceClass;
+	NoLegsOffset = TorsoSchema.NoLegsOffset;
 
 	Super::InitializeFromPreset(Preset);
+}
+
+void ASRBodyPart_Torso::AttachToMeshComponent(USkeletalMeshComponent* InMeshComponent)
+{
+	if (InMeshComponent)
+	{
+		AttachToComponent(InMeshComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
+		AddActorLocalOffset(NoLegsOffset);
+	}
 }
 
 void ASRBodyPart_Torso::AttachToBodyPart(ASRBodyPart* BodyPart)

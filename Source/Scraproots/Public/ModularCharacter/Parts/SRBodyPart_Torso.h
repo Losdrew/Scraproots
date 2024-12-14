@@ -26,6 +26,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BodyPart")
 	FName AttachmentSocket;
+
+	// Applied to the torso when there are no legs
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BodyPart")
+	FVector NoLegsOffset; 
 };
 
 UCLASS(Blueprintable, BlueprintType)
@@ -48,7 +52,12 @@ class SCRAPROOTS_API ASRBodyPart_Torso : public ASRBodyPart
 public:
 	virtual void InitializeFromPreset(const FSRBodyPartPreset& Preset) override;
 
+public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BodyPart")
+	FVector NoLegsOffset;
+
 protected:
+	virtual void AttachToMeshComponent(USkeletalMeshComponent* InMeshComponent) override;
 	virtual void AttachToBodyPart(ASRBodyPart* BodyPart) override;
 
 	UFUNCTION(BlueprintImplementableEvent)

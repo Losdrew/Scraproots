@@ -56,6 +56,14 @@ void ASRBodyPart::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 	bInitialized = true;
 }
 
+void ASRBodyPart::AttachToMeshComponent(USkeletalMeshComponent* InMeshComponent)
+{
+	if (InMeshComponent)
+	{
+		AttachToComponent(InMeshComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
+	}
+}
+
 void ASRBodyPart::SetBodyPartMeshParameters(USkeletalMeshComponent* SkeletalMeshComponent)
 {
 	if (SkeletalMeshComponent)

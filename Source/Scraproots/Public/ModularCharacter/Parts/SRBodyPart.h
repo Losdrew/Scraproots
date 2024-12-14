@@ -67,6 +67,7 @@ public:
 	ASRBodyPart();
 
 	virtual void InitializeFromPreset(const FSRBodyPartPreset& Preset);
+	virtual void AttachToMeshComponent(USkeletalMeshComponent* InMeshComponent);
 	virtual void AddAttachmentBodyPart(ASRBodyPart* BodyPart);
 
 public:
