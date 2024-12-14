@@ -63,6 +63,7 @@ void ASRBodyPart::SetBodyPartMeshParameters(USkeletalMeshComponent* SkeletalMesh
 		SkeletalMeshComponent->SetupAttachment(RootComponent);
 		SkeletalMeshComponent->SetCollisionResponseToChannel(ECC_Pawn, ECR_Ignore);
 		SkeletalMeshComponent->SetCollisionEnabled(ECollisionEnabled::Type::QueryOnly);
+		SkeletalMeshComponent->bReceivesDecals = false;
 	}
 }
 
