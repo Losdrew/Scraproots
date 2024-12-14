@@ -177,6 +177,22 @@ USkeletalMeshComponent* USRCharacterPartsComponent::GetParentMeshComponent() con
 	return nullptr;
 }
 
+void USRCharacterPartsComponent::OnActorVisibilityChanged()
+{
+	if (AActor* Owner = GetOwner())
+	{
+		for (const auto& Elem : BodyParts)
+		{
+			if (ASRBodyPart* BodyPart = Elem.Value.Get())
+			{
+				BodyPart->SetActorHiddenInGame(Owner->IsHidden());
+			}
+		}
+	}
+
+	Super::OnActorVisibilityChanged();
+}
+
 void USRCharacterPartsComponent::DetachBodyPart(ASRBodyPart* BodyPart)
 {
 	BodyPart->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);

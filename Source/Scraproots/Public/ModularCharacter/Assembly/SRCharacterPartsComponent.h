@@ -59,6 +59,8 @@ protected:
 	// If the parent actor is derived from ACharacter, returns the Mesh component, otherwise nullptr
 	USkeletalMeshComponent* GetParentMeshComponent() const;
 
+	virtual void OnActorVisibilityChanged() override;
+
 protected:
 	UPROPERTY()
 	TMap<ESRBodyPartType, TObjectPtr<ASRBodyPart>> BodyParts;
