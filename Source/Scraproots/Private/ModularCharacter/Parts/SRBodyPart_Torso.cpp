@@ -26,6 +26,7 @@ void ASRBodyPart_Torso::InitializeFromPreset(const FSRBodyPartPreset& Preset)
 	const FSRBodyPartSchema_Torso& TorsoSchema = TorsoSchemaData->TorsoSchema;
 	BaseMesh = TorsoSchema.Mesh;
 	AttachmentSocket = TorsoSchema.AttachmentSocket;
+	AnimInstanceClass = TorsoSchema.AnimInstanceClass;
 
 	Super::InitializeFromPreset(Preset);
 }
