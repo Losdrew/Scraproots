@@ -28,6 +28,15 @@ void USRProductManager::Initialize(const FSRProductsConfig& InConfig)
 	}
 }
 
+FSRProductDefinition USRProductManager::GetProductDefinition(const FGameplayTag& ProductTag) const
+{
+	if (const FSRProductDefinition* ProductDefinition = FindProductDefinition(ProductTag))
+	{
+		return *ProductDefinition;
+	}
+	return FSRProductDefinition();
+}
+
 FSRProductDefinition* USRProductManager::FindProductDefinition(const FGameplayTag& ProductTag) const
 {
 	if (!ProductsConfig.ProductDefinitionsTable)
