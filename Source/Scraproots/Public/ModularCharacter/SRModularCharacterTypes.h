@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "GameplayTagContainer.h"
 #include "SRModularCharacterTypes.generated.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogSRModularCharacter, Log, All);
@@ -26,11 +27,26 @@ struct FSRModularCharacterConfig
 	TSubclassOf<class ASRBodyPart_Head> DefaultHeadClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Modular Character")
+	TSubclassOf<class ASRBodyPart_Torso> DefaultTorsoClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Modular Character")
 	TSubclassOf<class ASRBodyPart_Arm> DefaultArmClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Modular Character")
 	TSubclassOf<class ASRBodyPart_Leg> DefaultLegClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Modular Character")
-	TSubclassOf<class ASRBodyPart_Torso> DefaultTorsoClass;
+	FGameplayTag GenericHeadTag;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Modular Character")
+	FGameplayTag GenericTorsoTag;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Modular Character")
+	FGameplayTag GenericLeftArmTag;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Modular Character")
+	FGameplayTag GenericRightArmTag;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Modular Character")
+	FGameplayTag GenericLegsTag;
 };

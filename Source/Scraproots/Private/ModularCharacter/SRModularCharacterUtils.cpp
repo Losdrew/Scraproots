@@ -4,6 +4,7 @@
 
 #include "GameplayTagContainer.h"
 #include "Core/SRStatics.h"
+#include "Core/SRDeveloperSettings.h"
 #include "Product/SRProductTypes.h"
 #include "Product/SRProductManager.h"
 #include "ModularCharacter/Parts/SRBodyPart.h"
@@ -16,6 +17,44 @@ USRBodyPartSchemaData* USRModularCharacterUtils::GetBodyPartSchemaDataByProductT
 		return Cast<USRBodyPartSchemaData>(ProductSchemaData);
 	}
 	return nullptr;
+}
+
+ESRBodyPartType USRModularCharacterUtils::GetBodyPartTypeByProductTag(const UObject* WorldContextObject, FGameplayTag ProductTag)
+{
+	const USRDeveloperSettings* DeveloperSettings = GetDefault<USRDeveloperSettings>();
+	if (!DeveloperSettings)
+	{
+		UE_LOG(LogSRModularCharacter, Error, TEXT("USRModularCharacterUtils::GetBodyPartTypeByProductTag: Developer settings not found"));
+		return ESRBodyPartType::None;
+	}
+
+	if (ProductTag.MatchesTag(DeveloperSettings->ModularCharacterConfig.GenericHeadTag))
+	{
+		return ESRBodyPartType::Head;
+	}
+	if (ProductTag.MatchesTag(DeveloperSettings->ModularCharacterConfig.GenericTorsoTag))
+	{
+		return ESRBodyPartType::Torso;
+	}
+	if (ProductTag.MatchesTag(DeveloperSettings->ModularCharacterConfig.GenericLeftArmTag))
+	{
+		return ESRBodyPartType::LeftArm;
+	}
+	if (ProductTag.MatchesTag(DeveloperSettings->ModularCharacterConfig.GenericRightArmTag))
+	{
+		return ESRBodyPartType::RightArm;
+	}
+	if (ProductTag.MatchesTag(DeveloperSettings->ModularCharacterConfig.GenericLegsTag))
+	{
+		return ESRBodyPartType::Legs;
+	}
+
+	if (ProductTag != FGameplayTag::EmptyTag)
+	{
+		UE_LOG(LogSRModularCharacter, Warning, TEXT("USRModularCharacterUtils::GetBodyPartTypeByProductTag: Body part type not found for tag %s"), *ProductTag.ToString());
+	}
+
+	return ESRBodyPartType::None;
 }
 
 FSRProductDefinition* USRModularCharacterUtils::GetProductDefinitionByProductTag(const UObject* WorldContextObject, FGameplayTag ProductTag)

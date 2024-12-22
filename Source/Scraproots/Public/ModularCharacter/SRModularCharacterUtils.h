@@ -19,6 +19,10 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Modular Character", meta = (WorldContext = "WorldContextObject"))
 	static USRBodyPartSchemaData* GetBodyPartSchemaDataByProductTag(const UObject* WorldContextObject, FGameplayTag ProductTag);
 
+	// If the product tag is not body part, returns ESRBodyPartType::None
+	UFUNCTION(BlueprintPure, Category = "Modular Character", meta = (WorldContext = "WorldContextObject"))
+	static ESRBodyPartType GetBodyPartTypeByProductTag(const UObject* WorldContextObject, FGameplayTag ProductTag);
+
 	static FSRProductDefinition* GetProductDefinitionByProductTag(const UObject* WorldContextObject, FGameplayTag ProductTag);
 	static USRProductSchemaData* GetProductSchemaDataByProductTag(const UObject* WorldContextObject, FGameplayTag ProductTag);
 };
