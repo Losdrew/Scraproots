@@ -53,6 +53,9 @@ public:
 	virtual void InitializeFromPreset(const FSRBodyPartPreset& Preset) override;
 
 public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "BodyPart")
+	FVector LegsOffset;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BodyPart")
 	FVector NoLegsOffset;
 

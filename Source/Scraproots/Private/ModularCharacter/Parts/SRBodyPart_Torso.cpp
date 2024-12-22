@@ -37,17 +37,17 @@ void ASRBodyPart_Torso::AttachToMeshComponent(USkeletalMeshComponent* InMeshComp
 	if (InMeshComponent)
 	{
 		AttachToComponent(InMeshComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
-		AddActorLocalOffset(NoLegsOffset);
+		MeshComponent->SetRelativeLocation(FVector::ZeroVector);
+		MeshComponent->AddLocalOffset(NoLegsOffset);
 	}
 }
 
 void ASRBodyPart_Torso::AttachToBodyPart(ASRBodyPart* BodyPart)
 {
-	if (BodyPart)
+	if (BodyPart && BodyPart->MeshComponent && BodyPart->BodyPartType == ESRBodyPartType::Legs)
 	{
-		if (BodyPart->BodyPartType == ESRBodyPartType::Legs && BodyPart->MeshComponent)
-		{
-			AttachToLegs(BodyPart);
-		}
+		MeshComponent->SetRelativeLocation(FVector::ZeroVector);
+		AttachToLegs(BodyPart);
+		MeshComponent->AddWorldOffset(LegsOffset);
 	}
 }
