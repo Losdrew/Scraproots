@@ -11,6 +11,7 @@ struct FSRBodyPartPreset;
 class ASRBodyPart;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnBodyPartChangedSignature, ASRBodyPart*, BodyPart);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnBodyPartsSetSignature);
 
 // Handles spawning and managing body parts for a modular character
 UCLASS(Blueprintable, BlueprintType, meta = (BlueprintSpawnableComponent))
@@ -48,6 +49,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "ModularCharacter|Parts")
 	FOnBodyPartChangedSignature OnBodyPartRemovedDelegate;
+
+	UPROPERTY(BlueprintAssignable, Category = "ModularCharacter|Parts")
+	FOnBodyPartsSetSignature OnBodyPartsSetDelegate;
 
 protected:
 	UFUNCTION()

@@ -19,6 +19,8 @@ void USRCharacterPartsComponent::SetBodyPartsFromPreset(const FSRModularCharacte
 	SetBodyPart(Preset.LegsPreset);
 	SetBodyPart(Preset.HeadPreset);
 	SetBodyPart(Preset.TorsoPreset);
+
+	OnBodyPartsSetDelegate.Broadcast();
 }
 
 void USRCharacterPartsComponent::SetBodyPart(const FSRBodyPartPreset& PartPreset)
