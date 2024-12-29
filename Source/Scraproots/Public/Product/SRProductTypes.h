@@ -56,7 +56,7 @@ struct SCRAPROOTS_API FSRProductDefinition : public FTableRowBase
 	// Description of stats/attributes/abilities that this product has.
 	// This is used to display the product's stats in the UI.
 	// Might not reflect the actual stats of the product.
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (MultiLine = "true"))
 	FText StatsText;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
