@@ -36,8 +36,8 @@ public:
 	TArray<FObstacleCoord> GetRandomObstacleCoord(int32 GridSizeX, int32 GridSizeY);
 
 private:
-	TArray<TArray<bool>> CreateBoolGrid(int32 GridSizeX, int32 GridSizeY) const;
-	TArray<TArray<bool>> InitializeGrid(int32 GridSizeX, int32 GridSizeY) const;
-	void GenerateObstacles(TArray<TArray<bool>>& Grid, int32 GridSizeX, int32 GridSizeY, int MinObstacles, int MaxObstacles);
+	int32 GenerateObstacles(TArray<TArray<bool>>& Grid, int32 GridSizeX, int32 GridSizeY, int MinObstacles, int MaxObstacles);
 	TArray<FObstacleCoord> ConvertGridToArray(const TArray<TArray<bool>>& Grid, int32 GridSizeX, int32 GridSizeY);
+	bool AreTilesConnected(TArray<TArray<bool>>& Grid, int32 GridSizeX, int32 GridSizeY, int32 ObstaclesTotal);
+	TArray<TArray<bool>> InitializeGrid(int32 GridSizeX, int32 GridSizeY) const;
 };

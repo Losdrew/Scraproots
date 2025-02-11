@@ -5,6 +5,10 @@ USRObstacleCoord::USRObstacleCoord()
 {
 }
 
+const int TileSize = 200;
+const double MinProbability = 0.25;
+const double MaxProbability = 0.35;
+
 TArray<TArray<bool>> USRObstacleCoord::InitializeGrid(int32 GridSizeX, int32 GridSizeY) const
 {
 	TArray<TArray<bool>> Grid;
@@ -20,15 +24,16 @@ TArray<TArray<bool>> USRObstacleCoord::InitializeGrid(int32 GridSizeX, int32 Gri
 	return Grid;
 }
 
-void USRObstacleCoord::GenerateObstacles(TArray<TArray<bool>>& Grid, int32 GridSizeX, int32 GridSizeY, int MinObstacles, int MaxObstacles)
+int USRObstacleCoord::GenerateObstacles(TArray<TArray<bool>>& Grid, int32 GridSizeX, int32 GridSizeY, int MinObstacles, int MaxObstacles)
 {
-	int ObstaclesTotal = 0;
+	int32 ObstaclesTotal = 0;
+	Grid = InitializeGrid(GridSizeX, GridSizeY);
 
 	while (ObstaclesTotal < MinObstacles)
 	{
-		for (int32 X = 0; X < GridSizeX; X++)
+		for (int32 X = 1; X < GridSizeX; X++)
 		{
-			for (int32 Y = 1; Y < GridSizeY; Y++)  // Start from Y = 1
+			for (int32 Y = 0; Y < GridSizeY; Y++)  // Start from Y = 1
 			{
 				int RndNum = FMath::RandRange(1, 10);
 				if (RndNum == 1 && ObstaclesTotal < MaxObstacles && !Grid[X][Y])
@@ -39,19 +44,84 @@ void USRObstacleCoord::GenerateObstacles(TArray<TArray<bool>>& Grid, int32 GridS
 			}
 		}
 	}
+	if (AreTilesConnected(Grid, GridSizeX, GridSizeY, ObstaclesTotal))
+		return ObstaclesTotal;
+	else
+		return -1;
 }
+
+#include "ObstacleCoord.h"
+#include "Containers/Queue.h"
+
+bool USRObstacleCoord::AreTilesConnected(TArray<TArray<bool>>& Grid, int32 GridSizeX, int32 GridSizeY, int32 ObstaclesTotal)
+{
+	// «найдемо першу порожню кл≥тинку дл€ старту
+	int32 StartX = -1, StartY = -1;
+	for (int32 X = 0; X < GridSizeX; X++)
+	{
+		for (int32 Y = 0; Y < GridSizeY; Y++)
+		{
+			if (!Grid[X][Y])  // якщо це порожн€ кл≥тинка
+			{
+				StartX = X;
+				StartY = Y;
+				break;
+			}
+		}
+		if (StartX != -1) break;
+	}
+
+	// якщо немаЇ жодноњ порожньоњ кл≥тинки, вважаЇмо, що вони "з'Їднан≥"
+	if (StartX == -1) return true;
+
+	// —творимо коп≥ю дл€ перев≥рки в≥дв≥даних кл≥тинок
+	TArray<TArray<bool>> Visited = InitializeGrid(GridSizeX, GridSizeY);
+
+	// ¬икористаЇмо BFS дл€ пошуку вс≥х з'Їднаних порожн≥х кл≥тинок
+	TQueue<FIntPoint> Queue;
+	Queue.Enqueue(FIntPoint(StartX, StartY));
+	Visited[StartX][StartY] = true;
+
+	const int32 Directions[4][2] = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+	int32 EmptyCellsCount = 1;
+	int32 TotalEmptyCells = GridSizeX * GridSizeY - ObstaclesTotal;
+
+	while (!Queue.IsEmpty())
+	{
+		FIntPoint Current;
+		Queue.Dequeue(Current);
+
+		for (const auto& Dir : Directions)
+		{
+			int32 NewX = Current.X + Dir[0];
+			int32 NewY = Current.Y + Dir[1];
+
+			if (NewX >= 0 && NewX < GridSizeX && NewY >= 0 && NewY < GridSizeY &&
+				!Grid[NewX][NewY] && !Visited[NewX][NewY])
+			{
+				Visited[NewX][NewY] = true;
+				Queue.Enqueue(FIntPoint(NewX, NewY));
+				EmptyCellsCount++;
+			}
+		}
+	}
+
+	// якщо к≥льк≥сть в≥дв≥даних порожн≥х кл≥тинок сп≥впадаЇ з загальною к≥льк≥стю Ч значить, вони вс≥ з'Їднан≥
+	return EmptyCellsCount == TotalEmptyCells;
+}
+
 
 TArray<FObstacleCoord> USRObstacleCoord::ConvertGridToArray(const TArray<TArray<bool>>& Grid, int32 GridSizeX, int32 GridSizeY)
 {
 	TArray<FObstacleCoord> ResultArray;
 
-	for (int32 X = 0; X < GridSizeX; X++)
+	for (int32 X = 1; X < GridSizeX; X++)
 	{
-		for (int32 Y = 1; Y < GridSizeY; Y++)  // Start from Y = 1
+		for (int32 Y = 0; Y < GridSizeY; Y++)
 		{
 			if (Grid[X][Y])
 			{
-				ResultArray.Add(FObstacleCoord(X * 200, Y * 200));	// Store as a struct
+				ResultArray.Add(FObstacleCoord(X * TileSize, Y * TileSize));
 			}
 		}
 	}
@@ -62,12 +132,16 @@ TArray<FObstacleCoord> USRObstacleCoord::ConvertGridToArray(const TArray<TArray<
 TArray<FObstacleCoord> USRObstacleCoord::GetRandomObstacleCoord(int32 GridSizeX, int32 GridSizeY)
 {
 	int CellsTotal = GridSizeX * GridSizeY;
-	int MinObstacles = round((double)CellsTotal * 0.25);
-	int MaxObstacles = round((double)CellsTotal * 0.35);
+	int MinObstacles = round((double)CellsTotal * MinProbability);
+	int MaxObstacles = round((double)CellsTotal * MaxProbability);
 
-	TArray<TArray<bool>> Grid = InitializeGrid(GridSizeX, GridSizeY);
+	TArray<TArray<bool>> Grid;
 
-	GenerateObstacles(Grid, GridSizeX, GridSizeY, MinObstacles, MaxObstacles);
+	int32 ObstaclesTotal = 0;
+	do
+	{
+		ObstaclesTotal = GenerateObstacles(Grid, GridSizeX, GridSizeY, MinObstacles, MaxObstacles);
+	} while (ObstaclesTotal == -1);
 
 	return ConvertGridToArray(Grid, GridSizeX, GridSizeY);
 }
