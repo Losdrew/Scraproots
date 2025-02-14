@@ -24,19 +24,19 @@ TArray<TArray<bool>> USRObstacleCoord::InitializeGrid(int32 GridSizeX, int32 Gri
 	return Grid;
 }
 
-int USRObstacleCoord::GenerateObstacles(TArray<TArray<bool>>& Grid, int32 GridSizeX, int32 GridSizeY, int MinObstacles, int MaxObstacles)
+int USRObstacleCoord::GenerateObstacles(TArray<TArray<bool>>& Grid, int32 GridSizeX, int32 GridSizeY, int MinObstacles, int MaxObstacles, TArray<TArray<bool>> EnemyGrid)
 {
 	int32 ObstaclesTotal = 0;
 	Grid = InitializeGrid(GridSizeX, GridSizeY);
 
 	while (ObstaclesTotal < MinObstacles)
 	{
-		for (int32 X = 1; X < GridSizeX; X++)
+		for (int32 X = 0; X < GridSizeX; X++)
 		{
-			for (int32 Y = 0; Y < GridSizeY; Y++)  // Start from Y = 1
+			for (int32 Y = 1; Y < GridSizeY; Y++)  // Start from Y = 1
 			{
 				int RndNum = FMath::RandRange(1, 10);
-				if (RndNum == 1 && ObstaclesTotal < MaxObstacles && !Grid[X][Y])
+				if (RndNum == 1 && ObstaclesTotal < MaxObstacles && !Grid[X][Y] && !EnemyGrid[X][Y])
 				{
 					Grid[X][Y] = true;
 					ObstaclesTotal++;
@@ -115,9 +115,9 @@ TArray<FObstacleCoord> USRObstacleCoord::ConvertGridToArray(const TArray<TArray<
 {
 	TArray<FObstacleCoord> ResultArray;
 
-	for (int32 X = 1; X < GridSizeX; X++)
+	for (int32 X = 0; X < GridSizeX; X++)
 	{
-		for (int32 Y = 0; Y < GridSizeY; Y++)
+		for (int32 Y = 1; Y < GridSizeY; Y++)
 		{
 			if (Grid[X][Y])
 			{
@@ -129,18 +129,53 @@ TArray<FObstacleCoord> USRObstacleCoord::ConvertGridToArray(const TArray<TArray<
 	return ResultArray;
 }
 
-TArray<FObstacleCoord> USRObstacleCoord::GetRandomObstacleCoord(int32 GridSizeX, int32 GridSizeY)
+TArray<FObstacleCoord> USRObstacleCoord::ConvertToCoord(TArray<int32> EnemyTileIndices)
+{
+	TArray<FObstacleCoord> EnemyTileCoords;
+
+	for (int32 Index : EnemyTileIndices)
+	{
+		int32 X = Index / 1000;
+		int32 Y = Index % 1000;
+		EnemyTileCoords.Add(FObstacleCoord(X, Y));
+	}
+
+	return EnemyTileCoords;
+}
+
+TArray<TArray<bool>> USRObstacleCoord::ConvertCoordsToGrid(int32 GridSizeX, int32 GridSizeY, TArray<FObstacleCoord> EnemyTileCoords)
+{
+	TArray<TArray<bool>> EnemyGrid = InitializeGrid(GridSizeX, GridSizeY);
+
+	for (const FObstacleCoord& Coord : EnemyTileCoords)
+	{
+		int32 X = Coord.X;
+		int32 Y = Coord.Y;
+
+		if (X >= 0 && X < GridSizeX && Y >= 0 && Y < GridSizeY)
+		{
+			EnemyGrid[X][Y] = true;
+		}
+	}
+
+	return EnemyGrid;
+}
+
+
+
+TArray<FObstacleCoord> USRObstacleCoord::GetRandomObstacleCoord(int32 GridSizeX, int32 GridSizeY, TArray<int32> EnemyTileIndices)
 {
 	int CellsTotal = GridSizeX * GridSizeY;
 	int MinObstacles = round((double)CellsTotal * MinProbability);
 	int MaxObstacles = round((double)CellsTotal * MaxProbability);
 
 	TArray<TArray<bool>> Grid;
+	TArray<TArray<bool>> EnemyGrid = ConvertCoordsToGrid(GridSizeX, GridSizeY, ConvertToCoord(EnemyTileIndices));
 
 	int32 ObstaclesTotal = 0;
 	do
 	{
-		ObstaclesTotal = GenerateObstacles(Grid, GridSizeX, GridSizeY, MinObstacles, MaxObstacles);
+		ObstaclesTotal = GenerateObstacles(Grid, GridSizeX, GridSizeY, MinObstacles, MaxObstacles, EnemyGrid);
 	} while (ObstaclesTotal == -1);
 
 	return ConvertGridToArray(Grid, GridSizeX, GridSizeY);
