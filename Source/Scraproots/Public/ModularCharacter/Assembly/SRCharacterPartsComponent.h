@@ -60,6 +60,9 @@ protected:
 	UFUNCTION()
 	void OnBodyPartRemoved(ASRBodyPart* BodyPart);
 
+	UFUNCTION()
+	void OnBodyPartsSet();
+
 	// If the parent actor is derived from ACharacter, returns the Mesh component, otherwise nullptr
 	USkeletalMeshComponent* GetParentMeshComponent() const;
 
