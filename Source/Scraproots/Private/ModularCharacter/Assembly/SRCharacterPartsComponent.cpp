@@ -20,7 +20,9 @@ void USRCharacterPartsComponent::SetBodyPartsFromPreset(const FSRModularCharacte
 	SetBodyPart(Preset.HeadPreset);
 	SetBodyPart(Preset.TorsoPreset);
 
-	OnBodyPartsSetDelegate.Broadcast();
+	FTimerManager& TimerManager = GetWorld()->GetTimerManager();
+	FTimerHandle TimerHandle;
+	TimerManager.SetTimer(TimerHandle, this, &ThisClass::OnBodyPartsSet, 1.f, false);
 }
 
 void USRCharacterPartsComponent::SetBodyPart(const FSRBodyPartPreset& PartPreset)
@@ -80,6 +82,12 @@ void USRCharacterPartsComponent::OnBodyPartAdded(ASRBodyPart* BodyPart)
 void USRCharacterPartsComponent::OnBodyPartRemoved(ASRBodyPart* BodyPart)
 {
 	OnBodyPartRemovedDelegate.Broadcast(BodyPart);
+}
+
+void USRCharacterPartsComponent::OnBodyPartsSet()
+{
+	OnBodyPartsSetDelegate.Broadcast();
+	AttachBodyParts();
 }
 
 void USRCharacterPartsComponent::RemoveBodyPart(ESRBodyPartType BodyPartType)

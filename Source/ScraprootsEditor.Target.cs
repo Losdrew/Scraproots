@@ -9,6 +9,7 @@ public class ScraprootsEditorTarget : TargetRules
 	{
 		Type = TargetType.Editor;
 		DefaultBuildSettings = BuildSettingsVersion.V5;
+		IncludeOrderVersion = EngineIncludeOrderVersion.Latest;
 
 		ExtraModuleNames.AddRange( new string[] { "Scraproots" } );
 	}
