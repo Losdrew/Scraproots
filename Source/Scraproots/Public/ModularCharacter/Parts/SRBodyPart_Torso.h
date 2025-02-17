@@ -64,5 +64,5 @@ protected:
 	virtual void AttachToBodyPart(ASRBodyPart* BodyPart) override;
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void AttachToLegs(ASRBodyPart* BodyPart);
+	void AttachToLegs(ASRBodyPart* Legs);
 };

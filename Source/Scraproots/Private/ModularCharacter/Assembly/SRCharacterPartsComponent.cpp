@@ -153,7 +153,7 @@ void USRCharacterPartsComponent::AttachBodyParts()
 
 	if (Legs)
 	{
-		Legs->AttachToMeshComponent(ParentMeshComponent);;
+		Legs->AttachToMeshComponent(ParentMeshComponent);
 	}
 
 	AttachOrAdd(Legs, Torso);
