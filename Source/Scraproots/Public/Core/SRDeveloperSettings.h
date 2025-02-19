@@ -7,26 +7,15 @@
 #include "Product/SRProductTypes.h"
 #include "SRDeveloperSettings.generated.h"
 
-UCLASS(config = Game, defaultconfig, MinimalAPI)
+UCLASS(Config = Game, DefaultConfig, DisplayName = "Developer Settings")
 class USRDeveloperSettings : public UDeveloperSettings
 {
 	GENERATED_BODY()
 
 public:
-	USRDeveloperSettings();
-
 	//~UDeveloperSettings interface
 	virtual FName GetCategoryName() const override;
 	//~End of UDeveloperSettings interface
-
-	//~UObject interface
-#if WITH_EDITOR
-	virtual void PreEditChange(FProperty* PropertyAboutToChange) override;
-	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
-	virtual void PostReloadConfig(FProperty* PropertyThatWasLoaded) override;
-	virtual void PostInitProperties() override;
-#endif
-	//~End of UObject interface
 
 public:
 	UPROPERTY(config, EditAnywhere, Category = "Modular Character")

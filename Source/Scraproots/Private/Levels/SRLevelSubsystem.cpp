@@ -5,8 +5,17 @@
 #include "GameFramework/GameModeBase.h"
 #include "Kismet/GameplayStatics.h"
 #include "Levels/SRLevelTypes.h"
+#include "Levels/SRLevelSettings.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogSRLevelSubsystem, Log, All);
+
+void USRLevelSubsystem::Initialize(FSubsystemCollectionBase& Collection)
+{
+	Super::Initialize(Collection);
+
+	const USRLevelSettings* LevelSettings = GetDefault<USRLevelSettings>();
+	SetLevels(LevelSettings->LevelConfig.Levels);
+}
 
 void USRLevelSubsystem::SetLevels(const TArray<FSRLevel>& InLevels)
 {
@@ -64,9 +73,10 @@ const FSRLevel& USRLevelSubsystem::GetCurrentLevel()
 	return CurrentLevel;
 }
 
-bool USRLevelSubsystem::TryGetNextLevel(FSRLevel& OutNextLevel) const
+bool USRLevelSubsystem::TryGetNextLevel(FSRLevel& OutNextLevel)
 {
-	int32 CurrentLevelIndex = GetIndexOfLevel(CurrentLevel);
+	const FSRLevel& ActualCurrentLevel = GetCurrentLevel();
+	int32 CurrentLevelIndex = GetIndexOfLevel(ActualCurrentLevel);
 	if (CurrentLevelIndex == INDEX_NONE || !Levels.IsValidIndex(CurrentLevelIndex + 1))
 	{
 		UE_LOG(LogSRLevelSubsystem, Error, TEXT("Can't open next level: current level is invalid or there is no next level."));

@@ -19,7 +19,6 @@ struct SCRAPROOTS_API FSRLevel
 	GENERATED_BODY()
 
 public:
-
 	FSRLevel()
 	{
 		Id = Id.IsValid() ? Id : FGuid::NewGuid();
