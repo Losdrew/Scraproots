@@ -15,6 +15,13 @@ void USRInventoryManager::Initialize()
 	{
 		EventRouter->OnGameplayEvent.AddDynamic(this, &USRInventoryManager::HandleGameplayEvent);
 	}
+
+	InventoryConfig = GetDefault<USRInventorySettings>()->InventoryConfig;
+
+	if (InventoryConfig.InitialItems.Num() > 0)
+	{
+		AddProducts(InventoryConfig.InitialItems);
+	}
 }
 
 bool USRInventoryManager::AddProduct(const FGameplayTag& ProductTag)

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Product/SRProductTypes.h"
+#include "Inventory/SRInventorySettings.h"
 #include "SRInventoryManager.generated.h"
 
 struct FSRInventoryItem;
@@ -49,6 +50,9 @@ private:
 	void HandleGameplayEvent(const FSRGameplayEvent& Event);
 
 private:
+	UPROPERTY()
+	FSRInventoryConfig InventoryConfig;
+
 	UPROPERTY()
 	TArray<FSRInventoryItem> InventoryItems;
 };
