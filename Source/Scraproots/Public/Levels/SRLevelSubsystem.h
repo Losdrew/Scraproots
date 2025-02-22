@@ -15,6 +15,8 @@ class SCRAPROOTS_API USRLevelSubsystem : public UGameInstanceSubsystem
 	GENERATED_BODY()
 
 public:
+	void Initialize(FSubsystemCollectionBase& Collection) override;
+
 	UFUNCTION(BlueprintCallable, Category = "Levels")
 	void SetLevels(const TArray<FSRLevel>& InLevels);
 
@@ -41,7 +43,7 @@ public:
 
 	// Returns the level that comes after the current one
 	UFUNCTION(BlueprintCallable, Category = "Levels")
-	bool TryGetNextLevel(FSRLevel& OutNextLevel) const;
+	bool TryGetNextLevel(FSRLevel& OutNextLevel);
 
 	UFUNCTION(BlueprintCallable, Category = "Levels")
 	int32 GetLevelsNum() const { return Levels.Num(); }
