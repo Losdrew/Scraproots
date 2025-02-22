@@ -86,8 +86,8 @@ void USRCharacterPartsComponent::OnBodyPartRemoved(ASRBodyPart* BodyPart)
 
 void USRCharacterPartsComponent::OnBodyPartsSet()
 {
-	OnBodyPartsSetDelegate.Broadcast();
 	AttachBodyParts();
+	OnBodyPartsSetDelegate.Broadcast();
 }
 
 void USRCharacterPartsComponent::RemoveBodyPart(ESRBodyPartType BodyPartType)
