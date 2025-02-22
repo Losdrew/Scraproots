@@ -4,11 +4,10 @@
 
 #include "Engine/DeveloperSettings.h"
 #include "ModularCharacter/SRModularCharacterTypes.h"
-#include "Product/SRProductTypes.h"
-#include "SRDeveloperSettings.generated.h"
+#include "SRModularCharacterSettings.generated.h"
 
-UCLASS(Config = Game, DefaultConfig, DisplayName = "Developer Settings")
-class USRDeveloperSettings : public UDeveloperSettings
+UCLASS(Config = Game, DefaultConfig, DisplayName = "Modular Character Settings")
+class USRModularCharacterSettings : public UDeveloperSettings
 {
 	GENERATED_BODY()
 
@@ -18,9 +17,6 @@ public:
 	//~End of UDeveloperSettings interface
 
 public:
-	UPROPERTY(config, EditAnywhere, Category = "Modular Character")
+	UPROPERTY(Config, EditAnywhere, Category = "Modular Character", meta = (ShowOnlyInnerProperties))
 	FSRModularCharacterConfig ModularCharacterConfig;
-
-	UPROPERTY(config, EditAnywhere, Category = "Products")
-	FSRProductsConfig ProductsConfig;
 };

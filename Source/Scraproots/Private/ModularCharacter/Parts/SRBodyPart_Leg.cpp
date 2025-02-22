@@ -2,14 +2,14 @@
 
 #include "ModularCharacter/Parts/SRBodyPart_Leg.h"
 
-#include "Core/SRDeveloperSettings.h"
+#include "ModularCharacter/SRModularCharacterSettings.h"
 #include "ModularCharacter/SRModularCharacterUtils.h"
 
 FSRBodyPartSchema_Leg::FSRBodyPartSchema_Leg()
 	: Super()
 {
-	const USRDeveloperSettings* DeveloperSettings = GetDefault<USRDeveloperSettings>();
-	LegClass = DeveloperSettings->ModularCharacterConfig.DefaultLegClass;
+	const USRModularCharacterSettings* ModularCharacterSettings = GetDefault<USRModularCharacterSettings>();
+	LegClass = ModularCharacterSettings->ModularCharacterConfig.DefaultLegClass;
 }
 
 //////////////////////////////////////////////////

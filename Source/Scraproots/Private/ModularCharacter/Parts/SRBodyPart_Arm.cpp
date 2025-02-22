@@ -2,14 +2,14 @@
 
 #include "ModularCharacter/Parts/SRBodyPart_Arm.h"
 
-#include "Core/SRDeveloperSettings.h"
 #include "ModularCharacter/SRModularCharacterUtils.h"
+#include "ModularCharacter/SRModularCharacterSettings.h"
 
 FSRBodyPartSchema_Arm::FSRBodyPartSchema_Arm()
 	: Super()
 {
-	const USRDeveloperSettings* DeveloperSettings = GetDefault<USRDeveloperSettings>();
-	ArmClass = DeveloperSettings->ModularCharacterConfig.DefaultArmClass;
+	const USRModularCharacterSettings* ModularCharacterSettings = GetDefault<USRModularCharacterSettings>();
+	ArmClass = ModularCharacterSettings->ModularCharacterConfig.DefaultArmClass;
 }
 
 //////////////////////////////////////////////////

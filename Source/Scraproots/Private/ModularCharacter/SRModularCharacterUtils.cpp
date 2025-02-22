@@ -4,11 +4,11 @@
 
 #include "GameplayTagContainer.h"
 #include "Core/SRStatics.h"
-#include "Core/SRDeveloperSettings.h"
 #include "Product/SRProductTypes.h"
 #include "Product/SRProductManager.h"
 #include "ModularCharacter/Parts/SRBodyPart.h"
 #include "ModularCharacter/SRModularCharacterTypes.h"
+#include "ModularCharacter/SRModularCharacterSettings.h"
 
 USRBodyPartSchemaData* USRModularCharacterUtils::GetBodyPartSchemaDataByProductTag(const UObject* WorldContextObject, FGameplayTag ProductTag)
 {
@@ -21,30 +21,30 @@ USRBodyPartSchemaData* USRModularCharacterUtils::GetBodyPartSchemaDataByProductT
 
 ESRBodyPartType USRModularCharacterUtils::GetBodyPartTypeByProductTag(const UObject* WorldContextObject, FGameplayTag ProductTag)
 {
-	const USRDeveloperSettings* DeveloperSettings = GetDefault<USRDeveloperSettings>();
-	if (!DeveloperSettings)
+	const USRModularCharacterSettings* ModularCharacterSettings = GetDefault<USRModularCharacterSettings>();
+	if (!ModularCharacterSettings)
 	{
 		UE_LOG(LogSRModularCharacter, Error, TEXT("USRModularCharacterUtils::GetBodyPartTypeByProductTag: Developer settings not found"));
 		return ESRBodyPartType::None;
 	}
 
-	if (ProductTag.MatchesTag(DeveloperSettings->ModularCharacterConfig.GenericHeadTag))
+	if (ProductTag.MatchesTag(ModularCharacterSettings->ModularCharacterConfig.GenericHeadTag))
 	{
 		return ESRBodyPartType::Head;
 	}
-	if (ProductTag.MatchesTag(DeveloperSettings->ModularCharacterConfig.GenericTorsoTag))
+	if (ProductTag.MatchesTag(ModularCharacterSettings->ModularCharacterConfig.GenericTorsoTag))
 	{
 		return ESRBodyPartType::Torso;
 	}
-	if (ProductTag.MatchesTag(DeveloperSettings->ModularCharacterConfig.GenericLeftArmTag))
+	if (ProductTag.MatchesTag(ModularCharacterSettings->ModularCharacterConfig.GenericLeftArmTag))
 	{
 		return ESRBodyPartType::LeftArm;
 	}
-	if (ProductTag.MatchesTag(DeveloperSettings->ModularCharacterConfig.GenericRightArmTag))
+	if (ProductTag.MatchesTag(ModularCharacterSettings->ModularCharacterConfig.GenericRightArmTag))
 	{
 		return ESRBodyPartType::RightArm;
 	}
-	if (ProductTag.MatchesTag(DeveloperSettings->ModularCharacterConfig.GenericLegsTag))
+	if (ProductTag.MatchesTag(ModularCharacterSettings->ModularCharacterConfig.GenericLegsTag))
 	{
 		return ESRBodyPartType::Legs;
 	}
