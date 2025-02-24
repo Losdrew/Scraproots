@@ -1,13 +1,16 @@
 #include "ObstacleCoord.h"
 #include "Math/UnrealMathUtility.h"
+#include "Containers/Queue.h"
 
 USRObstacleCoord::USRObstacleCoord()
 {
 }
 
 const int TileSize = 200;
+const double MaxProbability = 0.2;
 const double MinProbability = 0.25;
-const double MaxProbability = 0.35;
+const double SidesProbability = 25;
+const double MiddleProbability = 15;
 
 TArray<TArray<bool>> USRObstacleCoord::InitializeGrid(int32 GridSizeX, int32 GridSizeY) const
 {
@@ -35,11 +38,25 @@ int USRObstacleCoord::GenerateObstacles(TArray<TArray<bool>>& Grid, int32 GridSi
 		{
 			for (int32 Y = 1; Y < GridSizeY; Y++)  // Start from Y = 1
 			{
-				int RndNum = FMath::RandRange(1, 10);
-				if (RndNum == 1 && ObstaclesTotal < MaxObstacles && !Grid[X][Y] && !EnemyGrid[X][Y])
+				int RndNum = FMath::RandRange(1, 100);
+				if (X > 2 && X < 2 + GridSizeX / 2 && RndNum <= 5)
 				{
-					Grid[X][Y] = true;
-					ObstaclesTotal++;
+					if (!Grid[X][Y] && !EnemyGrid[X][Y])
+					{
+						Grid[X][Y] = true;
+						ObstaclesTotal++;
+					}
+				}
+				else
+				{
+					if ((X <= 2 || X >= 2 + GridSizeX / 2) && RndNum <= 10)
+					{
+						if (!Grid[X][Y] && !EnemyGrid[X][Y])
+						{
+							Grid[X][Y] = true;
+							ObstaclesTotal++;
+						}
+					}
 				}
 			}
 		}
@@ -50,66 +67,50 @@ int USRObstacleCoord::GenerateObstacles(TArray<TArray<bool>>& Grid, int32 GridSi
 		return -1;
 }
 
-#include "ObstacleCoord.h"
-#include "Containers/Queue.h"
-
 bool USRObstacleCoord::AreTilesConnected(TArray<TArray<bool>>& Grid, int32 GridSizeX, int32 GridSizeY, int32 ObstaclesTotal)
 {
-	// «найдемо першу порожню кл≥тинку дл€ старту
-	int32 StartX = -1, StartY = -1;
-	for (int32 X = 0; X < GridSizeX; X++)
+	int totalEmptyCells = GridSizeX * GridSizeY - ObstaclesTotal;
+	TArray<TArray<bool>> Visited = InitializeGrid(GridSizeX, GridSizeY);
+	TQueue<FIntPoint> Queue;
+
+	for (int X = 0; X < GridSizeX; X++)
 	{
-		for (int32 Y = 0; Y < GridSizeY; Y++)
+		for (int Y = 0; Y < GridSizeY; Y++)
 		{
-			if (!Grid[X][Y])  // якщо це порожн€ кл≥тинка
+			if (!Grid[X][Y])
 			{
-				StartX = X;
-				StartY = Y;
+				Queue.Enqueue(FIntPoint(X, Y));
+				Visited[X][Y] = true;
 				break;
 			}
 		}
-		if (StartX != -1) break;
+		if (!Queue.IsEmpty()) break;
 	}
 
-	// якщо немаЇ жодноњ порожньоњ кл≥тинки, вважаЇмо, що вони "з'Їднан≥"
-	if (StartX == -1) return true;
+	if (Queue.IsEmpty()) return true;
 
-	// —творимо коп≥ю дл€ перев≥рки в≥дв≥даних кл≥тинок
-	TArray<TArray<bool>> Visited = InitializeGrid(GridSizeX, GridSizeY);
-
-	// ¬икористаЇмо BFS дл€ пошуку вс≥х з'Їднаних порожн≥х кл≥тинок
-	TQueue<FIntPoint> Queue;
-	Queue.Enqueue(FIntPoint(StartX, StartY));
-	Visited[StartX][StartY] = true;
-
-	const int32 Directions[4][2] = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
-	int32 EmptyCellsCount = 1;
-	int32 TotalEmptyCells = GridSizeX * GridSizeY - ObstaclesTotal;
+	int emptyCellsCount = 0;
+	FIntPoint Directions[4] = {FIntPoint(0, 1), FIntPoint(1, 0), FIntPoint(0, -1), FIntPoint(-1, 0)};
 
 	while (!Queue.IsEmpty())
 	{
 		FIntPoint Current;
 		Queue.Dequeue(Current);
+		emptyCellsCount++;
 
-		for (const auto& Dir : Directions)
+		for (auto& Dir : Directions)
 		{
-			int32 NewX = Current.X + Dir[0];
-			int32 NewY = Current.Y + Dir[1];
-
-			if (NewX >= 0 && NewX < GridSizeX && NewY >= 0 && NewY < GridSizeY &&
-				!Grid[NewX][NewY] && !Visited[NewX][NewY])
+			int newX = Current.X + Dir.X;
+			int newY = Current.Y + Dir.Y;
+			if (newX >= 0 && newX < GridSizeX && newY >= 0 && newY < GridSizeY && !Grid[newX][newY] && !Visited[newX][newY])
 			{
-				Visited[NewX][NewY] = true;
-				Queue.Enqueue(FIntPoint(NewX, NewY));
-				EmptyCellsCount++;
+				Visited[newX][newY] = true;
+				Queue.Enqueue(FIntPoint(newX, newY));
 			}
 		}
 	}
-
-	// якщо к≥льк≥сть в≥дв≥даних порожн≥х кл≥тинок сп≥впадаЇ з загальною к≥льк≥стю Ч значить, вони вс≥ з'Їднан≥
-	return EmptyCellsCount == TotalEmptyCells;
+	return emptyCellsCount == totalEmptyCells;
 }
-
 
 TArray<FObstacleCoord> USRObstacleCoord::ConvertGridToArray(const TArray<TArray<bool>>& Grid, int32 GridSizeX, int32 GridSizeY)
 {
