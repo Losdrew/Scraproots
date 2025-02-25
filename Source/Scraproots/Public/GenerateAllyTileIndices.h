@@ -16,5 +16,5 @@ public:
 	USRGenerateAllyTileIndices();
 
 	UFUNCTION(BlueprintCallable, Category = "Random Generation")
-	static TArray<int32> GenerateUniqueRandomNumbers(int32 NumberOfUnits, int32 GridYSize);
+	static TArray<int32> GenerateAllyTileIndices(int32 NumberOfUnits, int32 GridYSize);
 };

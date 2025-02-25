@@ -8,7 +8,7 @@ USRGenerateAllyTileIndices::USRGenerateAllyTileIndices()
 {
 }
 
-TArray<int32> USRGenerateAllyTileIndices::GenerateUniqueRandomNumbers(int32 NumberOfUnits, int32 GridYSize)
+TArray<int32> USRGenerateAllyTileIndices::GenerateAllyTileIndices(int32 NumberOfUnits, int32 GridYSize)
 {
 	TArray<int32> PossibleIndices;
 	TArray<int32> RandomAllyIndices;
