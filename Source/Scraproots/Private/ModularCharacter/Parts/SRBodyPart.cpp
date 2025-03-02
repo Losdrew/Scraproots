@@ -125,6 +125,7 @@ void ASRBodyPart::AttachToBodyPart(ASRBodyPart* BodyPart)
 		if (BodyPart->MeshComponent)
 		{
 			AttachToComponent(BodyPart->MeshComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
+			OnBodyPartAttachedDelegate.Broadcast(this);
 		}
 	}
 }

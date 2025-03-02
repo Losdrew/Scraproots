@@ -77,11 +77,20 @@ void USRCharacterPartsComponent::SetBodyPart(const FSRBodyPartPreset& PartPreset
 void USRCharacterPartsComponent::OnBodyPartAdded(ASRBodyPart* BodyPart)
 {
 	OnBodyPartAddedDelegate.Broadcast(BodyPart);
+	BodyPart->OnBodyPartAttachedDelegate.AddWeakLambda(this, [this](ASRBodyPart* InBodyPart)
+	{ 
+		OnBodyPartAttached(InBodyPart); 
+	});
 }
 
 void USRCharacterPartsComponent::OnBodyPartRemoved(ASRBodyPart* BodyPart)
 {
 	OnBodyPartRemovedDelegate.Broadcast(BodyPart);
+}
+
+void USRCharacterPartsComponent::OnBodyPartAttached(ASRBodyPart* BodyPart)
+{
+	OnBodyPartAttachedDelegate.Broadcast(BodyPart);
 }
 
 void USRCharacterPartsComponent::OnBodyPartsSet()
