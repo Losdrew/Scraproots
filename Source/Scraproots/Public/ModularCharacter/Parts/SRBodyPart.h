@@ -85,6 +85,9 @@ public:
 	TSoftClassPtr<USRAnimInstance> AnimInstanceClass;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BodyPart")
+	TSubclassOf<USRAnimInstance> LoadedAnimInstanceClass;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BodyPart")
 	TMap<FGameplayTag, float> Stats;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BodyPart")
