@@ -11,6 +11,9 @@
 
 class ASRBodyPart;
 
+DECLARE_MULTICAST_DELEGATE(FSROnMeshLoadedSignature);
+DECLARE_MULTICAST_DELEGATE_OneParam(FSROnBodyPartAttachedSignature, ASRBodyPart*);
+
 // Defines a body part (general configuration)
 USTRUCT(BlueprintType)
 struct SCRAPROOTS_API FSRBodyPartSchema
@@ -55,8 +58,6 @@ public:
 	ESRBodyPartType BodyPartType = ESRBodyPartType::None;
 };
 
-DECLARE_MULTICAST_DELEGATE(FOnMeshLoadedSignature);
-
 // Instance of a body part
 UCLASS(Abstract)
 class SCRAPROOTS_API ASRBodyPart : public AActor
@@ -96,6 +97,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Cosmetics")
 	TSoftObjectPtr<USkeletalMesh> BaseMesh;
 
+	FSROnBodyPartAttachedSignature OnBodyPartAttachedDelegate;
+
 	bool bInitialized = false;
 
 public:
@@ -114,8 +117,7 @@ protected:
 	virtual void AttachToBodyPart(ASRBodyPart* BodyPart);
 
 protected:
+	FSROnMeshLoadedSignature OnMeshLoadedDelegate;
 
 	bool bMeshLoaded = false;
-
-	FOnMeshLoadedSignature OnMeshLoadedDelegate;
 };
