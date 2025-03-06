@@ -19,6 +19,7 @@ void USRProductManager::Initialize(const FSRProductsConfig& InConfig)
 			if (RowData)
 			{
 				ProductDefinitionMap.Add(RowData->ProductTag, RowData);
+				UE_LOG(LogSRProductManager, Warning, TEXT("Added Product: %s"), *RowData->ProductTag.ToString());
 			}
 		}
 	}
@@ -62,4 +63,36 @@ void USRProductManager::GetProductDefinitions(const FGameplayTagContainer& Produ
 			OutArray.Add(ProductDefinition);
 		}
 	}
+}
+
+void USRProductManager::GetAllUsableBodyParts(const FGameplayTag& BodyPartTag, TArray<FSRProductDefinition>& OutArray) const
+{
+	OutArray.Empty();
+	int32 FoundCount = 0;
+
+	UE_LOG(LogSRProductManager, Warning, TEXT("Searching for body parts with tag: %s"), *BodyPartTag.ToString());
+
+	for (const TPair<FGameplayTag, FSRProductDefinition*>& Entry : ProductDefinitionMap)
+	{
+		// Якщо тег BodyPartTag - це голова, перевіряємо, чи не CuteRobot
+		if (BodyPartTag.MatchesTagExact(FGameplayTag::RequestGameplayTag(FName("BodyPart.Head"))))
+		{
+			if (Entry.Key.MatchesTagExact(FGameplayTag::RequestGameplayTag(FName("BodyPart.Head.CuteRobot"))))
+			{
+				UE_LOG(LogSRProductManager, Warning, TEXT("Skipping CuteRobot Head: %s"), *Entry.Key.ToString());
+				continue;  // Пропускаємо CuteRobot
+			}
+		}
+
+		// Додаємо всі інші підходящі частини
+		if (Entry.Key.MatchesTag(BodyPartTag))
+		{
+			OutArray.Add(*Entry.Value);
+			FoundCount++;
+
+			UE_LOG(LogSRProductManager, Warning, TEXT("Found Body Part: %s"), *Entry.Key.ToString());
+		}
+	}
+
+	UE_LOG(LogSRProductManager, Warning, TEXT("Total found body parts: %d"), FoundCount);
 }

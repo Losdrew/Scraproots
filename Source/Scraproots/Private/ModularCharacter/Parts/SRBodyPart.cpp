@@ -77,25 +77,27 @@ void ASRBodyPart::SetBodyPartMeshParameters(USkeletalMeshComponent* SkeletalMesh
 
 void ASRBodyPart::LoadMesh()
 {
+	bMeshLoaded = false;
+
 	USRAssetManager& AssetManager = USRAssetManager::Get();
 	TWeakObjectPtr<USkeletalMeshComponent> WeakMeshComponent = MeshComponent;
-	bMeshLoaded = false;
 	AssetManager.SetSkeletalMeshAsync(BaseMesh, WeakMeshComponent, FSimpleDelegate::CreateWeakLambda(this, [this]() 
 	{
 		OnMeshLoaded();
+	}));
+
+	AssetManager.LoadClassAsync<UAnimInstance>(AnimInstanceClass, TDelegate<void(TSubclassOf<UAnimInstance>)>::CreateWeakLambda(this, [this](TSubclassOf<UAnimInstance> InLoadedAnimInstanceClass)
+	{ 
+		LoadedAnimInstanceClass = InLoadedAnimInstanceClass;
+		MeshComponent->SetAnimInstanceClass(LoadedAnimInstanceClass);
 	}));
 }
 
 void ASRBodyPart::OnMeshLoaded()
 {
+	MeshComponent->SetAnimInstanceClass(LoadedAnimInstanceClass);
 	bMeshLoaded = true;
 	OnMeshLoadedDelegate.Broadcast();
-
-	USRAssetManager& AssetManager = USRAssetManager::Get();
-	AssetManager.LoadClassAsync<UAnimInstance>(AnimInstanceClass, TDelegate<void(TSubclassOf<UAnimInstance>)>::CreateWeakLambda(this, [this](TSubclassOf<UAnimInstance> LoadedAnimInstanceClass)
-	{
-		MeshComponent->SetAnimInstanceClass(LoadedAnimInstanceClass);
-	}));
 }
 
 void ASRBodyPart::AddAttachmentBodyPart(ASRBodyPart* BodyPart)
@@ -125,6 +127,7 @@ void ASRBodyPart::AttachToBodyPart(ASRBodyPart* BodyPart)
 		if (BodyPart->MeshComponent)
 		{
 			AttachToComponent(BodyPart->MeshComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
+			OnBodyPartAttachedDelegate.Broadcast(this);
 		}
 	}
 }

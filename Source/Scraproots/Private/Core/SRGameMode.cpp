@@ -9,9 +9,9 @@
 
 void ASRGameMode::BeginPlay()
 {
-	Super::BeginPlay();
-
 	InitializeGameSystems();
+
+	Super::BeginPlay();
 }
 
 void ASRGameMode::InitializeGameSystems()

@@ -16,6 +16,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Product")
 	FSRProductDefinition GetProductDefinition(const FGameplayTag& ProductTag) const;
 
+	UFUNCTION(BlueprintCallable, Category = "Product")
+	void GetAllUsableBodyParts(const FGameplayTag& BodyPartTag, TArray<FSRProductDefinition>& OutArray) const;
+
+
 	FSRProductDefinition* FindProductDefinition(const FGameplayTag& ProductTag) const;
 	void GetProductDefinitions(const FGameplayTagContainer& ProductTags, TArray<const FSRProductDefinition*>& OutArray) const;
 	UDataTable* GetProductDefinitionsTable() const { return ProductsConfig.ProductDefinitionsTable; }

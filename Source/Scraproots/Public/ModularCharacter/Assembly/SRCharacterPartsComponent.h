@@ -51,6 +51,9 @@ public:
 	FOnBodyPartChangedSignature OnBodyPartRemovedDelegate;
 
 	UPROPERTY(BlueprintAssignable, Category = "ModularCharacter|Parts")
+	FOnBodyPartChangedSignature OnBodyPartAttachedDelegate;
+
+	UPROPERTY(BlueprintAssignable, Category = "ModularCharacter|Parts")
 	FOnBodyPartsSetSignature OnBodyPartsSetDelegate;
 
 protected:
@@ -59,6 +62,9 @@ protected:
 
 	UFUNCTION()
 	void OnBodyPartRemoved(ASRBodyPart* BodyPart);
+
+	UFUNCTION()
+	void OnBodyPartAttached(ASRBodyPart* BodyPart);
 
 	UFUNCTION()
 	void OnBodyPartsSet();
