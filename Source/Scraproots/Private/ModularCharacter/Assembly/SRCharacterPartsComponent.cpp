@@ -77,9 +77,9 @@ void USRCharacterPartsComponent::SetBodyPart(const FSRBodyPartPreset& PartPreset
 void USRCharacterPartsComponent::OnBodyPartAdded(ASRBodyPart* BodyPart)
 {
 	OnBodyPartAddedDelegate.Broadcast(BodyPart);
-	BodyPart->OnBodyPartAttachedDelegate.AddWeakLambda(this, [this](ASRBodyPart* InBodyPart)
+	BodyPart->OnMeshLoadedDelegate.AddWeakLambda(this, [this]()
 	{ 
-		OnBodyPartAttached(InBodyPart); 
+		AttachBodyParts();
 	});
 }
 
@@ -169,6 +169,8 @@ void USRCharacterPartsComponent::AttachBodyParts()
 	AttachOrAdd(Torso, Head);
 	AttachOrAdd(Torso, LeftArm);
 	AttachOrAdd(Torso, RightArm);
+
+	OnBodyPartsAttachedDelegate.Broadcast();
 }
 
 USkeletalMeshComponent* USRCharacterPartsComponent::GetParentMeshComponent() const

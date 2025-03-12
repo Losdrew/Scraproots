@@ -39,7 +39,6 @@ void ASRBodyPart_Torso::AttachToMeshComponent(USkeletalMeshComponent* InMeshComp
 		AttachToComponent(InMeshComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
 		MeshComponent->SetRelativeLocation(FVector::ZeroVector);
 		MeshComponent->AddLocalOffset(NoLegsOffset);
-		OnBodyPartAttachedDelegate.Broadcast(this);
 	}
 }
 
@@ -50,6 +49,5 @@ void ASRBodyPart_Torso::AttachToBodyPart(ASRBodyPart* BodyPart)
 		MeshComponent->SetRelativeLocation(FVector::ZeroVector);
 		AttachToLegs(BodyPart);
 		MeshComponent->AddWorldOffset(LegsOffset);
-		OnBodyPartAttachedDelegate.Broadcast(this);
 	}
 }

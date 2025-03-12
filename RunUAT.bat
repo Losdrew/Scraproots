@@ -24,7 +24,7 @@ set ProjectName=Scraproots
 :: git pull origin main
 
 echo Compiling C++ code if there are changes...
-call "%EnginePath%\Build\BatchFiles\Build.bat" "%ProjectName%" Win64 Development "%CD%\%ProjectName%.uproject"
+call "%EnginePath%\Build\BatchFiles\Build.bat" "%ProjectName%" Win64 DebugGame "%CD%\%ProjectName%.uproject"
 
 echo Running the project...
 start "" "%EnginePath%\Binaries\Win64\UnrealEditor.exe" "%CD%\%ProjectName%.uproject"
