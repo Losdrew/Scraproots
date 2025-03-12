@@ -100,7 +100,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Cosmetics")
 	TSoftObjectPtr<USkeletalMesh> BaseMesh;
 
-	FSROnBodyPartAttachedSignature OnBodyPartAttachedDelegate;
+	FSROnMeshLoadedSignature OnMeshLoadedDelegate;
 
 	bool bInitialized = false;
 
@@ -120,7 +120,6 @@ protected:
 	virtual void AttachToBodyPart(ASRBodyPart* BodyPart);
 
 protected:
-	FSROnMeshLoadedSignature OnMeshLoadedDelegate;
 
 	bool bMeshLoaded = false;
 };

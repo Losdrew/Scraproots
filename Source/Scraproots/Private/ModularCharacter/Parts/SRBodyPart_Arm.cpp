@@ -48,7 +48,6 @@ void ASRBodyPart_Arm::AttachToBodyPart(ASRBodyPart* BodyPart)
 		if (BodyPart->MeshComponent)
 		{
 			AttachToComponent(BodyPart->MeshComponent, FAttachmentTransformRules::SnapToTargetIncludingScale, AttachmentSocket);
-			OnBodyPartAttachedDelegate.Broadcast(this);
 		}
 	}
 }
