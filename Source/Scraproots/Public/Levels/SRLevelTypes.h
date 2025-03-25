@@ -44,6 +44,9 @@ public:
 	TSoftObjectPtr<UWorld> LevelWorld;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Levels")
+	FString LevelName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Levels")
 	TSubclassOf<AGameModeBase> GameMode;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Levels")
