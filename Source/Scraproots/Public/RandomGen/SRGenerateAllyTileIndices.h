@@ -2,10 +2,8 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "UObject/Object.h"
-#include "GenerateAllyTileIndices.generated.h"
-
+#include "SRGenerateAllyTileIndices.generated.h"
 
 UCLASS(Blueprintable, BlueprintType)
 class SCRAPROOTS_API USRGenerateAllyTileIndices : public UObject

@@ -1,4 +1,7 @@
-#include "ObstacleCoord.h"
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#include "RandomGen/SRObstacleCoord.h"
+
 #include "Math/UnrealMathUtility.h"
 #include "Containers/Queue.h"
 
@@ -62,9 +65,13 @@ int USRObstacleCoord::GenerateObstacles(TArray<TArray<bool>>& Grid, int32 GridSi
 		}
 	}
 	if (AreTilesConnected(Grid, GridSizeX, GridSizeY, ObstaclesTotal))
+	{
 		return ObstaclesTotal;
+	}
 	else
+	{
 		return -1;
+	}
 }
 
 bool USRObstacleCoord::AreTilesConnected(TArray<TArray<bool>>& Grid, int32 GridSizeX, int32 GridSizeY, int32 ObstaclesTotal)
@@ -84,32 +91,38 @@ bool USRObstacleCoord::AreTilesConnected(TArray<TArray<bool>>& Grid, int32 GridS
 				break;
 			}
 		}
-		if (!Queue.IsEmpty()) break;
+		if (!Queue.IsEmpty()) 
+		{
+			break;
+		}
 	}
 
-	if (Queue.IsEmpty()) return true;
+	if (Queue.IsEmpty()) 
+	{
+		return true;
+	}
 
-	int emptyCellsCount = 0;
+	int EmptyCellsCount = 0;
 	FIntPoint Directions[4] = {FIntPoint(0, 1), FIntPoint(1, 0), FIntPoint(0, -1), FIntPoint(-1, 0)};
 
 	while (!Queue.IsEmpty())
 	{
 		FIntPoint Current;
 		Queue.Dequeue(Current);
-		emptyCellsCount++;
+		EmptyCellsCount++;
 
-		for (auto& Dir : Directions)
+		for (FIntPoint& Dir : Directions)
 		{
-			int newX = Current.X + Dir.X;
-			int newY = Current.Y + Dir.Y;
-			if (newX >= 0 && newX < GridSizeX && newY >= 0 && newY < GridSizeY && !Grid[newX][newY] && !Visited[newX][newY])
+			int NewX = Current.X + Dir.X;
+			int NewY = Current.Y + Dir.Y;
+			if (NewX >= 0 && NewX < GridSizeX && NewY >= 0 && NewY < GridSizeY && !Grid[NewX][NewY] && !Visited[NewX][NewY])
 			{
-				Visited[newX][newY] = true;
-				Queue.Enqueue(FIntPoint(newX, newY));
+				Visited[NewX][NewY] = true;
+				Queue.Enqueue(FIntPoint(NewX, NewY));
 			}
 		}
 	}
-	return emptyCellsCount == totalEmptyCells;
+	return EmptyCellsCount == totalEmptyCells;
 }
 
 TArray<FObstacleCoord> USRObstacleCoord::ConvertGridToArray(const TArray<TArray<bool>>& Grid, int32 GridSizeX, int32 GridSizeY)
@@ -161,8 +174,6 @@ TArray<TArray<bool>> USRObstacleCoord::ConvertCoordsToGrid(int32 GridSizeX, int3
 
 	return EnemyGrid;
 }
-
-
 
 TArray<FObstacleCoord> USRObstacleCoord::GetRandomObstacleCoord(int32 GridSizeX, int32 GridSizeY, TArray<int32> EnemyTileIndices)
 {
