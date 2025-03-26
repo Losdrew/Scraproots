@@ -13,6 +13,14 @@ enum class ESRLevelType : uint8
 	Boss		UMETA(ToolTip = "Level with a boss fight."),
 };
 
+UENUM(BlueprintType)
+enum class ESRLevelSize : uint8
+{
+	Small UMETA(ToolTip = "One unit in party, 7x7 grid"),
+	Medium UMETA(ToolTip = "Two units in party, 8x8 grid"),
+	Big UMETA(ToolTip = "Three units in party, 10x10 grid"),
+};
+
 USTRUCT(BlueprintType)
 struct SCRAPROOTS_API FSRLevel
 {
@@ -47,5 +55,15 @@ public:
 	TSubclassOf<AGameModeBase> GameMode;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Levels")
-	ESRLevelType LevelType;
+	ESRLevelSize LevelSize;
+};
+
+USTRUCT(BlueprintType)
+struct SCRAPROOTS_API FSRLevelList
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Levels")
+	TArray<FSRLevel> Levels;
 };

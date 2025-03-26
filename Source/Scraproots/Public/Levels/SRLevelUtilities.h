@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "SRLevelTypes.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "SRLevelUtilities.generated.h"
 
@@ -14,31 +15,57 @@ class SCRAPROOTS_API USRLevelUtilities : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 
 public:
-	// Opens the level by its data
+	/** Opens the level by its data */
 	UFUNCTION(BlueprintCallable, Category = "Levels", meta = (WorldContext = "WorldContextObject"))
 	static void OpenLevel(UObject const* WorldContextObject, const FSRLevel& Level);
 
-	// Opens the level by soft reference to the world
-	// @param	GameMode	Can be left empty. Used to open the level with a game mode other than the default one
+	/** Opens the level by soft reference to the world */
 	UFUNCTION(BlueprintCallable, Category = "Levels", meta = (WorldContext = "WorldContextObject"))
 	static void OpenLevelByWorld(UObject const* WorldContextObject, TSoftObjectPtr<UWorld> World, TSubclassOf<AGameModeBase> GameMode = nullptr);
 
-	// Returns index of level in the levels array
+	/** Returns index of level in the levels array */
 	UFUNCTION(BlueprintCallable, Category = "Levels", meta = (WorldContext = "WorldContextObject"))
 	static int32 GetIndexOfLevel(UObject const* WorldContextObject, const FSRLevel& Level);
 
-	// Returns the current level
+	/** Returns the current level */
 	UFUNCTION(BlueprintCallable, Category = "Levels", meta = (WorldContext = "WorldContextObject"))
 	static const FSRLevel& GetCurrentLevel(UObject const* WorldContextObject);
 
-	// Returns the level that comes after the current one
+	/** Returns the next level, if available */
 	UFUNCTION(BlueprintCallable, Category = "Levels", meta = (WorldContext = "WorldContextObject"))
-	static bool TryGetNextLevel(UObject const* WorldContextObject, FSRLevel& OutNextLevel);
+	static bool TryGetNextLevel(UObject const* WorldContextObject, FSRLevel& OutNextLevel, int32 PartySize);
 
-	// Returns an array of all levels
+	/** Returns all levels */
 	UFUNCTION(BlueprintCallable, Category = "Levels", meta = (WorldContext = "WorldContextObject"))
 	static const TArray<FSRLevel>& GetAllLevels(UObject const* WorldContextObject);
 
+	/** Initializes the shuffled level order (Opening_Level always first) */
+	UFUNCTION(BlueprintCallable, Category = "Levels")
+	static void InitializeLevelOrder();
+
+	/** Returns the next level of a given size */
+	UFUNCTION(BlueprintCallable, Category = "Levels")
+	static FSRLevel GetNextLevel(int32 PartySize);
+
+	// Returns the shuffled level order
+	UFUNCTION(BlueprintCallable, Category = "Levels")
+	static const TArray<FName>& GetShuffledLevels();
+
+	// Returns the current level index
+	UFUNCTION(BlueprintCallable, Category = "Levels")
+	static int32 GetCurrentLevelIndex();
+
+	// Sets the current level index
+	UFUNCTION(BlueprintCallable, Category = "Levels")
+	static void SetCurrentLevelIndex(int32 NewIndex);
+
 private:
+	/** Helper to get the level subsystem */
 	static USRLevelSubsystem* GetLevelSubsystem(UObject const* WorldContextObject);
+
+	/** Array storing shuffled level order */
+	static TArray<FName> ShuffledLevels;
+
+	/** Index of the current level */
+	static int32 CurrentLevelIndex;
 };

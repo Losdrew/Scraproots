@@ -43,7 +43,7 @@ public:
 
 	// Returns the level that comes after the current one
 	UFUNCTION(BlueprintCallable, Category = "Levels")
-	bool TryGetNextLevel(FSRLevel& OutNextLevel);
+	bool TryGetNextLevel(FSRLevel& OutNextLevel, int32 PartySize);
 
 	UFUNCTION(BlueprintCallable, Category = "Levels")
 	int32 GetLevelsNum() const { return Levels.Num(); }
