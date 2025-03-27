@@ -3,20 +3,11 @@
 #pragma once
 
 #include "Engine/DeveloperSettings.h"
-#include "Levels/SRLevelTypes.h"
+#include "SRLevelTypes.h"
 #include "SRLevelSettings.generated.h"
 
-USTRUCT(BlueprintType)
-struct FSRLevelConfig
-{
-	GENERATED_BODY()
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TArray<FSRLevel> Levels;
-};
-
-UCLASS(Config = Game, DefaultConfig, DisplayName = "Level Settings")
-class USRLevelSettings : public UDeveloperSettings
+UCLASS(Config = Game, DefaultConfig, meta = (DisplayName = "Level Settings"))
+class SCRAPROOTS_API USRLevelSettings : public UDeveloperSettings
 {
 	GENERATED_BODY()
 
@@ -25,6 +16,7 @@ public:
 	virtual FName GetCategoryName() const override;
 	//~End of UDeveloperSettings interface
 
-	UPROPERTY(Config, EditAnywhere, BlueprintReadOnly, Category = "Level", meta = (ShowOnlyInnerProperties))
-	FSRLevelConfig LevelConfig;
+	// Map of level names to their respective level lists
+	UPROPERTY(Config, EditAnywhere, BlueprintReadOnly, Category = "Levels")
+	TMap<FName, FSRLevelList> LevelConfig;
 };
