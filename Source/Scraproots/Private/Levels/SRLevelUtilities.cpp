@@ -28,7 +28,7 @@ void USRLevelUtilities::SetCurrentLevelIndex(int32 NewIndex)
 
 void USRLevelUtilities::InitializeLevelOrder()
 {
-	USRLevelSettings* LevelSettings = USRLevelSettings::Get();
+	const USRLevelSettings* LevelSettings = GetDefault<USRLevelSettings>();
 	if (!LevelSettings)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Failed to load LevelSettings!"));
@@ -72,7 +72,7 @@ FSRLevel USRLevelUtilities::GetNextLevel(int32 PartySize)
 	CurrentLevelIndex++;
 	FName NextLevelName = ShuffledLevels[CurrentLevelIndex];
 
-	USRLevelSettings* LevelSettings = USRLevelSettings::Get();
+	const USRLevelSettings* LevelSettings = GetDefault<USRLevelSettings>();
 	if (!LevelSettings)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Failed to load LevelSettings!"));
@@ -110,7 +110,6 @@ FSRLevel USRLevelUtilities::GetNextLevel(int32 PartySize)
 	UE_LOG(LogTemp, Warning, TEXT("No matching level size found, using first available level."));
 	return LevelList->Levels[0];
 }
-
 
 void USRLevelUtilities::OpenLevel(UObject const* WorldContextObject, const FSRLevel& Level)
 {

@@ -2,8 +2,9 @@
 
 #include "Levels/SRLevelSettings.h"
 
-USRLevelSettings* USRLevelSettings::Get()
+#include UE_INLINE_GENERATED_CPP_BY_NAME(SRLevelSettings)
+
+FName USRLevelSettings::GetCategoryName() const
 {
-	// Retrieve the singleton instance from the config system
-	return GetMutableDefault<USRLevelSettings>();
+	return FApp::GetProjectName();
 }
