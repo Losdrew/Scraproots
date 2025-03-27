@@ -19,7 +19,9 @@ public class Scraproots : ModuleRules
                 "GameplayTags",
                 "CommonUI",
                 "UMG",
-                "DeveloperSettings"
+                "DeveloperSettings",
+                "StreamingPauseRendering",
+                "Slate"
             }
         );
     }
