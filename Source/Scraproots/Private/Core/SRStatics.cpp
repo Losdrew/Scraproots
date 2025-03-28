@@ -6,6 +6,7 @@
 #include "Core/SRGameMode.h"
 #include "Kismet/GameplayStatics.h"
 #include "EngineUtils.h"
+#include "Core/SRGameInstance.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogSRStatics, Log, All);
 
@@ -53,9 +54,9 @@ AActor* USRStatics::FindActorByName(const UObject* WorldContextObject, const FSt
 
 USRInventoryManager* USRStatics::GetInventoryManager(const UObject* WorldContextObject)
 {
-	if (const ASRGameMode* GameMode = Cast<ASRGameMode>(UGameplayStatics::GetGameMode(WorldContextObject)))
+	if (const USRGameInstance* GameInstance = Cast<USRGameInstance>(UGameplayStatics::GetGameInstance(WorldContextObject)))
 	{
-		return GameMode->InventoryManager;
+		return GameInstance->GetInventoryManager();
 	}
 
 	return nullptr;
@@ -63,9 +64,9 @@ USRInventoryManager* USRStatics::GetInventoryManager(const UObject* WorldContext
 
 USRProductManager* USRStatics::GetProductManager(const UObject* WorldContextObject)
 {
-	if (const ASRGameMode* GameMode = Cast<ASRGameMode>(UGameplayStatics::GetGameMode(WorldContextObject)))
+	if (const USRGameInstance* GameInstance = Cast<USRGameInstance>(UGameplayStatics::GetGameInstance(WorldContextObject)))
 	{
-		return GameMode->ProductManager;
+		return GameInstance->GetProductManager();
 	}
 
 	return nullptr;

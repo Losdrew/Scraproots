@@ -4,6 +4,9 @@
 
 #include "Blueprint/UserWidget.h"
 #include "StreamingPauseRendering.h"
+#include "Inventory/SRInventoryManager.h"
+#include "Product/SRProductManager.h"
+#include "Product/SRProductSettings.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogSRGameInstance, Log, All);
 
@@ -59,6 +62,21 @@ void USRGameInstance::Init()
 
 	// Disable unwanted loading behaviour when opening levels
 	GEngine->RegisterBeginStreamingPauseRenderingDelegate(nullptr);
+
+	ProductManager = NewObject<USRProductManager>(this);
+	checkf(ProductManager, TEXT("ProductManager is not set in the SRGameMode!"));
+	if (ProductManager)
+	{
+		const USRProductSettings* ProductSettings = GetDefault<USRProductSettings>();
+		ProductManager->Initialize(ProductSettings->ProductsConfig);
+	}
+
+	InventoryManager = NewObject<USRInventoryManager>(this);
+	checkf(InventoryManager, TEXT("InventoryManager is not set in the SRGameMode!"));
+	if (InventoryManager)
+	{
+		InventoryManager->Initialize();
+	}
 }
 
 void USRGameInstance::Shutdown()

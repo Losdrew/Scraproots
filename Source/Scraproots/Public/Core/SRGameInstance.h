@@ -5,6 +5,9 @@
 #include "Engine/GameInstance.h"
 #include "SRGameInstance.generated.h"
 
+class USRInventoryManager;
+class USRProductManager;
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FSROnLoadingFinishedSignature);
 
 UCLASS()
@@ -21,6 +24,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	bool IsShowingLoadingScreen() const { return bShowingLoadingScreen; }
+
+	virtual USRInventoryManager* GetInventoryManager() const { return InventoryManager; }
+	virtual USRProductManager* GetProductManager() const { return ProductManager; }
 
 public:
 	UPROPERTY(BlueprintAssignable)
@@ -46,6 +52,12 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Loading")
 	float PostMapLoadDelay;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Inventory Manager")
+	TObjectPtr<USRInventoryManager> InventoryManager;
+	
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Product")
+	TObjectPtr<USRProductManager> ProductManager;
 
 private:
 	TSharedPtr<SWidget> LoadingScreenWidget;
