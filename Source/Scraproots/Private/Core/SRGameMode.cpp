@@ -3,9 +3,6 @@
 #include "Core/SRGameMode.h"
 
 #include "Core/SRGameplayEventRouter.h"
-#include "Inventory/SRInventoryManager.h"
-#include "Product/SRProductSettings.h"
-#include "Product/SRProductManager.h"
 
 void ASRGameMode::BeginPlay()
 {

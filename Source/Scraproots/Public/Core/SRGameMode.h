@@ -3,12 +3,9 @@
 #pragma once
 
 #include "GameFramework/GameMode.h"
-#include "Product/SRProductTypes.h"
 #include "SRGameMode.generated.h"
 
 class USRGameplayEventRouter;
-class USRProductManager;
-class USRInventoryManager;
 
 UCLASS()
 class SCRAPROOTS_API ASRGameMode : public AGameMode
