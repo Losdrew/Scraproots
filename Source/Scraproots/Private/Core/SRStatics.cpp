@@ -7,6 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "EngineUtils.h"
 #include "Core/SRGameInstance.h"
+#include "Abilities/SRAbility.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogSRStatics, Log, All);
 
@@ -50,6 +51,18 @@ AActor* USRStatics::FindActorByName(const UObject* WorldContextObject, const FSt
 	}
 
 	return nullptr;
+}
+
+TArray<ASRAbility*> USRStatics::SortAbilitiesByType(const UObject* WorldContextObject, const TArray<ASRAbility*>& Abilities)
+{
+	TArray<ASRAbility*> SortedAbilities = Abilities;
+	SortedAbilities.Sort([](const ASRAbility& A, const ASRAbility& B)
+	{
+		// If the ability type is the same, sort by priority.
+		// Otherwise, sort by ability type.
+		return A.AbilityType == B.AbilityType ? A.Priority > B.Priority : A.AbilityType < B.AbilityType;
+	});
+	return SortedAbilities;
 }
 
 USRInventoryManager* USRStatics::GetInventoryManager(const UObject* WorldContextObject)

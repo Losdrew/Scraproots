@@ -5,7 +5,9 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "SRStatics.generated.h"
 
+enum class ESRAbilityType : uint8;
 struct FSRGameplayEvent;
+class ASRAbility;
 
 /**
  * Static class with utility functions for the game.
@@ -25,6 +27,9 @@ public:
 	// Searches the world's actors for one that matches the given object name.
 	UFUNCTION(BlueprintPure, Category = "Utility", meta = (WorldContext = "WorldContextObject"))
 	static AActor* FindActorByName(const UObject* WorldContextObject, const FString& ObjectName);
+
+	UFUNCTION(BlueprintCallable, Category = "Utility", meta = (WorldContext = "WorldContextObject"))
+	static TArray<ASRAbility*> SortAbilitiesByType(const UObject* WorldContextObject, const TArray<ASRAbility*>& Abilities);
 
 	UFUNCTION(BlueprintPure, Category = "Managers", meta = (WorldContext = "WorldContextObject"))
 	static class USRProductManager* GetProductManager(const UObject* WorldContextObject);
