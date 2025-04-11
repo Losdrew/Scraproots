@@ -17,7 +17,7 @@ class SCRAPROOTS_API USRGameInstance : public UGameInstance, public FTickableGam
 	
 public:
 	UFUNCTION(BlueprintCallable)
-	void StartLoadingScreen();
+	void StartLoadingScreen(TSoftClassPtr<UUserWidget> LoadingScreenClass);
 
 	UFUNCTION(BlueprintCallable)
 	void StopLoadingScreen();
@@ -47,9 +47,6 @@ protected:
 	//~End of FTickableObjectBase interface
 
 protected:
-	UPROPERTY(EditDefaultsOnly, Category = "Loading")
-	TSubclassOf<UUserWidget> LoadingScreenClass;
-
 	UPROPERTY(EditDefaultsOnly, Category = "Loading")
 	float PostMapLoadDelay;
 
