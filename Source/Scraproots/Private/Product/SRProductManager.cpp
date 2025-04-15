@@ -74,19 +74,14 @@ void USRProductManager::GetAllUsableBodyParts(const FGameplayTag& BodyPartTag, T
 
 	for (const TPair<FGameplayTag, FSRProductDefinition*>& Entry : ProductDefinitionMap)
 	{
-		// Якщо тег BodyPartTag - це голова, перевіряємо, чи не CuteRobot
-		if (BodyPartTag.MatchesTagExact(FGameplayTag::RequestGameplayTag(FName("BodyPart.Head"))))
+		if (Entry.Key.MatchesTag(BodyPartTag))
 		{
 			if (Entry.Key.MatchesTagExact(FGameplayTag::RequestGameplayTag(FName("BodyPart.Head.CuteRobot"))))
 			{
 				UE_LOG(LogSRProductManager, Warning, TEXT("Skipping CuteRobot Head: %s"), *Entry.Key.ToString());
 				continue;  // Пропускаємо CuteRobot
 			}
-		}
 
-		// Додаємо всі інші підходящі частини
-		if (Entry.Key.MatchesTag(BodyPartTag))
-		{
 			OutArray.Add(*Entry.Value);
 			FoundCount++;
 

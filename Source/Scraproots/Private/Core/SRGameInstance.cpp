@@ -3,38 +3,43 @@
 #include "Core/SRGameInstance.h"
 
 #include "Blueprint/UserWidget.h"
-#include "StreamingPauseRendering.h"
+#include "Core/SRAssetManager.h"
 #include "Inventory/SRInventoryManager.h"
 #include "Product/SRProductManager.h"
 #include "Product/SRProductSettings.h"
+#include "StreamingPauseRendering.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogSRGameInstance, Log, All);
 
-void USRGameInstance::StartLoadingScreen()
+void USRGameInstance::StartLoadingScreen(TSoftClassPtr<UUserWidget> LoadingScreenClass)
 {
-	if (!LoadingScreenClass)
+	if (LoadingScreenClass.IsNull())
 	{
 		UE_LOG(LogSRGameInstance, Warning, TEXT("No LoadingScreenClass specified"));
 		return;
 	}
 
-	UUserWidget* LoadingScreen = UUserWidget::CreateWidgetInstance(*this, LoadingScreenClass, FName());
-	if (!LoadingScreen)
+	USRAssetManager& AssetManager = USRAssetManager::Get();
+	AssetManager.LoadClassAsync<UUserWidget>(LoadingScreenClass, TDelegate<void(TSubclassOf<UUserWidget>)>::CreateWeakLambda(this, [this](TSubclassOf<UUserWidget> LoadedWidgetClass)
 	{
-		UE_LOG(LogSRGameInstance, Warning, TEXT("Failed to create LoadingScreen widget"));
-		return;
-	}
+		UUserWidget* LoadingScreen = UUserWidget::CreateWidgetInstance(*this, LoadedWidgetClass, FName());
+		if (!LoadingScreen)
+		{
+			UE_LOG(LogSRGameInstance, Warning, TEXT("Failed to create LoadingScreen widget"));
+			return;
+		}
 
-	UGameViewportClient* GameViewportClient = GetGameViewportClient();
-	if (!GameViewportClient)
-	{
-		UE_LOG(LogSRGameInstance, Warning, TEXT("Failed to get GameViewportClient"));
-		return;
-	}
+		UGameViewportClient* GameViewportClient = GetGameViewportClient();
+		if (!GameViewportClient)
+		{
+			UE_LOG(LogSRGameInstance, Warning, TEXT("Failed to get GameViewportClient"));
+			return;
+		}
 
-	LoadingScreenWidget = LoadingScreen->TakeWidget();
-	GameViewportClient->AddViewportWidgetContent(LoadingScreenWidget.ToSharedRef(), 1000);
-	bShowingLoadingScreen = true;
+		LoadingScreenWidget = LoadingScreen->TakeWidget();
+		GameViewportClient->AddViewportWidgetContent(LoadingScreenWidget.ToSharedRef(), 1000);
+		bShowingLoadingScreen = true;
+	}));
 }
 
 void USRGameInstance::StopLoadingScreen()
@@ -115,7 +120,7 @@ bool USRGameInstance::IsTickable() const
 
 TStatId USRGameInstance::GetStatId() const
 {
-	RETURN_QUICK_DECLARE_CYCLE_STAT(ULoadingScreenManager, STATGROUP_Tickables);
+	RETURN_QUICK_DECLARE_CYCLE_STAT(USRGameInstance, STATGROUP_Tickables);
 }
 
 UWorld* USRGameInstance::GetTickableGameObjectWorld() const
