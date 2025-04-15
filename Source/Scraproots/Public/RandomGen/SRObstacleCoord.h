@@ -33,6 +33,21 @@ class SCRAPROOTS_API USRObstacleCoord : public UObject
 public:
 	USRObstacleCoord();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Generation")
+	int32 TileSize = 200;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Generation")
+	float MaxProbability = 0.2f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Generation")
+	float MinProbability = 0.25f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Generation")
+	float SidesProbability = 25.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Generation")
+	float MiddleProbability = 15.f;
+
 	UFUNCTION(BlueprintCallable, Category = "Obstacle")
 	TArray<FObstacleCoord> GetRandomObstacleCoord(int32 GridSizeX, int32 GridSizeY, TArray<int32> EnemyTileIndices);
 

@@ -2,8 +2,6 @@
 #include "Math/UnrealMathUtility.h"
 #include "Containers/Set.h"
 
-const int TileSize = 200;
-
 USRGenerateScrapCoords::USRGenerateScrapCoords()
 {
 }

@@ -5,7 +5,7 @@
 #include "RandomGen/SRObstacleCoord.h"
 #include "SRGenerateScrapCoords.generated.h"
 
-UCLASS()
+UCLASS(Blueprintable, BlueprintType)
 class SCRAPROOTS_API USRGenerateScrapCoords : public UObject
 {
 	GENERATED_BODY()
@@ -13,8 +13,11 @@ class SCRAPROOTS_API USRGenerateScrapCoords : public UObject
 public:
 	USRGenerateScrapCoords();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Generation")
+	int32 TileSize = 200;
+
 	UFUNCTION(BlueprintCallable, Category = "Random Generation")
-	static TArray<FObstacleCoord> GenerateScrapCoords(
+	TArray<FObstacleCoord> GenerateScrapCoords(
 		int32 GridSizeXY,
 		const TArray<int32>& EnemyIndices,
 		const TArray<int32>& AllyIndices,
