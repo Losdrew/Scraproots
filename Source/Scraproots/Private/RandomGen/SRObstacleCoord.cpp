@@ -9,12 +9,6 @@ USRObstacleCoord::USRObstacleCoord()
 {
 }
 
-const int TileSize = 200;
-const double MaxProbability = 0.2;
-const double MinProbability = 0.25;
-const double SidesProbability = 25;
-const double MiddleProbability = 15;
-
 TArray<TArray<bool>> USRObstacleCoord::InitializeGrid(int32 GridSizeX, int32 GridSizeY) const
 {
 	TArray<TArray<bool>> Grid;
