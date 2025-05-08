@@ -36,7 +36,7 @@ struct SCRAPROOTS_API FSRItemDetails
 
 	// Weight used for random generation
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	int32 Weight;
+	int32 Weight = 0;
 };
 
 USTRUCT(BlueprintType)
@@ -60,10 +60,10 @@ struct SCRAPROOTS_API FSRProductDefinition : public FTableRowBase
 	FText StatsText;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	ESRProductCategory CategoryID;
+	ESRProductCategory CategoryID = ESRProductCategory();
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (ClampMin = "0.0"))
-	float Price;
+	float Price = 0.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TSoftObjectPtr<UTexture2D> Image;

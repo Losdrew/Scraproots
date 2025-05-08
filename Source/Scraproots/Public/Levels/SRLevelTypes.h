@@ -44,7 +44,7 @@ public:
 
 public:
 	// This level's global identifier
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Levels")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Levels", meta=(IgnoreForMemberInitializationTest))
 	FGuid Id;
 
 	// The actual level (map) to load
@@ -55,7 +55,7 @@ public:
 	TSubclassOf<AGameModeBase> GameMode;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Levels")
-	ESRLevelSize LevelSize;
+	ESRLevelSize LevelSize = ESRLevelSize();
 };
 
 USTRUCT(BlueprintType)

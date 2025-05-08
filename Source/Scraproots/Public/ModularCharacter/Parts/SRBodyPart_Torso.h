@@ -29,7 +29,7 @@ public:
 
 	// Applied to the torso when there are no legs
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BodyPart")
-	FVector NoLegsOffset; 
+	FVector NoLegsOffset = FVector(0, 0, 0); 
 };
 
 UCLASS(Blueprintable, BlueprintType)
