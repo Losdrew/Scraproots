@@ -4,4 +4,8 @@
 
 #include "Core/SRGameplayTags.h"
 
-const FGameplayTag FSRTag_Event::Inventory_ItemsChanged = FGameplayTag::RequestGameplayTag(FName("Event.Inventory.ItemsChanged"));
+FGameplayTag FSRTag_Event::Inventory_ItemsChanged()
+{
+	static FGameplayTag Result = FGameplayTag::RequestGameplayTag(FName("Event.Inventory.ItemsChanged"));
+	return Result;
+}

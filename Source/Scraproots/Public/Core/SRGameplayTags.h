@@ -13,5 +13,5 @@ struct SCRAPROOTS_API FSRTag_Event
 {
 	GENERATED_BODY()
 
-	static const FGameplayTag Inventory_ItemsChanged;
+	static FGameplayTag Inventory_ItemsChanged();
 };

@@ -37,7 +37,7 @@ bool USRInventoryManager::AddProduct(const FGameplayTag& ProductTag)
 
 	InventoryItems.Add(NewItem);
 	UE_LOG(LogSRInventoryManager, Log, TEXT("AddItem: Added item %s to inventory."), *ProductDef->DisplayName.ToString());
-	USRStatics::BroadcastGameplayEvent(this, {FSRTag_Event::Inventory_ItemsChanged, ""});
+	USRStatics::BroadcastGameplayEvent(this, {FSRTag_Event::Inventory_ItemsChanged(), ""});
 
 	return true;
 }
@@ -61,7 +61,7 @@ bool USRInventoryManager::RemoveItem(const FGuid& ItemID)
 
 	InventoryItems.RemoveSingle(*Item);
 	UE_LOG(LogSRInventoryManager, Log, TEXT("RemoveItem: Removed item %s from inventory."), *Item->ProductTag.ToString());
-	USRStatics::BroadcastGameplayEvent(this, {FSRTag_Event::Inventory_ItemsChanged, ""});
+	USRStatics::BroadcastGameplayEvent(this, {FSRTag_Event::Inventory_ItemsChanged(), ""});
 
 	return true;
 }
@@ -115,7 +115,7 @@ FSRInventoryItem* USRInventoryManager::FindInventoryItemByProductTag(const FGame
 void USRInventoryManager::ClearData()
 {
 	InventoryItems.Empty();
-	USRStatics::BroadcastGameplayEvent(this, {FSRTag_Event::Inventory_ItemsChanged, ""});
+	USRStatics::BroadcastGameplayEvent(this, {FSRTag_Event::Inventory_ItemsChanged(), ""});
 }
 
 void USRInventoryManager::HandleGameplayEvent(const FSRGameplayEvent& Event)
