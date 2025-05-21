@@ -8,6 +8,10 @@
 #include "Product/SRProductManager.h"
 #include "Product/SRProductSettings.h"
 #include "StreamingPauseRendering.h"
+#include "Kismet/GameplayStatics.h"
+#include "Levels/SRLevelSettings.h"
+#include "Levels/SRLevelUtilities.h"
+#include "Levels/SRLevelSubsystem.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogSRGameInstance, Log, All);
 
@@ -126,4 +130,32 @@ TStatId USRGameInstance::GetStatId() const
 UWorld* USRGameInstance::GetTickableGameObjectWorld() const
 {
 	return GetWorld();
+}
+
+void USRGameInstance::RestartGame()
+{
+	USRLevelSubsystem* LevelSubsystem = GetSubsystem<USRLevelSubsystem>();
+	if (LevelSubsystem)
+	{
+		LevelSubsystem->ResetLevelSubsystem();
+	}
+
+	const USRLevelSettings* LevelSettings = GetDefault<USRLevelSettings>();
+	if (!LevelSettings)
+	{
+		UE_LOG(LogTemp, Error, TEXT("LevelSettings is null"));
+		return;
+	}
+
+	const TMap<FName, FSRLevelList>& LevelMap = LevelSettings->LevelConfig;
+	const FSRLevelList* OpeningLevelList = LevelMap.Find("Opening_Level");
+
+	if (!OpeningLevelList || OpeningLevelList->Levels.Num() == 0)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Opening_Level not found or empty"));
+		return;
+	}
+
+	const FSRLevel& OpeningLevel = OpeningLevelList->Levels[0];
+	USRLevelUtilities::OpenLevel(this, OpeningLevel);
 }

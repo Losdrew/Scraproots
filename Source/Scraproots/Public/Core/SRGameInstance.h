@@ -17,6 +17,9 @@ class SCRAPROOTS_API USRGameInstance : public UGameInstance, public FTickableGam
 	
 public:
 	UFUNCTION(BlueprintCallable)
+	void RestartGame();
+
+	UFUNCTION(BlueprintCallable)
 	void StartLoadingScreen(TSoftClassPtr<UUserWidget> LoadingScreenClass);
 
 	UFUNCTION(BlueprintCallable)

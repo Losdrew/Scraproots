@@ -15,6 +15,9 @@ class SCRAPROOTS_API USRLevelSubsystem : public UGameInstanceSubsystem
 	GENERATED_BODY()
 
 public:
+	UFUNCTION(BlueprintCallable)
+	void ResetLevelSubsystem();
+
 	void Initialize(FSubsystemCollectionBase& Collection) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Levels")

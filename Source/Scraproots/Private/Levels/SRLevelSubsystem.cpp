@@ -149,3 +149,26 @@ bool USRLevelSubsystem::TryGetNextLevel(FSRLevel& OutNextLevel, int32 PartySize)
 	OutNextLevel = LevelList->Levels[0];
 	return true;
 }
+
+void USRLevelSubsystem::ResetLevelSubsystem()
+{
+	const USRLevelSettings* LevelSettings = GetDefault<USRLevelSettings>();
+	if (!LevelSettings)
+	{
+		UE_LOG(LogSRLevelSubsystem, Error, TEXT("LevelSettings not found!"));
+		return;
+	}
+
+	const TMap<FName, FSRLevelList>& LevelMap = LevelSettings->LevelConfig;
+
+	Levels.Empty();
+
+	for (const auto& Entry : LevelMap)
+	{
+		Levels.Append(Entry.Value.Levels);
+	}
+
+	USRLevelUtilities::InitializeLevelOrder();
+
+	UE_LOG(LogSRLevelSubsystem, Log, TEXT("SRLevelSubsystem has been reset."));
+}
