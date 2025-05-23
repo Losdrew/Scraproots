@@ -5,13 +5,11 @@
 #include "Blueprint/UserWidget.h"
 #include "Core/SRAssetManager.h"
 #include "Inventory/SRInventoryManager.h"
+#include "Levels/SRLevelSettings.h"
+#include "Levels/SRLevelSubsystem.h"
+#include "Levels/SRLevelUtilities.h"
 #include "Product/SRProductManager.h"
 #include "Product/SRProductSettings.h"
-#include "StreamingPauseRendering.h"
-#include "Kismet/GameplayStatics.h"
-#include "Levels/SRLevelSettings.h"
-#include "Levels/SRLevelUtilities.h"
-#include "Levels/SRLevelSubsystem.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogSRGameInstance, Log, All);
 
@@ -134,6 +132,9 @@ UWorld* USRGameInstance::GetTickableGameObjectWorld() const
 
 void USRGameInstance::RestartGame()
 {
+	InventoryManager->ClearData();
+	InventoryManager->Initialize();
+
 	USRLevelSubsystem* LevelSubsystem = GetSubsystem<USRLevelSubsystem>();
 	if (LevelSubsystem)
 	{

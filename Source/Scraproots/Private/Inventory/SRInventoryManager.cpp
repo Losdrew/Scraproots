@@ -11,11 +11,6 @@ DEFINE_LOG_CATEGORY_STATIC(LogSRInventoryManager, Log, All);
 
 void USRInventoryManager::Initialize()
 {
-	if (USRGameplayEventRouter* EventRouter = USRStatics::GetGameplayEventRouter(this))
-	{
-		EventRouter->OnGameplayEvent.AddDynamic(this, &USRInventoryManager::HandleGameplayEvent);
-	}
-
 	InventoryConfig = GetDefault<USRInventorySettings>()->InventoryConfig;
 
 	if (InventoryConfig.InitialItems.Num() > 0)
@@ -116,8 +111,4 @@ void USRInventoryManager::ClearData()
 {
 	InventoryItems.Empty();
 	USRStatics::BroadcastGameplayEvent(this, {FSRTag_Event::Inventory_ItemsChanged(), ""});
-}
-
-void USRInventoryManager::HandleGameplayEvent(const FSRGameplayEvent& Event)
-{
 }

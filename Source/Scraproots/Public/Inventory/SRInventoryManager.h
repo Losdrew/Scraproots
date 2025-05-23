@@ -43,11 +43,7 @@ public:
 	// Internal helper to find an inventory item by product tag
 	FSRInventoryItem* FindInventoryItemByProductTag(const FGameplayTag& ProductTag);
 
-private:
 	void ClearData();
-
-	UFUNCTION()
-	void HandleGameplayEvent(const FSRGameplayEvent& Event);
 
 private:
 	UPROPERTY()
