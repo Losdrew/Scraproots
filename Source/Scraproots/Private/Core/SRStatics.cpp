@@ -2,20 +2,19 @@
 
 #include "Core/SRStatics.h"
 
-#include "Core/SRGameplayEventRouter.h"
-#include "Core/SRGameMode.h"
-#include "Kismet/GameplayStatics.h"
-#include "EngineUtils.h"
-#include "Core/SRGameInstance.h"
 #include "Abilities/SRAbility.h"
+#include "Core/SRGameInstance.h"
+#include "Core/SRGameplayEventRouter.h"
+#include "EngineUtils.h"
+#include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogSRStatics, Log, All);
 
 USRGameplayEventRouter* USRStatics::GetGameplayEventRouter(const UObject* WorldContextObject)
 {
-	if (const ASRGameMode* GameMode = Cast<ASRGameMode>(UGameplayStatics::GetGameMode(WorldContextObject)))
+	if (const USRGameInstance* GameInstance = Cast<USRGameInstance>(UGameplayStatics::GetGameInstance(WorldContextObject)))
 	{
-		return GameMode->GameplayEventRouter;
+		return GameInstance->GetGameplayEventRouter();
 	}
 
 	return nullptr;

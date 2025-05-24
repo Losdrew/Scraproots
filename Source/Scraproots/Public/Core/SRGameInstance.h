@@ -7,6 +7,7 @@
 
 class USRInventoryManager;
 class USRProductManager;
+class USRGameplayEventRouter;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FSROnLoadingFinishedSignature);
 
@@ -30,6 +31,7 @@ public:
 
 	virtual USRInventoryManager* GetInventoryManager() const { return InventoryManager; }
 	virtual USRProductManager* GetProductManager() const { return ProductManager; }
+	virtual USRGameplayEventRouter* GetGameplayEventRouter() const { return GameplayEventRouter; }
 
 public:
 	UPROPERTY(BlueprintAssignable)
@@ -58,6 +60,9 @@ protected:
 	
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Product")
 	TObjectPtr<USRProductManager> ProductManager;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Gameplay Events")
+	TObjectPtr<USRGameplayEventRouter> GameplayEventRouter;
 
 private:
 	TSharedPtr<SWidget> LoadingScreenWidget;
