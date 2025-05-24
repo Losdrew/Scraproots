@@ -22,19 +22,15 @@ void USRLevelSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 		return;
 	}
 
-	// Get LevelMap correctly
 	const TMap<FName, FSRLevelList>& LevelMap = LevelSettings->LevelConfig;
 
-	// Clear any previous data
 	Levels.Empty();
 
-	// Populate Levels array
 	for (const auto& Entry : LevelMap)
 	{
-		Levels.Append(Entry.Value.Levels);	// Correctly append FSRLevelList.Levels
+		Levels.Append(Entry.Value.Levels);
 	}
 
-	// Initialize shuffled level order
 	USRLevelUtilities::InitializeLevelOrder();
 
 	UE_LOG(LogSRLevelSubsystem, Log, TEXT("SRLevelSubsystem initialized with %d levels"), Levels.Num());
@@ -96,7 +92,7 @@ const FSRLevel& USRLevelSubsystem::GetCurrentLevel()
 
 bool USRLevelSubsystem::TryGetNextLevel(FSRLevel& OutNextLevel, int32 PartySize)
 {
-	if (USRLevelUtilities::GetCurrentLevelIndex() >= 4)	 // Max 5 levels including opening
+	if (USRLevelUtilities::GetCurrentLevelIndex() >= 5)
 	{
 		UE_LOG(LogSRLevelSubsystem, Warning, TEXT("All levels have been played."));
 		return false;
@@ -104,7 +100,6 @@ bool USRLevelSubsystem::TryGetNextLevel(FSRLevel& OutNextLevel, int32 PartySize)
 
 	FName NextLevelName = USRLevelUtilities::GetShuffledLevels()[USRLevelUtilities::GetCurrentLevelIndex()];
 
-	// Get the next level name from shuffled list
 	int32 NewIndex = USRLevelUtilities::GetCurrentLevelIndex() + 1;
 	USRLevelUtilities::SetCurrentLevelIndex(NewIndex);
 
@@ -124,9 +119,8 @@ bool USRLevelSubsystem::TryGetNextLevel(FSRLevel& OutNextLevel, int32 PartySize)
 		return false;
 	}
 
-	// Determine required level size based on party size
 	ESRLevelSize RequiredSize;
-	switch (PartySize)	// Assume GetPartySize() returns an int (1,2,3)
+	switch (PartySize)
 	{
 		case 1: RequiredSize = ESRLevelSize::Small; break;
 		case 2: RequiredSize = ESRLevelSize::Medium; break;
@@ -134,7 +128,6 @@ bool USRLevelSubsystem::TryGetNextLevel(FSRLevel& OutNextLevel, int32 PartySize)
 		default: RequiredSize = ESRLevelSize::Big; break;
 	}
 
-	// Find the first level that matches the required size
 	for (const FSRLevel& Level : LevelList->Levels)
 	{
 		if (Level.LevelSize == RequiredSize)
@@ -145,7 +138,6 @@ bool USRLevelSubsystem::TryGetNextLevel(FSRLevel& OutNextLevel, int32 PartySize)
 		}
 	}
 
-	// If no exact match, return the first available level
 	OutNextLevel = LevelList->Levels[0];
 	return true;
 }

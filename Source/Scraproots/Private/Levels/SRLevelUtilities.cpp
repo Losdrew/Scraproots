@@ -63,10 +63,10 @@ void USRLevelUtilities::InitializeLevelOrder()
 
 FSRLevel USRLevelUtilities::GetNextLevel(int32 PartySize)
 {
-	if (CurrentLevelIndex >= 4)	 // Stop after 5 levels (0 = Opening, 1-4 = Next 4)
+	if (CurrentLevelIndex >= 5)	 
 	{
 		UE_LOG(LogTemp, Warning, TEXT("No more levels available!"));
-		return FSRLevel();	// Return an empty level
+		return FSRLevel();	
 	}
 
 	CurrentLevelIndex++;
