@@ -63,8 +63,6 @@ void USRGameInstance::StopLoadingScreen()
 
 void USRGameInstance::Init()
 {
-	Super::Init();
-
 	FCoreUObjectDelegates::PostLoadMapWithWorld.AddUObject(this, &ThisClass::OnPostLoadMap);
 
 	// Disable unwanted loading behaviour when opening levels
@@ -84,6 +82,11 @@ void USRGameInstance::Init()
 	{
 		InventoryManager->Initialize();
 	}
+
+	GameplayEventRouter = NewObject<USRGameplayEventRouter>(this);
+	checkf(GameplayEventRouter, TEXT("GameplayEventRouter is not set in the SRGameMode!"));
+
+	Super::Init();
 }
 
 void USRGameInstance::Shutdown()
