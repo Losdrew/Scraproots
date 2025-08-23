@@ -10,9 +10,7 @@ You are a resilient sprout growing among the rust and ruins. The world is proced
 * **Playtime**: ~30-40 min per run
 * **Engine**: Unreal Engine 5
 
-## Gameplay preview:
-
-[![Everything Is AWESOME](https://img.youtube.com/vi/e8Y_EZUNSqo/maxresdefault.jpg)](https://www.youtube.com/watch?v=e8Y_EZUNSqo "Everything Is AWESOME")
+### [Gameplay preview](https://www.youtube.com/watch?v=e8Y_EZUNSqo)
 
 ## Created by a small Ukrainian indie team
 
