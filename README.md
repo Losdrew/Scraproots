@@ -18,4 +18,4 @@ You are a resilient sprout growing among the rust and ruins. The world is proced
 [Quote](https://github.com/DarknessQuote) - programmer, game designer  
 [mika.exe](https://github.com/NurePershynaAnastasiia) - programmer, artist
 
-**Music** by [примара](linktr.ee/prymaraxv)  
+**Music** by [примара](https://linktr.ee/prymaraxv)  
